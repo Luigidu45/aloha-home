@@ -161,6 +161,8 @@ class GlobalConfig(BaseSettings):
             if key not in type(self).model_fields:
                 raise AttributeError(f"GlobalConfig has no field '{key}'")
             setattr(self, key, value)
+        self.record_engine = self.record_engine
+        self.record_encoding_threads = self.record_encoding_threads
 
     @property
     def unitree_connection_type(self) -> str:

@@ -44,6 +44,15 @@ class TestRecordingConfig:
             == "mcap"
         )
 
+    def test_mcap_cannot_be_updated_without_rust(self) -> None:
+        config = GlobalConfig.model_validate({})
+
+        with pytest.raises(ValidationError, match="MCAP recording requires --record-engine rust"):
+            config.update(record="mcap")
+
+        config.update(record="mcap", record_engine="rust")
+        assert config.record == "mcap"
+
     def test_encoding_threads_require_rust(self) -> None:
         with pytest.raises(ValidationError, match="valid only with --record-engine rust"):
             GlobalConfig.model_validate({"record_encoding_threads": 8})
