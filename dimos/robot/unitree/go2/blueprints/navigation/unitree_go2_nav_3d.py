@@ -34,7 +34,10 @@ from dimos.msgs.geometry_msgs.PoseStamped import PoseStamped
 from dimos.msgs.sensor_msgs.PointCloud2 import PointCloud2
 from dimos.navigation.basic_path_follower.module import BasicPathFollower
 from dimos.navigation.movement_manager.movement_manager import MovementManager
-from dimos.navigation.nav_3d.mls_planner.mls_planner_native import MLSPlannerNative
+from dimos.navigation.nav_3d.mls_planner.mls_planner_native import (
+    MLSPlannerNative,
+    MLSPlannerNativeConfig,
+)
 from dimos.navigation.nav_3d.mls_planner.viz import planner_visual_override
 from dimos.robot.unitree.go2.blueprints.basic.unitree_go2_basic import rerun_config
 from dimos.robot.unitree.go2.connection import GO2Connection
@@ -48,6 +51,7 @@ from dimos.robot.unitree.go2.go2_mid360_static_transforms import Go2Mid360Static
 from dimos.visualization.vis_module import vis_module
 
 voxel_size = 0.08
+wall_clearance_m = 0.1
 # Raise above 0 to draw what the planner searched over (surface, nodes, weighted edges).
 planner_viz_hz = 0.0
 
@@ -104,37 +108,56 @@ def _static_robot_body(rr: Any) -> list[Any]:
     ]
 
 
-_nav_rerun_config = {
-    **rerun_config,
-    "max_hz": {
-        **rerun_config["max_hz"],
-        # Rate-limited at the source by global_emit_every, roughly every 5s.
-        "world/global_map": 0,
-        "world/local_map": 0.5,
-    },
-    # Ring buffer replayed to a connecting viewer. Small so connect catches up fast.
-    "memory_limit": "64MB",
-    # The robot box hangs off base_link on its own entity: a static transform
-    # under world/tf would override the live one.
-    "static": {
-        "world/robot_body": _static_robot_body,
-    },
-    "visual_override": {
-        **rerun_config["visual_override"],
-        "world/global_map": _render_global_map,
-        "world/full_map": _render_global_map,
-        # The raw premap is millions of points. The seeded voxels are full_map.
-        "world/loaded_map": None,
-        "world/path": _render_path,
-        "world/camera_info": None,
-        "world/color_image": None,
-        "world/lidar": None,
-        **planner_visual_override(planner_viz_hz),
-    },
-}
+def nav_rerun_config(planner_viz_hz: float) -> dict[str, Any]:
+    """Rerun config for the nav_3d stack, with the planner's debug entities at the given rate."""
+    return {
+        **rerun_config,
+        "max_hz": {
+            **rerun_config["max_hz"],
+            # Rate-limited at the source by global_emit_every, roughly every 5s.
+            "world/global_map": 0,
+            "world/local_map": 0.5,
+        },
+        # Ring buffer replayed to a connecting viewer. Small so connect catches up fast.
+        "memory_limit": "64MB",
+        # The robot box hangs off base_link on its own entity: a static transform
+        # under world/tf would override the live one.
+        "static": {
+            "world/robot_body": _static_robot_body,
+        },
+        "visual_override": {
+            **rerun_config["visual_override"],
+            "world/global_map": _render_global_map,
+            "world/full_map": _render_global_map,
+            # The raw premap is millions of points. The seeded voxels are full_map.
+            "world/loaded_map": None,
+            "world/path": _render_path,
+            "world/camera_info": None,
+            "world/color_image": None,
+            "world/lidar": None,
+            **planner_visual_override(
+                planner_viz_hz, voxel_size=voxel_size, wall_clearance_m=wall_clearance_m
+            ),
+        },
+    }
+
+
+mls_planner_config = MLSPlannerNativeConfig(
+    world_frame="odom",
+    voxel_size=voxel_size,
+    robot_height=ROBOT_HEIGHT,
+    start_z_offset_m=BASE_LINK_HEIGHT,
+    surface_closing_radius=0.3,
+    wall_clearance_m=wall_clearance_m,
+    wall_buffer_m=0.75,
+    wall_buffer_weight=100.0,
+    step_threshold_m=0.16,
+    step_penalty_weight=4.0,
+    viz_publish_hz=planner_viz_hz,
+)
 
 unitree_go2_nav_3d = autoconnect(
-    vis_module(viewer_backend=global_config.viewer, rerun_config=_nav_rerun_config),
+    vis_module(viewer_backend=global_config.viewer, rerun_config=nav_rerun_config(planner_viz_hz)),
     # "mcf" for stair traversal
     GO2Connection.blueprint(
         lidar=False,
@@ -160,19 +183,9 @@ unitree_go2_nav_3d = autoconnect(
     ),
     # global_map is remapped off so the planner runs purely on the
     # incremental local_map + region_bounds pair.
-    MLSPlannerNative.blueprint(
-        world_frame="odom",
-        voxel_size=voxel_size,
-        robot_height=ROBOT_HEIGHT,
-        start_z_offset_m=BASE_LINK_HEIGHT,
-        surface_closing_radius=0.3,
-        wall_clearance_m=0.1,
-        wall_buffer_m=0.75,
-        wall_buffer_weight=100.0,
-        step_threshold_m=0.16,
-        step_penalty_weight=4.0,
-        viz_publish_hz=planner_viz_hz,
-    ).remappings([(MLSPlannerNative, "global_map", "global_map_unused")]),
+    MLSPlannerNative.blueprint(**mls_planner_config.model_dump(exclude_unset=True)).remappings(
+        [(MLSPlannerNative, "global_map", "global_map_unused")]
+    ),
     BasicPathFollower.blueprint(speed=0.5, heading_gain=1.5, max_angular=1.5),
     MovementManager.blueprint(),
 ).global_config(n_workers=10, robot_model="unitree_go2", obstacle_avoidance=False)
