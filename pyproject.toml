@@ -287,7 +287,8 @@ manipulation = [
     # Hardware SDKs
     "piper-sdk",
     "xarm-python-sdk>=1.17.0",
-    "a750-control; sys_platform == 'linux' and platform_machine == 'x86_64'",
+    # cp312-only wheels; the repo floor is 3.10 (the R1 Pro's ROS 2 Humble rclpy).
+    "a750-control; sys_platform == 'linux' and platform_machine == 'x86_64' and python_full_version >= '3.12'",
 
     "can-motor-control>=0.0.8; sys_platform == 'linux' or sys_platform == 'darwin'",
 
@@ -527,6 +528,12 @@ default-groups = ["tests"]
 exclude-newer = "7 days"
 exclude-newer-package = { dimos-viewer = false, dimos-lcm = false, lcm-dimos-fork = false, roboplan = false, md-babel-py = false, can-motor-control = false, edgetam-dimos = false, dim-odom = false }
 override-dependencies = [
+    # onnxruntime stopped shipping cp310 wheels at 1.24, but its requires-python
+    # still admits 3.10, so uv resolves it and only fails at install time. The
+    # R1 Pro runs 3.10 (ROS 2 Humble rclpy), and perception's chromadb pulls
+    # onnxruntime transitively, so a plain extra swap can't avoid it.
+    "onnxruntime<1.24; python_full_version < '3.11'",
+    "onnxruntime; python_full_version >= '3.11'",
     # ultralytics, unitree-sdk2py-dimos and unitree-webrtc-connect depend on
     # opencv-python, which ships the same cv2/ tree as our opencv-contrib-python
     # core dep and clobbers it. Contrib is a superset, so never install plain.
