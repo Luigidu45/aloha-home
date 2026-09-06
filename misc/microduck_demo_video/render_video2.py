@@ -14,8 +14,8 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
 sys.path.insert(0, "/Users/tule/trenches/dimos-repo/.claude/worktrees/microduck-sim")
-from dimos.robot.pollen.microduck import assets_fetch  # noqa: E402
-from dimos.simulation.utils.xml_parser import build_joint_mappings  # noqa: E402
+from dimos.robot.pollen.microduck import assets_fetch
+from dimos.simulation.utils.xml_parser import build_joint_mappings
 
 EVENTS = "/Users/tule/.claude/jobs/1c2d08cf/tmp/events.jsonl"
 OUT = "/Users/tule/Desktop/microduck_demo_sidebyside.mp4"
@@ -64,9 +64,7 @@ oq = np.array([o[2] for o in odom])
 jt = np.array([j[0] for j in joints])
 jp = np.array([j[1] for j in joints])
 
-slow_windows = [
-    (t - SLOW_PRE, t + SLOW_POST) for t, role, _ in chat if role in ("human", "agent")
-]
+slow_windows = [(t - SLOW_PRE, t + SLOW_POST) for t, role, _ in chat if role in ("human", "agent")]
 
 
 def speed_at(t):
@@ -191,10 +189,32 @@ canvas = Image.new("RGB", (W, H))
 FONT_BADGE = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 26)
 
 ff = subprocess.Popen(
-    ["ffmpeg", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
-     "-r", str(FPS), "-i", "-", "-c:v", "libx264", "-preset", "medium",
-     "-crf", "20", "-pix_fmt", "yuv420p", OUT],
-    stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+    [
+        "ffmpeg",
+        "-y",
+        "-f",
+        "rawvideo",
+        "-pix_fmt",
+        "rgb24",
+        "-s",
+        f"{W}x{H}",
+        "-r",
+        str(FPS),
+        "-i",
+        "-",
+        "-c:v",
+        "libx264",
+        "-preset",
+        "medium",
+        "-crf",
+        "20",
+        "-pix_fmt",
+        "yuv420p",
+        OUT,
+    ],
+    stdin=subprocess.PIPE,
+    stdout=subprocess.DEVNULL,
+    stderr=subprocess.DEVNULL,
 )
 
 t, n = 0.0, 0
@@ -213,7 +233,9 @@ while t < T_END:
     renderer.update_scene(data, camera=cam)
     sim_img = Image.fromarray(renderer.render())
     if spd > 1:
-        ImageDraw.Draw(sim_img).text((SIM_W - 70, 20), f"{spd}x", font=FONT_BADGE, fill=(255, 255, 255))
+        ImageDraw.Draw(sim_img).text(
+            (SIM_W - 70, 20), f"{spd}x", font=FONT_BADGE, fill=(255, 255, 255)
+        )
     canvas.paste(sim_img, (0, 0))
     canvas.paste(draw_terminal(t), (SIM_W, 0))
     ff.stdin.write(np.asarray(canvas).tobytes())

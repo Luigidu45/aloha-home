@@ -47,7 +47,9 @@ def on_agent(msg) -> None:
         if isinstance(content, list):  # some models use content blocks
             content = " ".join(str(c) for c in content)
         for tc in tool_calls:
-            emit("chat", role="tool_call", text=f"{tc.get('name')}({json.dumps(tc.get('args', {}))})")
+            emit(
+                "chat", role="tool_call", text=f"{tc.get('name')}({json.dumps(tc.get('args', {}))})"
+            )
         if content:
             emit("chat", role="agent", text=content)
         if content and not tool_calls:

@@ -141,7 +141,9 @@ class RelayClient:
         except BaseException:
             await ctx.__aexit__(None, None, None)
             raise
-        logger.info(f"WebTransport session established: {parsed.scheme}://{host}:{port}{expected_path}")
+        logger.info(
+            f"WebTransport session established: {parsed.scheme}://{host}:{port}{expected_path}"
+        )
         return cls(url, role, session, ctx)
 
     async def __aenter__(self) -> RelayClient:

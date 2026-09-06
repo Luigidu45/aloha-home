@@ -1224,7 +1224,9 @@ class RelayBridgeModule(Module):
                 logger.warning(f"relay reconnect failed ({e}); retrying")
                 await asyncio.sleep(_RECONNECT_PAUSE_S)
 
-    def _reconcile(self, session: _Session, want: set[str], *, replay: list[str] | None = None) -> None:
+    def _reconcile(
+        self, session: _Session, want: set[str], *, replay: list[str] | None = None
+    ) -> None:
         """Subscribe/unsubscribe inputs so exactly `want` is being encoded."""
         for spec in self._channel_specs:
             active = spec.ch in session.unsubs

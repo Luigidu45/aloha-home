@@ -15,8 +15,8 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
 sys.path.insert(0, "/Users/tule/trenches/dimos-repo/.claude/worktrees/microduck-sim")
-from dimos.robot.pollen.microduck import assets_fetch  # noqa: E402
-from dimos.simulation.utils.xml_parser import build_joint_mappings  # noqa: E402
+from dimos.robot.pollen.microduck import assets_fetch
+from dimos.simulation.utils.xml_parser import build_joint_mappings
 
 EVENTS = "/Users/tule/.claude/jobs/1c2d08cf/tmp/events.jsonl"
 OUT = "/Users/tule/Desktop/microduck_demo.mp4"
@@ -39,9 +39,7 @@ scene.attach(robot, prefix="", frame=frame)
 model = scene.compile()
 data = mujoco.MjData(model)
 
-mappings = [
-    m for m in build_joint_mappings(None, model) if m.qpos_adr is not None
-]
+mappings = [m for m in build_joint_mappings(None, model) if m.qpos_adr is not None]
 free_adr = None
 hinge_maps = []
 for j in range(model.njnt):
@@ -83,9 +81,7 @@ def sample(t: float):
 
 
 # --- time warp: 1x around dialogue, FAST elsewhere ----------------------
-slow_windows = [
-    (t - SLOW_PRE, t + SLOW_POST) for t, role, _ in chat if role in ("human", "agent")
-]
+slow_windows = [(t - SLOW_PRE, t + SLOW_POST) for t, role, _ in chat if role in ("human", "agent")]
 
 
 def speed_at(t: float) -> int:
@@ -146,7 +142,7 @@ def overlay(frame_arr, t: float, spd: int):
             color = {"You": (120, 200, 255), "Duck": (255, 210, 90), "act": (150, 150, 150)}[tag]
             prefix = {"You": "You:  ", "Duck": "Duck: ", "act": "  > "}[tag]
             fnt = font_small if tag == "act" else font
-            draw.text((30, y), prefix + line, font=fnt, fill=color + (255,))
+            draw.text((30, y), prefix + line, font=fnt, fill=(*color, 255))
             y += lh
     if spd > 1:
         draw.text((W - 90, 24), f"{spd}x", font=font, fill=(255, 255, 255, 220))
@@ -160,10 +156,32 @@ cam.azimuth, cam.elevation, cam.distance = 150, -28, 3.0
 lookat = np.array([0.0, 0.0, 0.15])
 
 ff = subprocess.Popen(
-    ["ffmpeg", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
-     "-r", str(FPS), "-i", "-", "-c:v", "libx264", "-preset", "medium",
-     "-crf", "20", "-pix_fmt", "yuv420p", OUT],
-    stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+    [
+        "ffmpeg",
+        "-y",
+        "-f",
+        "rawvideo",
+        "-pix_fmt",
+        "rgb24",
+        "-s",
+        f"{W}x{H}",
+        "-r",
+        str(FPS),
+        "-i",
+        "-",
+        "-c:v",
+        "libx264",
+        "-preset",
+        "medium",
+        "-crf",
+        "20",
+        "-pix_fmt",
+        "yuv420p",
+        OUT,
+    ],
+    stdin=subprocess.PIPE,
+    stdout=subprocess.DEVNULL,
+    stderr=subprocess.DEVNULL,
 )
 
 t, nframes = 0.0, 0

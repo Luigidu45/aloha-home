@@ -273,14 +273,10 @@ async def test_coalesced_subscriptions_preserve_pending_replays():
         Subs(chs=["agent", "mode"], n=4),
     ]
     # One transport read delivers the whole subscription burst before consumption.
-    wire = b"".join(
-        _control_bytes(encode_datagram(msg), seq=i) for i, msg in enumerate(snapshots)
-    )
+    wire = b"".join(_control_bytes(encode_datagram(msg), seq=i) for i, msg in enumerate(snapshots))
     session._stream_data_received(3, wire, False)
     assert session.control_msgs.qsize() == 1
-    assert session.control_msgs.get_nowait() == Subs(
-        chs=["agent", "mode"], n=4, replay=["agent"]
-    )
+    assert session.control_msgs.get_nowait() == Subs(chs=["agent", "mode"], n=4, replay=["agent"])
     assert session.control_dropped == 0
 
 
