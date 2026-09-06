@@ -260,7 +260,7 @@ def _source_serves(url: str) -> bool:
     request = urllib.request.Request(url, method="HEAD")
     try:
         with urllib.request.urlopen(request, timeout=_HEAD_TIMEOUT_S) as resp:
-            return 200 <= resp.status < 300
+            return 200 <= int(resp.status) < 300
     except urllib.error.HTTPError as exc:
         if exc.code == 404 or exc.code == 410:
             return False

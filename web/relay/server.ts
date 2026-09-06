@@ -15,8 +15,10 @@ export interface RelayOptions {
   registry?: Registry;
   authorizeSession?: (url: URL) => boolean;
   viewerConnected?: (viewer: ViewerPeer, url: URL, close: () => void) => void;
-  handleHttp?: (req: Request, info: { wtUrl: string; certHash: string; v: number }) =>
-    Response | null | Promise<Response | null>;
+  handleHttp?: (
+    req: Request,
+    info: { wtUrl: string; certHash: string; v: number },
+  ) => Response | null | Promise<Response | null>;
 
   /** TCP port for the HTTP side. Default 7780; 0 picks an ephemeral port. */
   port?: number;
@@ -219,8 +221,7 @@ export async function startRelay(options: RelayOptions = {}): Promise<RelayHandl
           const viewer = new ViewerSession(wt, nextViewerId++, registry);
           options.viewerConnected?.(viewer, url, () => wt.close());
           viewer.start();
-        }
-        else {
+        } else {
           console.log(`[relay] rejecting unknown WebTransport endpoint ${path}`);
           wt.close({ closeCode: 1, reason: "unknown WebTransport endpoint" });
         }
@@ -234,7 +235,9 @@ export async function startRelay(options: RelayOptions = {}): Promise<RelayHandl
     const url = new URL(req.url);
     if (options.handleHttp) {
       const response = await options.handleHttp(req, {
-        wtUrl: `${wtUrl}/viewer`, certHash: cert.certHashB64, v: PROTOCOL_VERSION,
+        wtUrl: `${wtUrl}/viewer`,
+        certHash: cert.certHashB64,
+        v: PROTOCOL_VERSION,
       });
       if (response !== null) return response;
     }

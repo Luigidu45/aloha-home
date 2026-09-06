@@ -199,7 +199,7 @@ class MicroduckObserver:
         # v rotated by quat^-1
         xyz = quat[1:4]
         t = np.cross(xyz, down) * 2.0
-        return down - quat[0] * t + np.cross(xyz, t)
+        return np.asarray(down - quat[0] * t + np.cross(xyz, t), dtype=np.float32)
 
     def build(
         self,

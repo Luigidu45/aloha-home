@@ -175,7 +175,7 @@ describe("startVideoSink", () => {
     await flush();
   });
 
-  it("returns from a hidden tab without reporting a stall it caused itself", async () => {
+  it("returns from a hidden tab without reporting a stall it caused itself", () => {
     const { decode } = deferredDecode();
     let hidden = false;
     stop = startVideoSink(store, CH, canvas, health, { decode, hidden: () => hidden });

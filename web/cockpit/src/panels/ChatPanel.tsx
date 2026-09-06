@@ -32,7 +32,7 @@ export const AGENT_MODE_NOTICE = "Switch to Agent mode to talk to the duck";
 export const THINKING_TEXT = "◌ agent thinking";
 /** An empty transcript means nothing has been said yet, not that the agent is
  * still coming up - "waiting for the agent..." read as a stuck spinner. */
-export const EMPTY_TEXT = "Ask the duck something - try \"go to the kitchen\"";
+export const EMPTY_TEXT = 'Ask the duck something - try "go to the kitchen"';
 /** Scroll slack under which the transcript still counts as "at the bottom". */
 const STICK_SLACK_PX = 8;
 
@@ -87,7 +87,8 @@ function ChatView({ spec, store, teleop, chans }: PanelProps & { chans: ChatChan
   const thinking = idle === false;
   // humancli stamps the spinner with the time it appeared.
   const thinkingSince = useMemo(() => (thinking ? Date.now() / 1000 : 0), [thinking]);
-  const canSend = spec.params.readOnly !== true && teleop !== undefined && chans.input !== undefined;
+  const canSend = spec.params.readOnly !== true && teleop !== undefined &&
+    chans.input !== undefined;
   const wrongMode = canSend && mode !== null && mode !== "agent";
 
   const [draft, setDraft] = useState("");
@@ -212,7 +213,9 @@ function ChatView({ spec, store, teleop, chans }: PanelProps & { chans: ChatChan
             className={styles.input}
             data-testid={`chat-${chans.chat}-input`}
             aria-label="message to the agent"
-            placeholder={canSend ? "Enter sends, Shift+Enter for a new line" : "Agent input unavailable"}
+            placeholder={canSend
+              ? "Enter sends, Shift+Enter for a new line"
+              : "Agent input unavailable"}
             rows={2}
             value={draft}
             disabled={!canSend}
