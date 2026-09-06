@@ -20,6 +20,7 @@ from dimos_lcm.nav_msgs.Path import Path
 from dimos_lcm.std_msgs.Header import Header
 from dimos_lcm.std_msgs.Time import Time
 import numpy as np
+import pytest
 
 from dimos.msgs.nav_msgs.LineSegments3D import LineSegments3D
 
@@ -58,9 +59,7 @@ def test_decode_matches_the_wire_layout() -> None:
     assert empty.weights.shape == (0,)
 
 
-def test_mixed_frame_id_lengths_fall_back_to_the_generic_decoder() -> None:
+def test_mixed_frame_id_lengths_are_rejected() -> None:
     raw = encode_edges(20, frame_ids=["odom", "map", "base_link"])
-    assert LineSegments3D._decode_fixed_stride(raw) is None
-    msg = LineSegments3D.lcm_decode(raw)
-    np.testing.assert_array_equal(msg.segments, expected_segments(20))
-    np.testing.assert_allclose(msg.weights, np.arange(20) * 0.1)
+    with pytest.raises(ValueError, match="frame_id length"):
+        LineSegments3D.lcm_decode(raw)

@@ -24,7 +24,6 @@ import struct
 import time
 from typing import TYPE_CHECKING, BinaryIO
 
-from dimos_lcm.nav_msgs import Path as LCMPath
 import numpy as np
 
 from dimos.types.timestamped import Timestamped
@@ -73,15 +72,11 @@ class LineSegments3D(Timestamped):
 
     @classmethod
     def lcm_decode(cls, data: bytes | BinaryIO) -> LineSegments3D:
-        raw = data if isinstance(data, bytes) else data.read()
-        fast = cls._decode_fixed_stride(raw)
-        return fast if fast is not None else cls._decode_generic(raw)
+        """Read the Path payload through strided array views.
 
-    @classmethod
-    def _decode_fixed_stride(cls, raw: bytes) -> LineSegments3D | None:
-        """Decode with strided array views when every pose header has the same frame_id length."""
-        if len(raw) < 8 + _PREFIX.size:
-            return None
+        Every pose header must carry the same frame_id length, which is what the planner emits.
+        """
+        raw = data if isinstance(data, bytes) else data.read()
         count, _, sec, nsec, frame_len = _PREFIX.unpack_from(raw, 8)
         offset = 8 + _PREFIX.size
         frame_id = raw[offset : offset + frame_len][:-1].decode("utf-8", "replace")
@@ -89,17 +84,15 @@ class LineSegments3D(Timestamped):
         ts = sec + nsec / 1e9
         if count == 0:
             return cls(ts=ts, frame_id=frame_id)
-        if count % 2 or len(raw) < offset + _POSE_HEAD:
-            return None
+        if count % 2:
+            raise ValueError(f"LineSegments3D needs pose pairs, got {count} poses")
         (pose_frame_len,) = struct.unpack_from(">I", raw, offset + _POSE_HEAD - 4)
         stride = _POSE_HEAD + pose_frame_len + _POSE_TAIL
-        if len(raw) != offset + count * stride:
-            return None
         lens = np.ndarray(
             (count,), dtype=">u4", buffer=raw, offset=offset + _POSE_HEAD - 4, strides=(stride,)
         )
-        if not np.all(lens == pose_frame_len):
-            return None
+        if len(raw) != offset + count * stride or not np.all(lens == pose_frame_len):
+            raise ValueError("LineSegments3D poses must share one frame_id length")
         poses = np.ndarray(
             (count, _POSE_DOUBLES),
             dtype=">f8",
@@ -112,21 +105,6 @@ class LineSegments3D(Timestamped):
             frame_id=frame_id,
             segments=poses[:, :3].astype(np.float64).reshape(-1, 2, 3),
             weights=poses[0::2, 6].astype(np.float64),
-        )
-
-    @classmethod
-    def _decode_generic(cls, raw: bytes) -> LineSegments3D:
-        msg = LCMPath.lcm_decode(raw)
-        poses = msg.poses[: len(msg.poses) - len(msg.poses) % 2]
-        points = np.array(
-            [(p.pose.position.x, p.pose.position.y, p.pose.position.z) for p in poses],
-            dtype=np.float64,
-        )
-        return cls(
-            ts=msg.header.stamp.sec + msg.header.stamp.nsec / 1e9,
-            frame_id=msg.header.frame_id,
-            segments=points.reshape(-1, 2, 3),
-            weights=[p.pose.orientation.w for p in poses[0::2]],
         )
 
     def to_rerun(self, z_offset: float = 0.0, radii: float = 0.04) -> Archetype:
