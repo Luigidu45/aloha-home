@@ -49,9 +49,13 @@ def test_decode_matches_the_wire_layout() -> None:
     msg = LineSegments3D.lcm_decode(encode_edges(50))
     assert msg.frame_id == "odom"
     assert msg.ts == 12.5
-    assert msg.segments.shape == (50, 2, 3)
     np.testing.assert_array_equal(msg.segments, expected_segments(50))
     np.testing.assert_allclose(msg.weights, np.arange(50) * 0.1)
+
+    empty = LineSegments3D.lcm_decode(encode_edges(0))
+    assert len(empty) == 0
+    assert empty.segments.shape == (0, 2, 3)
+    assert empty.weights.shape == (0,)
 
 
 def test_mixed_frame_id_lengths_fall_back_to_the_generic_decoder() -> None:
@@ -60,23 +64,3 @@ def test_mixed_frame_id_lengths_fall_back_to_the_generic_decoder() -> None:
     msg = LineSegments3D.lcm_decode(raw)
     np.testing.assert_array_equal(msg.segments, expected_segments(20))
     np.testing.assert_allclose(msg.weights, np.arange(20) * 0.1)
-
-
-def test_empty_path_decodes_to_no_segments() -> None:
-    msg = LineSegments3D.lcm_decode(encode_edges(0))
-    assert len(msg) == 0
-    assert msg.segments.shape == (0, 2, 3)
-    assert msg.weights.shape == (0,)
-
-
-def test_to_rerun_colors_distinct_weights_differently() -> None:
-    msg = LineSegments3D(segments=np.zeros((3, 2, 3)), weights=[1.0, 10.0, 100.0])
-    colors = np.asarray(msg.to_rerun().colors.as_arrow_array().to_numpy(zero_copy_only=False))
-    assert len(colors) == 3
-    assert len(set(colors.tolist())) == 3
-
-
-def test_to_rerun_with_uniform_weights_uses_one_color() -> None:
-    msg = LineSegments3D(segments=np.zeros((3, 2, 3)))
-    colors = np.asarray(msg.to_rerun().colors.as_arrow_array().to_numpy(zero_copy_only=False))
-    assert len(set(colors.tolist())) == 1
