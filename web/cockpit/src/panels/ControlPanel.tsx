@@ -136,6 +136,11 @@ export function ControlPanel({ spec, store, teleop }: PanelProps) {
           );
         })}
         {policy === null && <span className={styles.hint}>waiting for policy state...</span>}
+        {policy?.active === "stand" && (
+          <span className={styles.hint} role="status" data-testid="control-stand-notice">
+            Stand holds position. Select walk to drive or navigate.
+          </span>
+        )}
         <div className={styles.chips}>
           {policy !== null && policy.variant !== "" && (
             <span className={styles.chip} data-testid="chip-variant">{policy.variant}</span>

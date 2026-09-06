@@ -43,6 +43,7 @@ from dimos.web.relay_bridge.protocol import (
     ProtocolError,
     RobotInfo,
     Robots,
+    Subs,
     TeleopStop,
     Tx,
     decode_data_frame,
@@ -576,3 +577,14 @@ def test_control_reader_drops_invalid_keeps_valid_neighbors():
         msg_from_dict({"t": "hello", "v": PROTOCOL_VERSION, "role": "viewer"}),
         msg_from_dict({"t": "ping", "n": 3, "ts": 4.5}),
     ]
+
+
+def test_subscription_replay_hint_names_an_active_channel() -> None:
+    message = {"t": "subs", "chs": ["agent"], "n": 3, "replay": ["agent"]}
+    assert msg_from_dict(message) == Subs(chs=["agent"], n=3, replay=["agent"])
+
+
+@pytest.mark.parametrize("replay", [None, 1, "agent", [1], ["unknown"]])
+def test_subscription_rejects_invalid_replay_hint(replay) -> None:
+    with pytest.raises(ProtocolError):
+        msg_from_dict({"t": "subs", "chs": ["agent"], "n": 3, "replay": replay})

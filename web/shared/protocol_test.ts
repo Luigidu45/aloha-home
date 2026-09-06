@@ -444,3 +444,11 @@ Deno.test("peek rejects a frame whose total exceeds MAX_DATA_FRAME_BYTES", () =>
   dv.setUint32(4, MAX_DATA_FRAME_BYTES, true); // payload pushes total over the cap
   assertThrows(() => peekDataFrameLengths(bad));
 });
+
+Deno.test("subscription replay hints are optional and name an active channel", () => {
+  const message: Msg = { t: "subs", chs: ["agent"], n: 3, replay: ["agent"] };
+  assertEquals(msgFromUnknown(message), message);
+  for (const replay of [null, 1, "agent", [1], ["unknown"]]) {
+    assertEquals(msgFromUnknown({ ...message, replay }), null);
+  }
+});

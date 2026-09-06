@@ -148,6 +148,8 @@ export interface SubsMsg {
   t: "subs";
   chs: string[];
   n: number;
+  /** A new viewer joined these already-active reliable channels. Older peers ignore it. */
+  replay?: string[];
 }
 
 // Teleop (T6). twist/stop ride datagrams viewer->relay->robot (loss-tolerant:
@@ -337,7 +339,10 @@ const MSG_VALIDATORS: Record<string, (value: Record<string, unknown>) => boolean
     (v.manifest === undefined || isRecord(v.manifest)),
   robots: (v) => Array.isArray(v.robots) && v.robots.every(isRobotInfo),
   manifest: (v) => v.manifest === undefined || isRecord(v.manifest),
-  subs: (v) => Array.isArray(v.chs) && v.chs.every((c) => typeof c === "string"),
+  subs: (v) =>
+    Array.isArray(v.chs) && v.chs.every((c) => typeof c === "string") &&
+    (v.replay === undefined || (Array.isArray(v.replay) &&
+      v.replay.every((ch) => typeof ch === "string" && (v.chs as string[]).includes(ch)))),
   twist: genAbsentOrNumber,
   stop: genAbsentOrNumber,
   teleop_start: genAbsentOrNumber,

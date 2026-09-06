@@ -10,6 +10,7 @@ import { ControlPanel } from "./ControlPanel.tsx";
 import { PENDING_MS } from "./controlPolicy.ts";
 import { NavMapPanel, NOTE_LINGER_MS, startNavOverlay } from "./NavMapPanel.tsx";
 import { getPanel } from "./registry.tsx";
+import type { MapTransform } from "./mapRenderer.ts";
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -167,6 +168,21 @@ describe("cockpit panels", () => {
   describe("ChatPanel", () => {
     beforeEach(() => {
       act(() => root.render(<ChatPanel spec={CHAT_SPEC} store={store} teleop={hooks} />));
+    });
+
+    it("shows a read-only transcript in teleop mode without offering agent input", () => {
+      const spec = {
+        ...CHAT_SPEC,
+        params: { ...CHAT_SPEC.params, readOnly: true },
+      };
+      act(() => root.render(<ChatPanel spec={spec} store={store} teleop={hooks} />));
+      ingest(store, "mode", { mode: "teleop" });
+      expect(q<HTMLTextAreaElement>("chat-agent-input").disabled).toBe(true);
+      expect(q<HTMLButtonElement>("chat-agent-send").disabled).toBe(true);
+      expect(container.textContent).toContain("Read-only transcript");
+      expect(container.textContent).not.toContain(AGENT_MODE_NOTICE);
+      chat("ai", "Watching the world");
+      expect(container.textContent).toContain("Watching the world");
     });
 
     it("renders the humancli transcript from chat frames, with tool rows and the spinner", () => {
@@ -584,6 +600,74 @@ describe("startNavOverlay", () => {
   afterEach(() => {
     stop?.();
     vi.restoreAllMocks();
+  });
+
+  it("reframes both canvases when places change without another grid frame", async () => {
+    const base = document.createElement("canvas");
+    const overlay = document.createElement("canvas");
+    defineSize(base, 440, 240);
+    defineSize(overlay, 440, 240);
+    let baseTransform: MapTransform | undefined;
+    const handle = startNavOverlay(
+      store,
+      {
+        costmap: "global_costmap",
+        pose: "odom",
+        path: "path",
+        places: "places",
+        navState: "nav_state",
+      },
+      base,
+      overlay,
+      { lastDrawOkAtMs: 0, failures: 0 },
+      {
+        fitPlaces: true,
+        inflate: () => Promise.resolve(new Uint8Array(4)),
+        hidden: () => false,
+        onTransform: (t) => {
+          baseTransform = t;
+        },
+      },
+    );
+    stop = handle.stop;
+    ingest(store, "global_costmap", {
+      bytes: new Uint8Array([1]),
+      w: 2,
+      h: 2,
+      res: 1,
+      origin: [0, 0, 0],
+    });
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+    const [, baseSeq] = seqs;
+    baseSeq.length = 0;
+    const places = {
+      frame: "world",
+      rooms: [{ name: "studio", aliases: [], bounds: [10, 14, 20, 22], target: [12, 21, 0] }],
+      objects: [],
+      tagged: [],
+    };
+    ingest(store, "places", places);
+    expect(baseSeq).toContain("drawImage");
+    expect(handle.transform()).toEqual(baseTransform);
+    expect(handle.transform()?.scale).toBeCloseTo(100);
+    expect(handle.transform()?.originX).toBeCloseTo(9.8);
+
+    baseSeq.length = 0;
+    ingest(store, "places", {
+      ...places,
+      rooms: [{ ...places.rooms[0], bounds: [20, 24, 30, 32], target: [22, 31, 0] }],
+    });
+    expect(baseSeq).toContain("drawImage");
+    expect(handle.transform()).toEqual(baseTransform);
+    expect(handle.transform()?.originX).toBeCloseTo(19.8);
+
+    handle.stop();
+    stop = null;
+    baseSeq.length = 0;
+    ingest(store, "places", places);
+    expect(baseSeq).toEqual([]);
   });
 
   it("draws the pose on the overlay above the room labels, never on the base", async () => {

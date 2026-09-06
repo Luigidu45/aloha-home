@@ -161,6 +161,9 @@ def _shape_twist(
     return vx, vy, wz
 
 
+shape_twist = _shape_twist
+
+
 class MicroduckSimModuleConfig(MujocoSimModuleConfig):
     # 14 servo joints and no gripper; a smaller dof would make the parent
     # misread joint 14 onward as a gripper.
@@ -431,16 +434,18 @@ class MicroduckSimModule(MujocoSimModule):
         logger.warning("Microduck fell over; standing it back up")
         # Falls usually happen tripping over an obstacle; standing back up
         # exactly in place can wedge the robot inside it. Nudge toward the
-        # room origin, which is open floor in the bundled scenes.
+        # configured spawn point, which the scene author chose as clear floor.
         data = engine.data
         adr = bank.root_qpos_adr
         x = float(data.qpos[adr])
         y = float(data.qpos[adr + 1])
-        dist = math.hypot(x, y)
+        spawn_x, spawn_y = self.config.spawn_xy or (0.0, 0.0)
+        dx, dy = x - spawn_x, y - spawn_y
+        dist = math.hypot(dx, dy)
         if dist > 1e-3:
             shift = min(0.25, dist)
-            data.qpos[adr] = x - shift * x / dist
-            data.qpos[adr + 1] = y - shift * y / dist
+            data.qpos[adr] = x - shift * dx / dist
+            data.qpos[adr + 1] = y - shift * dy / dist
         self._stand_in_place(engine)
         self._fallen_since = None
         return True
@@ -522,6 +527,9 @@ class MicroduckSimModule(MujocoSimModule):
     # ------------------------------------------------------------------- model
 
     def _compose_model(self) -> mujoco.MjModel:
+        return self._compose_spec().compile()
+
+    def _compose_spec(self) -> mujoco.MjSpec:
         """Compose scene + robot, adding the lidar and chase cameras and the ball.
 
         Simplified from the parent: no scene-package entities, and the
@@ -592,7 +600,7 @@ class MicroduckSimModule(MujocoSimModule):
         if not self.config.cast_shadows:
             for light in spec_scene.lights:
                 light.castshadow = False
-        return spec_scene.compile()
+        return spec_scene
 
 
 # The base policies hold a stand on a zero command, so the module needs no

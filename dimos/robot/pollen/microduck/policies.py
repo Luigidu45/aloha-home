@@ -42,6 +42,7 @@ throttle for 2 s before handing over to a legged policy) and upstream's
 from __future__ import annotations
 
 from collections.abc import Callable, Iterable, Mapping
+from copy import copy
 from dataclasses import dataclass
 import math
 from pathlib import Path
@@ -344,6 +345,16 @@ class PolicyBank:
             PolicyName(n) for n in POLICY_NAMES if n in seen
         )
         self._availability = policy_availability(variant, self.missing)
+
+    def for_robot(self, model: mujoco.MjModel, prefix: str) -> PolicyBank:
+        """Bind shared inference sessions to another robot with independent action history."""
+        bank = copy(self)
+        bank._observer = MicroduckObserver(
+            model, self.joint_names, self.default_pose, prefix=prefix
+        )
+        bank.root_qpos_adr = bank._observer.root_qpos_adr
+        bank.last_action = np.zeros(len(self.joint_names), dtype=np.float32)
+        return bank
 
     @property
     def names(self) -> tuple[str, ...]:

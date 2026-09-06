@@ -94,6 +94,17 @@
   position: relative;
 }
 
+/* Control strips take only the height their wrapped buttons need. */
+.frame[data-panel-kind="control"] .body {
+  min-height: 0;
+}
+
+/* Let paired video feeds adapt to their actual panel dimensions. */
+.frame[data-panel-kind="video"] .body,
+.frameMax[data-panel-kind="video"] .body {
+  container-type: size;
+}
+
 /* A maximized frame owns the viewport; lift the panels' own height caps. */
 .frameMax .body :global(canvas) {
   max-height: 100%;

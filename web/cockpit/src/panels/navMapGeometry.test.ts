@@ -4,6 +4,7 @@ import {
   clickToWorld,
   FALLBACK_HALF_M,
   fallbackTransform,
+  fitPlacesTransform,
   GOAL_LIMIT_M,
   goalPayload,
   hitLabel,
@@ -125,5 +126,62 @@ describe("readPlaces / readPath", () => {
       points: [[0, 0], [0.5, 0.1]],
     });
     expect(readPath({ frame: "world" })).toBeNull();
+  });
+});
+
+describe("fitPlacesTransform", () => {
+  it("fits translated room bounds and keeps pixel clicks in world coordinates", () => {
+    const t = fitPlacesTransform(
+      {
+        frame: "world",
+        rooms: [{
+          name: "studio",
+          aliases: [],
+          bounds: [10, 14, 20, 22],
+          target: [12, 21, 0],
+        }],
+        objects: [],
+        tagged: [],
+      },
+      440,
+      240,
+    )!;
+    expect(t.scale).toBeCloseTo(100);
+    const [left, bottom] = worldToCanvas(t, 10, 20);
+    expect(left).toBeCloseTo(20);
+    expect(bottom).toBeCloseTo(220);
+    const [x, y] = canvasToWorld(t, 220, 120);
+    expect(x).toBeCloseTo(12);
+    expect(y).toBeCloseTo(21);
+  });
+
+  it("includes known landmarks and tagged places outside the rooms", () => {
+    const t = fitPlacesTransform(
+      {
+        frame: "world",
+        rooms: [],
+        objects: [{ name: "bench", x: -2, y: -1 }],
+        tagged: [{ name: "spot", x: 2, y: 1, yaw: 0 }],
+      },
+      440,
+      240,
+    )!;
+    expect(t.originX).toBeCloseTo(-2.2);
+    expect(t.originY).toBeCloseTo(-1.2);
+    expect(t.scale).toBeCloseTo(100);
+  });
+
+  it("leaves empty metadata to the existing grid fallback", () => {
+    expect(fitPlacesTransform(null, 400, 300)).toBeNull();
+    expect(fitPlacesTransform(
+      {
+        frame: "world",
+        rooms: [],
+        objects: [],
+        tagged: [],
+      },
+      400,
+      300,
+    )).toBeNull();
   });
 });

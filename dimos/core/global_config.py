@@ -104,6 +104,8 @@ class GlobalConfig(BaseSettings):
     robot_rotation_diameter: float = 0.6
     nerf_speed: float = 1.0
     mcp_port: int = 9990
+    # Scope background skill updates when several robot runtimes share a transport.
+    tool_stream_topic: str = "/tool_streams"
     # `DIMOS_TRANSPORT` (or `.env`) is the single switch read by every process
     # (dimos, humancli, agentspy, dtop). The `transport` alias keeps the bare
     # env name and the `--transport` CLI flag (which sets the field by name) working.

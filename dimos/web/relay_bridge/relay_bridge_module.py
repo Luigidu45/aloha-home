@@ -962,7 +962,7 @@ class RelayBridgeModule(Module):
                     async for msg in session.client.control_messages():
                         if isinstance(msg, Subs) and msg.n > session.last_n:
                             session.last_n = msg.n
-                            self._reconcile(session, set(msg.chs))
+                            self._reconcile(session, set(msg.chs), replay=msg.replay)
                         elif isinstance(msg, WireTwist):
                             self._on_wire_twist(msg)
                         elif isinstance(msg, WireStop):
@@ -1224,7 +1224,7 @@ class RelayBridgeModule(Module):
                 logger.warning(f"relay reconnect failed ({e}); retrying")
                 await asyncio.sleep(_RECONNECT_PAUSE_S)
 
-    def _reconcile(self, session: _Session, want: set[str]) -> None:
+    def _reconcile(self, session: _Session, want: set[str], *, replay: list[str] | None = None) -> None:
         """Subscribe/unsubscribe inputs so exactly `want` is being encoded."""
         for spec in self._channel_specs:
             active = spec.ch in session.unsubs
@@ -1246,15 +1246,17 @@ class RelayBridgeModule(Module):
                     # Replay precedes the subscribe: this offer runs
                     # synchronously on the loop, so a live frame - possible
                     # only once subscribed - always queues behind it and wins
-                    # the 1-slot mailbox. Fires on 0->1 transitions only: the
-                    # relay reports sub-set changes and stays cache-free, so
-                    # an extra viewer on an already-active channel waits for
-                    # the next publish (review issue 2, deferred).
+                    # the 1-slot mailbox. Late reliable viewers request a
+                    # replay explicitly without detaching active encoders.
                     self._replay(session, spec, sender)
                     session.unsubs[spec.ch] = self.inputs[spec.ch].subscribe(
                         functools.partial(self._on_input, session, spec, sender)
                     )
                 logger.info(f"relay bridge: viewer subscribed to {spec.ch}; encoding started")
+            elif active and should and spec.ch in (replay or []) and spec.resend_on_subscribe:
+                # Existing viewers dedupe log entries by their stable message n.
+                # Only requested channels replay; other live encoders stay attached.
+                self._replay(session, spec, session.senders[spec.ch])
             elif active and not should:
                 unsubscribe = session.unsubs[spec.ch]
                 unsubscribe()

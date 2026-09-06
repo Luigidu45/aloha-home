@@ -94,6 +94,46 @@ export interface Places {
   tagged: TaggedPlace[];
 }
 
+const PLACE_MARGIN_RATIO = 0.05;
+const MIN_PLACE_MARGIN_M = 0.1;
+
+/** Fit the declared places, with a small margin, independently of the scan grid. */
+export function fitPlacesTransform(
+  places: Places | null,
+  canvasW: number,
+  canvasH: number,
+): MapTransform | null {
+  if (places === null) return null;
+  let xmin = Infinity, xmax = -Infinity, ymin = Infinity, ymax = -Infinity;
+  const include = (x: number, y: number): void => {
+    xmin = Math.min(xmin, x);
+    xmax = Math.max(xmax, x);
+    ymin = Math.min(ymin, y);
+    ymax = Math.max(ymax, y);
+  };
+  for (const room of places.rooms) {
+    include(room.bounds[0], room.bounds[2]);
+    include(room.bounds[1], room.bounds[3]);
+  }
+  for (const item of [...places.objects, ...places.tagged]) include(item.x, item.y);
+  if (!Number.isFinite(xmin)) return null;
+  const margin = Math.max(
+    MIN_PLACE_MARGIN_M,
+    Math.max(xmax - xmin, ymax - ymin) * PLACE_MARGIN_RATIO,
+  );
+  // This extent is only used for framing; it never replaces the actual grid.
+  return fitTransform(
+    {
+      w: xmax - xmin + 2 * margin,
+      h: ymax - ymin + 2 * margin,
+      res: 1,
+      origin: [xmin - margin, ymin - margin, 0],
+    },
+    canvasW,
+    canvasH,
+  );
+}
+
 function numbers(v: unknown, count: number): number[] | null {
   if (!Array.isArray(v) || v.length < count) return null;
   const out: number[] = [];

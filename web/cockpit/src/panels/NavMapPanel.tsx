@@ -34,6 +34,7 @@ import {
 import {
   clickToWorld,
   fallbackTransform,
+  fitPlacesTransform,
   goalPayload,
   hitLabel,
   type LabelBox,
@@ -264,13 +265,17 @@ export type NavOverlayChannels = Pick<
   "costmap" | "pose" | "path" | "places" | "navState"
 >;
 
+export interface NavOverlayOptions extends MapSinkDeps {
+  fitPlaces?: boolean;
+}
+
 export function startNavOverlay(
   store: ChannelStore,
   chans: NavOverlayChannels,
   base: HTMLCanvasElement,
   overlay: HTMLCanvasElement,
   health: DrawHealth,
-  deps: MapSinkDeps = {},
+  deps: NavOverlayOptions = {},
 ): NavOverlayHandle {
   const hidden = deps.hidden ?? (() => document.hidden);
   const observeResize = deps.observeResize ?? ((el, cb) => {
@@ -288,6 +293,16 @@ export function startNavOverlay(
   const read = (ch: string | undefined): unknown =>
     ch === undefined ? undefined : store.get(ch)?.value;
 
+  const viewTransform = (grid: GridPlacement | null, w: number, h: number): MapTransform => {
+    if (deps.fitPlaces) {
+      const fitted = fitPlacesTransform(readPlaces(read(chans.places)), w, h);
+      if (fitted !== null) return fitted;
+    }
+    return grid === null
+      ? fallbackTransform(w, h)
+      : deps.transform?.(grid, w, h) ?? fitTransform(grid, w, h);
+  };
+
   const draw = (): void => {
     if (stopped || hidden() || ctx === null) return;
     const cssW = overlay.clientWidth;
@@ -300,7 +315,7 @@ export function startNavOverlay(
       overlay.width = w;
       overlay.height = h;
     }
-    const t = place === null ? fallbackTransform(w, h) : fitTransform(place, w, h);
+    const t = viewTransform(place, w, h);
     current = t;
     labels = drawOverlay(ctx, t, w, h, dpr, {
       places: readPlaces(read(chans.places)),
@@ -314,6 +329,11 @@ export function startNavOverlay(
 
   const stopBase = startMapSink(store, chans.costmap, undefined, base, health, {
     ...deps,
+    transform: viewTransform,
+    redrawOn: [
+      ...(deps.redrawOn ?? []),
+      ...(deps.fitPlaces && chans.places !== undefined ? [chans.places] : []),
+    ],
     onTransform: (t, p) => {
       deps.onTransform?.(t, p);
       if (p !== place) {
@@ -378,6 +398,7 @@ function NavMapView({ spec, store, teleop, chans }: PanelProps & { chans: NavMap
 
   // Channel names are the effect's identity (chans is rebuilt per render).
   const { costmap, pose, path, places, navState } = chans;
+  const fitPlaces = spec.params.fitPlaces === true;
   useEffect(() => {
     const base = baseRef.current;
     const overlay = overlayRef.current;
@@ -388,13 +409,14 @@ function NavMapView({ spec, store, teleop, chans }: PanelProps & { chans: NavMap
       base,
       overlay,
       health,
+      { fitPlaces },
     );
     handleRef.current = handle;
     return () => {
       handleRef.current = null;
       handle.stop();
     };
-  }, [store, costmap, pose, path, places, navState, health]);
+  }, [store, costmap, pose, path, places, navState, health, fitPlaces]);
 
   const send = (ch: string | undefined, data: Record<string, unknown>, what: string): void => {
     if (teleop === undefined || ch === undefined) {

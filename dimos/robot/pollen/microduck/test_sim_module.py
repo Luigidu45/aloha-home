@@ -299,15 +299,21 @@ class _FakeEngine:
         self.model = None
 
 
-def test_check_fall_is_debounced_and_nudges_toward_origin() -> None:
-    module = MicroduckSimModule(auto_stand=True, auto_stand_after=2.0)
+@pytest.mark.parametrize(
+    ("spawn_xy", "expected_x"),
+    [(None, 0.75), ((2.0, 0.0), 1.25), ((1.0, 0.0), 1.0)],
+)
+def test_check_fall_is_debounced_and_nudges_toward_spawn(
+    monkeypatch: pytest.MonkeyPatch, spawn_xy: tuple[float, float] | None, expected_x: float
+) -> None:
+    module = MicroduckSimModule(auto_stand=True, auto_stand_after=2.0, spawn_xy=spawn_xy)
     try:
         bank = _FakeBank(gravity_z=0.9)  # lying on its back
         scheduler = _FakeScheduler()
         module._bank = bank  # type: ignore[assignment]
         module._scheduler = scheduler  # type: ignore[assignment]
         stood: list[Any] = []
-        module._stand_in_place = stood.append  # type: ignore[method-assign]
+        monkeypatch.setattr(module, "_stand_in_place", stood.append)
         engine = _FakeEngine()
 
         assert module._check_fall(engine, now=10.0) is False  # timer starts
@@ -316,7 +322,7 @@ def test_check_fall_is_debounced_and_nudges_toward_origin() -> None:
         assert module._check_fall(engine, now=12.1) is True  # stood back up
         assert scheduler.falls == [True]
         assert stood == [engine]
-        assert engine.data.qpos[0] == pytest.approx(0.75)  # nudged 0.25 m toward origin
+        assert engine.data.qpos[0] == pytest.approx(expected_x)
         assert module._fallen_since is None
 
         bank.gravity_z = -1.0  # upright again

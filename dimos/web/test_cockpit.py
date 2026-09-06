@@ -959,3 +959,17 @@ def test_tx_channel_defs_unpack_as_wire_triples() -> None:
         "goal_request": ("pose_goal.json.v1", "reliable"),
         "ui_command": ("command.json.v1", "reliable"),
     }
+
+
+def test_read_only_chat_preserves_manifest_compatibility() -> None:
+    manifest = build_microduck(Chat(read_only=True))
+    panel = manifest["panels"][0]
+    assert panel["params"]["readOnly"] is True
+    assert panel["channels"] == ["agent", "agent_idle", "mode", "human_input"]
+    parse_manifest(manifest)
+
+
+def test_scene_fitting_is_an_additive_navmap_option() -> None:
+    manifest = build_microduck(NavMap(fit_places=True))
+    assert manifest["panels"][0]["params"]["fitPlaces"] is True
+    parse_manifest(manifest)

@@ -139,6 +139,8 @@ class MicroduckObserver:
         model: mujoco.MjModel,
         joint_names: Sequence[str],
         default_pose: NDArray[np.float32],
+        *,
+        prefix: str = "",
     ) -> None:
         import mujoco
 
@@ -152,23 +154,24 @@ class MicroduckObserver:
         self._qpos_adr = np.empty(n, dtype=np.int64)
         self._qvel_adr = np.empty(n, dtype=np.int64)
         for i, name in enumerate(self.joint_names):
-            jid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, name)
+            jid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, prefix + name)
             if jid < 0:
                 raise RuntimeError(f"Microduck joint '{name}' not found in composed model")
             self._qpos_adr[i] = model.jnt_qposadr[jid]
             self._qvel_adr[i] = model.jnt_dofadr[jid]
 
-        gyro_sid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SENSOR, _GYRO_SENSOR)
+        gyro_sid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SENSOR, prefix + _GYRO_SENSOR)
         if gyro_sid < 0:
             raise RuntimeError(f"Microduck model has no '{_GYRO_SENSOR}' sensor")
         adr = int(model.sensor_adr[gyro_sid])
         self._gyro_slice = slice(adr, adr + 3)
 
-        trunk_jid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, _TRUNK_FREEJOINT)
+        trunk_jid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, prefix + _TRUNK_FREEJOINT)
         if trunk_jid < 0:
             raise RuntimeError(f"Microduck model has no '{_TRUNK_FREEJOINT}'")
         root_adr = int(model.jnt_qposadr[trunk_jid])
         self.root_qpos_adr = root_adr
+        self.root_qvel_adr = int(model.jnt_dofadr[trunk_jid])
         self._root_quat_slice = slice(root_adr + 3, root_adr + 7)
 
     @property
@@ -181,7 +184,8 @@ class MicroduckObserver:
         data.qpos[adr + 2] = 0.125
         data.qpos[adr + 3 : adr + 7] = (1.0, 0.0, 0.0, 0.0)
         data.qpos[self._qpos_adr] = self.default_pose
-        data.qvel[:] = 0.0
+        data.qvel[self._qvel_adr] = 0.0
+        data.qvel[self.root_qvel_adr : self.root_qvel_adr + 6] = 0.0
 
     def root_yaw(self, data: mujoco.MjData) -> float:
         """Trunk yaw (rad) in the world frame."""

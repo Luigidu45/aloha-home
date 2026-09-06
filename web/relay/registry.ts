@@ -302,7 +302,13 @@ export class Registry {
             });
             break;
           }
+          const replay = !viewer.subs.has(msg.ch) && entry.lastChs.includes(msg.ch) &&
+              entry.delivery.get(msg.ch) === "reliable"
+            ? msg.ch
+            : undefined;
           viewer.subs.add(msg.ch);
+          this.#syncSubs(viewer.watched, false, replay);
+          break;
         } else {
           viewer.subs.delete(msg.ch);
           viewer.policies.get(msg.ch)?.dispose();
@@ -573,13 +579,18 @@ export class Registry {
    * Recomputed from scratch on every mutation: no incremental refcounts to
    * drift across watch switches, disconnects, and reconnects.
    */
-  #syncSubs(robotId: string, force = false): void {
+  #syncSubs(robotId: string, force = false, replay?: string): void {
     const entry = this.#robots.get(robotId);
     if (entry === undefined) return;
     const chs = this.#activeChs(robotId, entry.delivery);
-    if (!force && chs.join("\n") === entry.lastChs.join("\n")) return;
+    if (!force && replay === undefined && chs.join("\n") === entry.lastChs.join("\n")) return;
     entry.lastChs = chs;
-    entry.peer.sendControl({ t: "subs", chs, n: ++entry.n });
+    entry.peer.sendControl({
+      t: "subs",
+      chs,
+      n: ++entry.n,
+      ...(replay === undefined ? {} : { replay: [replay] }),
+    });
     console.log(`[relay] robot ${robotId} active channels: [${chs.join(", ")}]`);
   }
 

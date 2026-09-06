@@ -412,14 +412,17 @@ class Teleop(Panel):
 
 @dataclass(frozen=True, kw_only=True)
 class Chat(Panel):
-    """Agent chat: the agent transcript, its idle flag and the control mode
-    in; typed human input out."""
+    """Agent chat: transcript, idle flag and mode in; typed human input out.
+
+    read_only disables the panel's composer; it is not a transport access policy.
+    """
 
     kind: ClassVar[str] = "chat"
     chat: str = "agent"
     idle: str = "agent_idle"
     mode: str = "mode"
     input: str = "human_input"
+    read_only: bool = False
     title: str = "Agent"
 
     def __post_init__(self) -> None:
@@ -437,7 +440,10 @@ class Chat(Panel):
         )
 
     def _panel_params(self) -> dict[str, Any]:
-        return {"chat": self.chat, "idle": self.idle, "mode": self.mode, "input": self.input}
+        params = {"chat": self.chat, "idle": self.idle, "mode": self.mode, "input": self.input}
+        if self.read_only:
+            return {**params, "readOnly": True}
+        return params
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -454,6 +460,7 @@ class NavMap(Panel):
     goal: str = "goal_request"
     command: str = "ui_command"
     title: str = "Nav map"
+    fit_places: bool = False
 
     def __post_init__(self) -> None:
         _check_stream("costmap", self.costmap)
@@ -480,7 +487,7 @@ class NavMap(Panel):
         )
 
     def _panel_params(self) -> dict[str, Any]:
-        return {
+        params: dict[str, Any] = {
             "costmap": self.costmap,
             "pose": self.pose,
             "path": self.path,
@@ -489,6 +496,9 @@ class NavMap(Panel):
             "goal": self.goal,
             "command": self.command,
         }
+        if self.fit_places:
+            params["fitPlaces"] = True
+        return params
 
 
 @dataclass(frozen=True, kw_only=True)

@@ -524,6 +524,7 @@ class MujocoSimModule(
         if self.config.robot_mjcf is not None:
             engine_kwargs["config_path"] = Path(self.config.robot_mjcf)
             engine_kwargs["model"] = self._compose_model()
+            engine_kwargs["robot_sim_spec"] = self.config.robot_sim_spec
         else:
             engine_kwargs["config_path"] = Path(self.config.address)
             engine_kwargs["assets"] = engine_assets

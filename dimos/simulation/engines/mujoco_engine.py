@@ -93,6 +93,9 @@ def _camera_ray_directions(width: int, height: int, fovy_degrees: float) -> NDAr
     return cast("NDArray[np.float64]", directions / norms)
 
 
+camera_ray_directions = _camera_ray_directions
+
+
 @dataclass
 class CameraConfig:
     name: str

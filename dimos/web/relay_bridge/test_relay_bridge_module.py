@@ -1127,11 +1127,11 @@ def test_supervisor_survives_reconcile_error(bridge, monkeypatch) -> None:
     real = module._reconcile
     calls: list[int] = []
 
-    def flaky(session: Any, want: set[str]) -> None:
+    def flaky(session: Any, want: set[str], *, replay: list[str] | None = None) -> None:
         calls.append(1)
         if len(calls) == 1:
             raise RuntimeError("boom")
-        real(session, want)
+        real(session, want, replay=replay)
 
     monkeypatch.setattr(module, "_reconcile", flaky)
     push(module, clients[0], Subs(chs=["odom"], n=1))
@@ -2552,3 +2552,20 @@ def test_spec_manifest_mismatch_fails(monkeypatch) -> None:
 def test_composition_preserves_generated_bridge() -> None:
     blueprint = cockpit(channels=[Channel("target_pose", PoseStamped, encoding="pose.json.v1")])
     assert with_relay_bridge(blueprint) is blueprint
+
+
+def test_late_viewer_replays_live_chat_without_resubscribing(agent_bridge) -> None:
+    module, clients = agent_bridge
+    client = clients[0]
+    transport_of(module, "agent").publish(HumanMessage(content="hello"))
+    push(module, client, Subs(chs=["agent"], n=1))
+    assert wait_until(lambda: len(frames_on(client, "agent")) == 1)
+    first_number = ns_on(client, "agent")[0]
+    push(module, client, Subs(chs=["agent"], n=2, replay=["agent"]))
+    assert wait_until(lambda: len(frames_on(client, "agent")) == 2)
+    assert [entry["content"] for entry in frames_on(client, "agent")] == ["hello", "hello"]
+    assert ns_on(client, "agent") == [first_number, first_number]
+    assert len(transport_of(module, "agent").subscribers) == 1
+    push(module, client, Subs(chs=["agent"], n=2, replay=["agent"]))
+    flush_loop(module)
+    assert len(frames_on(client, "agent")) == 2

@@ -1009,3 +1009,18 @@ Deno.test("tx before hello is rejected like any viewer command", () => {
   assertEquals((viewer.replies[0] as { code: string }).code, "hello_required");
   assertEquals(txMsgs(robot), []);
 });
+
+Deno.test("late reliable viewers request replay once without changing the active set", () => {
+  const reg = new Registry();
+  const robot = new FakeRobot("r1", SPECS);
+  reg.registerRobot(robot);
+  attach(reg, "r1", ["odom"]);
+  const v2 = attach(reg, "r1", ["odom"]);
+  assertEquals(robot.lastSubs(), { t: "subs", chs: ["odom"], n: 3, replay: ["odom"] });
+  send(reg, v2, { t: "sub", ch: "odom" });
+  assertEquals(robot.subs().length, 3);
+  send(reg, v2, { t: "unsub", ch: "odom" });
+  assertEquals(robot.subs().length, 3);
+  send(reg, v2, { t: "sub", ch: "odom" });
+  assertEquals(robot.lastSubs(), { t: "subs", chs: ["odom"], n: 4, replay: ["odom"] });
+});

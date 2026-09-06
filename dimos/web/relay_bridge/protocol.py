@@ -249,6 +249,18 @@ class Subs(_WireModel):
     t: Literal["subs"] = "subs"
     chs: list[str]
     n: int | float
+    replay: list[str] | None = None
+
+    @field_validator("replay", mode="before")
+    @classmethod
+    def _replay_is_subscribed(cls, value: Any, info: ValidationInfo) -> list[str] | None:
+        if value is None and info.context is not _WIRE_CTX:
+            return None
+        if not isinstance(value, list) or any(
+            not isinstance(ch, str) or ch not in info.data.get("chs", []) for ch in value
+        ):
+            raise ValueError("replay must name subscribed channels")
+        return value
 
 
 # Teleop (T6). twist/stop ride datagrams viewer->relay->robot (loss-tolerant:

@@ -44,7 +44,7 @@ function certOpts(hashB64: string): WebTransportOptions {
 }
 
 function within<T>(promise: Promise<T>, what: string, ms = 8000): Promise<T> {
-  let timer: number;
+  let timer: ReturnType<typeof setTimeout>;
   const timeout = new Promise<T>((_, reject) => {
     timer = setTimeout(() => reject(new Error(`${what} timed out after ${ms} ms`)), ms);
   });
@@ -1151,7 +1151,6 @@ Deno.test({
       v: PROTOCOL_VERSION,
       role: "robot",
       robot: ROBOT,
-      channels: CHANNELS,
       manifest: MANIFEST,
     });
     await nextOfType(robotDatagrams, "welcome", "robot welcome");

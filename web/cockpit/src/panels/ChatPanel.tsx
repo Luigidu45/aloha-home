@@ -87,7 +87,8 @@ function ChatView({ spec, store, teleop, chans }: PanelProps & { chans: ChatChan
   const thinking = idle === false;
   // humancli stamps the spinner with the time it appeared.
   const thinkingSince = useMemo(() => (thinking ? Date.now() / 1000 : 0), [thinking]);
-  const wrongMode = mode !== null && mode !== "agent";
+  const canSend = spec.params.readOnly !== true && teleop !== undefined && chans.input !== undefined;
+  const wrongMode = canSend && mode !== null && mode !== "agent";
 
   const [draft, setDraft] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -104,10 +105,8 @@ function ChatView({ spec, store, teleop, chans }: PanelProps & { chans: ChatChan
     stick.current = el.scrollHeight - el.scrollTop - el.clientHeight <= STICK_SLACK_PX;
   };
 
-  const canSend = teleop !== undefined && chans.input !== undefined;
-
   const transmit = (text: string): boolean => {
-    if (teleop === undefined || chans.input === undefined) {
+    if (!canSend || teleop === undefined || chans.input === undefined) {
       setError("no send path bound");
       return false;
     }
@@ -205,7 +204,7 @@ function ChatView({ spec, store, teleop, chans }: PanelProps & { chans: ChatChan
             </div>
           )}
           {rows.length === 0 && pending.length === 0 && !thinking && (
-            <span className={styles.hint}>{EMPTY_TEXT}</span>
+            <span className={styles.hint}>{canSend ? EMPTY_TEXT : "Read-only transcript"}</span>
           )}
         </div>
         <div className={styles.compose}>
@@ -213,7 +212,7 @@ function ChatView({ spec, store, teleop, chans }: PanelProps & { chans: ChatChan
             className={styles.input}
             data-testid={`chat-${chans.chat}-input`}
             aria-label="message to the agent"
-            placeholder={canSend ? "Enter sends, Shift+Enter for a new line" : "no send path bound"}
+            placeholder={canSend ? "Enter sends, Shift+Enter for a new line" : "Agent input unavailable"}
             rows={2}
             value={draft}
             disabled={!canSend}
