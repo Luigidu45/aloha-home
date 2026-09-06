@@ -63,9 +63,7 @@ def _geoms() -> dict[str, ET.Element]:
     return {g.get("name", ""): g for g in root.iter("geom") if g.get("name")}
 
 
-# --------------------------------------------------------------------------
 # Scene XML <-> constants
-# --------------------------------------------------------------------------
 
 
 def test_scene_file_exists() -> None:
@@ -198,9 +196,7 @@ def test_every_object_sits_in_a_room() -> None:
         assert any(r.contains(x, y) for r in MICRODUCK_ROOMS.values()), name
 
 
-# --------------------------------------------------------------------------
 # MuJoCo compile / compose (explicit: pytest -m mujoco)
-# --------------------------------------------------------------------------
 
 
 @pytest.mark.mujoco
@@ -286,9 +282,7 @@ def test_add_ball_body_custom_name_and_pos() -> None:
     assert model.body_pos[model.body("football").id] == pytest.approx((-0.5, 0.5, 0.035))
 
 
-# --------------------------------------------------------------------------
 # PlacesMemory
-# --------------------------------------------------------------------------
 
 
 @pytest.fixture

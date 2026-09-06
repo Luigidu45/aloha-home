@@ -907,38 +907,3 @@ class PolicyScheduler:
             active == ACTIVE_BRAKING and self._brake_with() == _ROLLER_CROUCH
         ):
             self._phase = (self._phase + dt / ROLLER_CROUCH_PERIOD_S) % 1.0
-
-
-__all__ = [
-    "ACTIONS",
-    "ACTIVE_BRAKING",
-    "ACTIVE_STANDING_UP",
-    "ASSET_MISSING_REASON",
-    "BASE_POLICIES",
-    "BRAKE_DURATION_S",
-    "DEFAULT_VARIANT",
-    "FALL_GRAVITY_Z",
-    "GROUND_PICK_END_PHASE",
-    "GROUND_PICK_PERIOD_S",
-    "KICK_BALL_OFFSETS",
-    "KICK_DURATION_S",
-    "LAST_ERROR_TTL_S",
-    "ONESHOT_POLICIES",
-    "POLICY_NAMES",
-    "POLICY_SPECS",
-    "ROLLERS_VARIANT",
-    "ROLLER_BRAKE_THROTTLE",
-    "ROLLER_CROUCH_PERIOD_S",
-    "ROLLER_HEADING_RANGE",
-    "ROLLER_THROTTLE_RANGE",
-    "ROULADE_DURATION_S",
-    "ROULADE_GRACE_S",
-    "STAND_UP_DURATION_S",
-    "VARIANTS",
-    "PolicyBank",
-    "PolicyKind",
-    "PolicyName",
-    "PolicyScheduler",
-    "PolicySpec",
-    "policy_availability",
-]

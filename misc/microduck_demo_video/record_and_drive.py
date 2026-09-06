@@ -1,3 +1,17 @@
+# Copyright 2026 Dimensional Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """Drive the microduck demo conversation while recording robot state.
 
 Runs as a zenoh client via the local router. Produces events.jsonl with:
@@ -31,7 +45,6 @@ def emit(kind: str, **kw) -> None:
         out_f.flush()
 
 
-# --- transports ---------------------------------------------------------
 human_tx = make_transport("/human_input")
 agent_tx = make_transport("/agent")
 odom_tx = make_transport("/odom", PoseStamped)
@@ -70,7 +83,6 @@ def on_odom(msg) -> None:
 agent_tx.subscribe(on_agent)
 odom_tx.subscribe(on_odom)
 
-# --- SHM joint poller ---------------------------------------------------
 key = shm_key_from_path(assets_fetch.robot_mjcf_path())
 shm = ManipShmReader(key)
 stop = threading.Event()
@@ -84,7 +96,6 @@ def poll_joints() -> None:
 
 threading.Thread(target=poll_joints, daemon=True).start()
 
-# --- scripted conversation ---------------------------------------------
 print("mesh settling...", flush=True)
 time.sleep(8)  # let zenoh link + capture some idle standing frames
 

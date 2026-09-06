@@ -246,9 +246,7 @@ def harness(tmp_path: Path, fast_polling: None) -> Iterator[Harness]:
         module.stop()
 
 
-# --------------------------------------------------------------------------
 # lifecycle / config
-# --------------------------------------------------------------------------
 
 
 def test_blueprint_keeps_objects_kwarg_and_config_pickles(tmp_path: Path) -> None:
@@ -470,9 +468,7 @@ def test_remember_place_respelled_updates_instead_of_duplicating(harness: Harnes
     )
 
 
-# --------------------------------------------------------------------------
 # navigation skills
-# --------------------------------------------------------------------------
 
 
 def test_go_to_room_by_alias_publishes_goal_and_arrives(harness: Harness) -> None:
@@ -751,9 +747,7 @@ def test_wait_clamps(harness: Harness) -> None:
     assert "Invalid duration" in harness.module.wait("soon")  # type: ignore[arg-type]
 
 
-# --------------------------------------------------------------------------
 # policy skills
-# --------------------------------------------------------------------------
 
 
 def test_list_policies_without_and_with_state(harness: Harness) -> None:

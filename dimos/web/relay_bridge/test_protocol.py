@@ -27,6 +27,8 @@ from dimos.web.relay_bridge.protocol import (
     MAX_CONTROL_PAYLOAD_BYTES,
     MAX_DATA_FRAME_BYTES,
     MAX_HEADER_LEN,
+    MAX_PUB_DATA_BYTES,
+    MAX_REQUEST_ID_LEN,
     MAX_TX_MSG_BYTES,
     PROTOCOL_VERSION,
     RESERVED_CHANNEL_PREFIX,
@@ -36,11 +38,13 @@ from dimos.web.relay_bridge.protocol import (
     ControlFrameReader,
     DataFrameStreamError,
     DataFrameStreamReader,
+    Error,
     FrameHeader,
     Hello,
     Manifest,
     Ping,
     ProtocolError,
+    Pub,
     RobotInfo,
     Robots,
     Subs,
@@ -105,6 +109,25 @@ def test_control_subs_payload_is_the_datagram_encoding():
     subs = next(v for v in DATAGRAMS if v["name"] == "subs_snapshot")
     payload = base64.b64decode(control["payload_b64"])
     assert decode_datagram(payload) == msg_from_dict(subs["message"])
+
+
+def test_pub_tx_frame_payload_is_the_data_json():
+    # A forwarded publish is a tx-channel data frame whose payload is exactly
+    # the JSON of the pub's data, with relay provenance in the header meta
+    # (meta.id is the relay token, not the viewer's request id). Also pins
+    # the pub bounds against the mirror.
+    assert MAX_PUB_DATA_BYTES == 32 * 1024
+    assert MAX_REQUEST_ID_LEN == 64
+    frame = next(v for v in DATA if v["name"] == "pub_tx_frame")
+    pub = next(v for v in DATAGRAMS if v["name"] == "pub")
+    assert frame["header"]["ch"] == pub["message"]["ch"]
+    assert frame["header"]["delivery"] == "reliable"
+    meta = frame["header"]["meta"]
+    assert set(meta) == {"id", "principal", "relayTs", "clientTs"}
+    assert meta["id"] != pub["message"]["id"]
+    payload = base64.b64decode(frame["payload_b64"])
+    assert len(payload) <= MAX_PUB_DATA_BYTES
+    assert json.loads(payload) == pub["message"]["data"]
 
 
 @pytest.mark.parametrize("vector", CONTROL, ids=[v["name"] for v in CONTROL])
@@ -344,6 +367,52 @@ def test_msg_from_dict_validates_nested_session_shapes():
             msg_from_dict(data)
 
 
+def test_pub_shape_validation():
+    ok = {"t": "pub", "id": "a", "ch": "chat", "data": {"x": 1.5}}
+    assert isinstance(msg_from_dict(ok), Pub)
+    # data is required and spans all of JSON, null included; only an absent
+    # data field is invalid.
+    bad = [
+        {"t": "pub", "id": "a", "ch": "chat"},
+        {"t": "pub", "id": "", "ch": "chat", "data": 1.5},
+        {"t": "pub", "id": "x" * (MAX_REQUEST_ID_LEN + 1), "ch": "chat", "data": 1.5},
+        {"t": "pub", "id": 7, "ch": "chat", "data": 1.5},
+        {**ok, "clientTs": None},
+        {**ok, "clientTs": "1"},
+        {**ok, "clientTs": True},
+        {"t": "pub_ack", "id": "", "ch": "chat", "relayTs": 1.5, "bridgeTs": 2.5},
+        {"t": "pub_nack", "id": "x" * (MAX_REQUEST_ID_LEN + 1), "code": "c", "message": "m"},
+    ]
+    for data in bad:
+        with pytest.raises(ProtocolError):
+            msg_from_dict(data)
+    # A top-level null data value survives encoding (Pub serializes itself so
+    # the encoders' exclude_none cannot eat it) and the round trip.
+    raw = encode_datagram(Pub(id="a", ch="chat", data=None))
+    assert raw == b'{"t":"pub","id":"a","ch":"chat","data":null}'
+    decoded = decode_datagram(raw)
+    assert isinstance(decoded, Pub) and decoded.data is None
+    # Nested nulls inside data are ordinary JSON and survive the round trip.
+    nested = {"t": "pub", "id": "a", "ch": "chat", "data": {"x": None, "y": 1.5}}
+    raw = encode_datagram(msg_from_dict(nested))
+    assert b'"x":null' in raw
+    decoded = decode_datagram(raw)
+    assert isinstance(decoded, Pub) and decoded.data == {"x": None, "y": 1.5}
+
+
+def test_error_request_id_validation():
+    # requestId correlates a publish failure to its request: absent for
+    # session-level errors, bounded and never null on the wire.
+    plain = msg_from_dict({"t": "error", "code": "c", "message": "m"})
+    assert isinstance(plain, Error) and plain.requestId is None
+    assert encode_datagram(plain) == b'{"t":"error","code":"c","message":"m"}'
+    tagged = msg_from_dict({"t": "error", "code": "c", "message": "m", "requestId": "r-1"})
+    assert isinstance(tagged, Error) and tagged.requestId == "r-1"
+    for request_id in [None, "", "x" * (MAX_REQUEST_ID_LEN + 1), 7]:
+        with pytest.raises(ProtocolError):
+            msg_from_dict({"t": "error", "code": "c", "message": "m", "requestId": request_id})
+
+
 def test_manifest_dict_roundtrips_verbatim():
     # The opaque manifest is carried untouched: exclude_none must not strip
     # None values inside it (a layout-less manifest legitimately carries
@@ -411,9 +480,6 @@ def test_huge_int_is_a_valid_number():
     # pass (a math.isfinite check would raise OverflowError on them).
     msg = msg_from_dict({"t": "ping", "n": 10**400, "ts": 2.5})
     assert isinstance(msg, Ping) and msg.n == 10**400
-
-
-# ---------- generic tx commands (Tx; mirror of TxMsg in protocol.ts) ----------
 
 
 def _tx(**overrides):

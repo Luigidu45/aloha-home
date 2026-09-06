@@ -1,3 +1,17 @@
+# Copyright 2026 Dimensional Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """Side-by-side re-render: MuJoCo sim (left) + humancli-style terminal (right).
 
 Same events.jsonl as render_video.py; instead of subtitles, the right panel
@@ -29,7 +43,6 @@ TERM_W = W - SIM_W
 TYPE_SECS = 2.0
 SLOW_PRE, SLOW_POST, FAST = 2.5, 6.0, 4
 
-# --- model (same composition as the sim) --------------------------------
 scene = mujoco.MjSpec.from_file(SCENE)
 robot = mujoco.MjSpec.from_file(str(assets_fetch.robot_mjcf_path()))
 scene.visual.global_.offwidth = SIM_W
@@ -47,7 +60,6 @@ for m in build_joint_mappings(None, model):
     if m.qpos_adr is not None:
         hinge_maps.append(m)
 
-# --- events -------------------------------------------------------------
 odom, joints, chat = [], [], []
 for line in open(EVENTS):
     e = json.loads(line)
@@ -77,7 +89,6 @@ def sample(t):
     return op[i], oq[i], jp[k]
 
 
-# --- terminal panel -----------------------------------------------------
 MONO = ImageFont.truetype("/System/Library/Fonts/Menlo.ttc", 15)
 MONO_B = ImageFont.truetype("/System/Library/Fonts/Menlo.ttc", 15, index=1)
 CW = MONO.getlength("M")
@@ -180,7 +191,6 @@ def draw_terminal(t):
     return img
 
 
-# --- render -------------------------------------------------------------
 renderer = mujoco.Renderer(model, height=H, width=SIM_W)
 cam = mujoco.MjvCamera()
 cam.azimuth, cam.elevation, cam.distance = 150, -28, 3.0

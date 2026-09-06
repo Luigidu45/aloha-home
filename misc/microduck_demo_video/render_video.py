@@ -1,3 +1,17 @@
+# Copyright 2026 Dimensional Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """Offline re-render of the recorded microduck demo into an mp4.
 
 Replays events.jsonl (odom + 14 joint positions + chat) through the same
@@ -27,7 +41,6 @@ SCENE = (
 W, H, FPS = 1280, 720, 30
 SLOW_PRE, SLOW_POST, FAST = 0.5, 6.0, 4
 
-# --- compose model (mirrors MicroduckSimModule._compose_model, no lidar cams)
 scene = mujoco.MjSpec.from_file(SCENE)
 robot = mujoco.MjSpec.from_file(str(assets_fetch.robot_mjcf_path()))
 scene.option.timestep = 0.005
@@ -52,7 +65,6 @@ for m in mappings:
     hinge_maps.append(m)
 print(f"model: {model.njnt} joints, free_adr={free_adr}, mapped={len(hinge_maps)}")
 
-# --- load events --------------------------------------------------------
 odom, joints, chat = [], [], []
 for line in open(EVENTS):
     e = json.loads(line)
@@ -80,7 +92,6 @@ def sample(t: float):
     return pos, quat, jp[k]
 
 
-# --- time warp: 1x around dialogue, FAST elsewhere ----------------------
 slow_windows = [(t - SLOW_PRE, t + SLOW_POST) for t, role, _ in chat if role in ("human", "agent")]
 
 
@@ -88,7 +99,6 @@ def speed_at(t: float) -> int:
     return 1 if any(a <= t <= b for a, b in slow_windows) else FAST
 
 
-# --- subtitles ----------------------------------------------------------
 def ascii_clean(s: str) -> str:
     return "".join(ch for ch in s if ord(ch) < 0x2500).strip()
 
@@ -149,7 +159,6 @@ def overlay(frame_arr, t: float, spd: int):
     return np.asarray(img.convert("RGB"))
 
 
-# --- render loop --------------------------------------------------------
 renderer = mujoco.Renderer(model, height=H, width=W)
 cam = mujoco.MjvCamera()
 cam.azimuth, cam.elevation, cam.distance = 150, -28, 3.0

@@ -605,4 +605,3 @@ class MicroduckSimModule(MujocoSimModule):
 
 # The base policies hold a stand on a zero command, so the module needs no
 # explicit idle handling; CONTROL_DT is re-exported for tests.
-__all__ = ["CHASE_CAMERA_NAME", "CONTROL_DT", "MicroduckSimModule", "MicroduckSimModuleConfig"]
