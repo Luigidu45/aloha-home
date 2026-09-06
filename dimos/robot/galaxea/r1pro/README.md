@@ -50,3 +50,45 @@ dimos run r1pro-nav             # + click-to-drive nav (costmap + A*)
 dimos run r1pro-manipulation    # + dual-arm planning (experimental)
 dimos run r1pro-planner-coordinator  # planar-base planning with fake hardware
 ```
+
+## Hosted teleoperation
+
+`r1pro-hosted-teleop-quest` and `r1pro-hosted-teleop-pico` dial out to the
+dimensional-teleop broker; the operator drives from a WebXR headset at
+[teleop.dimensionalos.com](https://teleop.dimensionalos.com) with no inbound
+ports on the robot. Both names run the same stack — Quest and PICO deliver the
+same WebXR poses and Joy — and exist so each headset has its own entry point.
+
+```bash
+TRANSPORTS__BROKER__API_KEY=dtk_live_... \
+TRANSPORTS__BROKER__ROBOT_NAME=r1pro \
+dimos run r1pro-hosted-teleop-quest
+```
+
+| Operator input | Effect |
+|---|---|
+| X + A held | Engage both arms; controller poses drive the grippers |
+| Right stick | Drive the chassis (forward/back, strafe) |
+| Left stick X | Yaw the chassis |
+| Left stick Y | Jog the torso up and down, while engaged |
+| Trigger | Gripper opening (no R1 Pro gripper hardware yet, see below) |
+
+The broker transport needs the `webrtc` extra, which the `uv sync` line above
+does not install:
+
+```bash
+uv sync --python /usr/bin/python3.10 --python-preference only-system \
+        --no-default-groups --extra base --extra manipulation --extra cpu \
+        --extra webrtc
+```
+
+Known gaps:
+
+- `R1ProConnection` has no gripper port, so trigger commands reach the
+  coordinator and stop there. Grasping needs the vendor gripper wired first.
+- The torso jog rides the teleoperation IK task's head target, so it only
+  moves while both arms are engaged. Base driving is always live.
+- The operator console renders the `arm` view: arms, video, and E-STOP have
+  controls, base and torso do not. They work from the sticks regardless.
+- Head-left and right-wrist colour feed the two video mux inputs. The R1 Pro
+  publishes them compressed, so each is decoded on the robot first.

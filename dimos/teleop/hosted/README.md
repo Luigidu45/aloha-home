@@ -18,6 +18,11 @@ that all run in one worker so everything shares that single session (the
   and the manual-drive guard. Reaches the driver over `@rpc` (`GO2Connection`).
 - **`arm_command.py`** — `ArmCommandModule`: VR controller poses and browser
   EE-twist → ControlCoordinator tasks (stale/reorder/future-stamp guarded).
+- **`mobile_arm_command.py`** — `MobileArmCommandModule`: the above plus
+  thumbstick base driving and a stick-jogged torso height, published on the
+  teleoperation task's head-target stream.
+- **`image_decode.py`** — `ImageDecodeModule`: CompressedImage → Image, for
+  drivers that only publish compressed frames (the mux takes raw Image).
 - **`camera_mux.py`** — `CameraMuxModule`: N cameras → one composited, capped
   video track (operator-selectable views).
 - **`map_compress.py`** — `MapCompressModule`: costmap + odom → the minimap
@@ -34,6 +39,9 @@ that all run in one worker so everything shares that single session (the
 - **`blueprints/cloudflare.py`** — wires the above into the four hosted
   blueprints: `teleop-hosted-go2-transport` / `-multicam` (`n_workers=2`) and
   `teleop-hosted-xarm6` / `-xarm7` (`n_workers=1`, coordinator + dual cams).
+  The R1 Pro pair (`r1pro-hosted-teleop-quest` / `-pico`) lives with the robot,
+  in `dimos/robot/galaxea/r1pro/blueprints/manipulation/hosted_teleop.py`,
+  because its sensor bus is Zenoh rather than LCM.
 
 The operator HTML lives in the dimensional-teleop broker repo (`web/`).
 

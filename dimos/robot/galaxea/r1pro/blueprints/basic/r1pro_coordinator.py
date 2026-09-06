@@ -52,6 +52,28 @@ from dimos.visualization.rerun.websocket_server import RerunWebSocketServer
 _chassis_joints = make_twist_base_joints("chassis")
 
 
+def r1pro_whole_body_hardware() -> HardwareComponent:
+    """The 18-DOF upper body behind the ROS bridge."""
+    return HardwareComponent(
+        hardware_id="r1pro",
+        hardware_type=HardwareType.WHOLE_BODY,
+        joints=R1PRO_UPPER_BODY_JOINTS,
+        adapter_type="transport_lcm",
+        adapter_kwargs={"transport_cls": make_transport},
+    )
+
+
+def r1pro_chassis_hardware() -> HardwareComponent:
+    """The holonomic chassis as twist-base virtual joints."""
+    return HardwareComponent(
+        hardware_id="chassis",
+        hardware_type=HardwareType.BASE,
+        joints=_chassis_joints,
+        adapter_type="transport_lcm",
+        adapter_kwargs={"transport_cls": make_transport},
+    )
+
+
 def _r1pro_rerun_blueprint() -> Any:
     """Two-tab viewer layout: main (head stereo + 3D) and all cameras + depth.
 
@@ -162,11 +184,14 @@ def _zenoh_transport(
 def r1pro_control(
     *,
     tasks: Sequence[TaskConfig] | None = None,
+    coordinator_cls: type[ControlCoordinator] = ControlCoordinator,
 ) -> Blueprint:
     """R1ProConnection and ControlCoordinator.
 
     ``tasks`` overrides the default task set (whole-body trajectory + chassis
     velocity); transports and remappings stay identical either way.
+    ``coordinator_cls`` selects a subclass that carries extra input ports, such
+    as ``TeleopControlCoordinator``.
     """
     resolved_tasks = (
         list(tasks)
@@ -185,23 +210,11 @@ def r1pro_control(
     return (
         autoconnect(
             R1ProConnection.blueprint(),
-            ControlCoordinator.blueprint(
+            coordinator_cls.blueprint(
                 tick_rate=100,
                 hardware=[
-                    HardwareComponent(
-                        hardware_id="r1pro",
-                        hardware_type=HardwareType.WHOLE_BODY,
-                        joints=R1PRO_UPPER_BODY_JOINTS,
-                        adapter_type="transport_lcm",
-                        adapter_kwargs={"transport_cls": make_transport},
-                    ),
-                    HardwareComponent(
-                        hardware_id="chassis",
-                        hardware_type=HardwareType.BASE,
-                        joints=_chassis_joints,
-                        adapter_type="transport_lcm",
-                        adapter_kwargs={"transport_cls": make_transport},
-                    ),
+                    r1pro_whole_body_hardware(),
+                    r1pro_chassis_hardware(),
                 ],
                 tasks=resolved_tasks,
             ),

@@ -71,6 +71,8 @@ overrides. All broker settings can also be passed on the CLI, e.g.
 |-----------|-------|
 | `teleop-hosted-go2-transport` | Drive + camera + minimap + click-to-nav (recommended) |
 | `teleop-hosted-go2-multicam` | Adds a second RealSense, operator-selectable, mux'd into one video track |
+| `teleop-hosted-xarm6` / `-xarm7` | VR arm teleop + dual cameras, coordinator-driven |
+| `r1pro-hosted-teleop-quest` / `-pico` | Galaxea R1 Pro: both arms, chassis on the sticks, torso jog |
 
 The transport blueprints bind `Cloudflare*` transports directly to the streams
 of several small, per-concern modules: `Go2CommandModule` (command / E-STOP /
@@ -144,6 +146,7 @@ the robot blueprint decides what to do with it.
 |--------|-------|---------|
 | Desktop browser | **WASD** keyboard | `TwistStamped` → `cmd_vel` |
 | Quest 3 / VR headset | **Left thumbstick** Y → fwd/back, X → strafe; **right thumbstick** X → yaw; grip = boost/slow | same `TwistStamped` path as keyboard |
+| Quest 3 / PICO, mobile manipulator | Controller poses → arms; **right thumbstick** → chassis translate, **left** X → yaw, Y → torso jog | `MobileArmCommandModule` → coordinator tasks |
 
 Shift = 2× speed, Ctrl = ½×. The operator can also send allow-listed sport
 commands (StandDown, RecoveryStand, Sit, Damp, Hello, Stretch, plus FrontJump
