@@ -52,6 +52,7 @@ def module(monkeypatch: pytest.MonkeyPatch) -> Iterator[ArmCommandModule]:
             control_loop_hz=50.0,
             cmd_stale_after_sec=0.5,
             enable_ui_scaling=False,
+            input_timeout_s=1.0,
         )
 
     monkeypatch.setattr(Module, "__init__", _fake_init)
@@ -314,3 +315,18 @@ def test_robot_state_reports_estop_and_engage(module: ArmCommandModule) -> None:
     payload = json.loads(module.robot_state.publish.call_args.args[0])
     assert payload["estopped"] is True
     assert payload["engaged"] == {"left": False, "right": False}
+
+
+def test_operator_pose_survives_a_control_loop_tick(module: ArmCommandModule) -> None:
+    """Regression: the inherited loop expired every pose the broker delivered,
+    so a hosted hand could never engage."""
+    module._controllers[Hand.RIGHT] = QuestControllerState(is_left=False, primary=True)
+    module._last_controller_update[Hand.RIGHT] = time.monotonic()
+    module._on_pose_bytes(_pose_bytes("right"))
+
+    with module._lock:
+        module._expire_stale_state(time.monotonic())
+        module._handle_engage()
+
+    assert module._current_poses[Hand.RIGHT] is not None
+    assert module._is_engaged[Hand.RIGHT]

@@ -142,6 +142,9 @@ class ArmCommandModule(ArmTeleopModule):
         robot_pose = webxr_to_robot(msg, is_left_controller=(hand == Hand.LEFT))
         with self._lock:
             self._current_poses[hand] = robot_pose
+            # Without this the inherited control loop expires the pose it just
+            # accepted, so the hand never engages.
+            self._last_pose_update[hand] = time.monotonic()
 
     def _on_twist_bytes(self, data: bytes) -> None:
         """Browser keyboard EE-twist → coordinator's eef_twist task."""
