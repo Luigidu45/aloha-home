@@ -57,6 +57,21 @@ def writer_with_gripper(shm_key, monkeypatch):
 
 
 @pytest.fixture
+def dual_arm_writer(shm_key, monkeypatch):
+    monkeypatch.setattr(adapter_mod, "shm_key_from_path", lambda _: shm_key)
+    w = ManipShmWriter(shm_key)
+    w.initialize_position_command([float(i) for i in range(12)])
+    w.write_joint_state(
+        positions=[float(i) for i in range(12)],
+        velocities=[float(i) / 10.0 for i in range(12)],
+        efforts=[-float(i) for i in range(12)],
+    )
+    w.signal_ready(num_joints=12)
+    yield w
+    w.cleanup()
+
+
+@pytest.fixture
 def adapter(writer):
     a = ShmMujocoAdapter(dof=ARM_DOF, address="/fake/scene.xml")
     assert a.connect() is True
@@ -170,6 +185,63 @@ class TestGripper:
 
     def test_write_gripper_position_no_gripper(self, adapter):
         assert adapter.write_gripper_position(0.5) is False
+
+
+class TestJointSlices:
+    def test_two_adapters_read_independent_arm_and_gripper_slices(self, dual_arm_writer):
+        left = ShmMujocoAdapter(
+            dof=5,
+            address="/fake/scene.xml",
+            joint_offset=0,
+            gripper_index=5,
+        )
+        right = ShmMujocoAdapter(
+            dof=5,
+            address="/fake/scene.xml",
+            joint_offset=6,
+            gripper_index=11,
+        )
+        try:
+            assert left.connect() is True
+            assert right.connect() is True
+
+            assert left.read_joint_positions() == [0.0, 1.0, 2.0, 3.0, 4.0]
+            assert right.read_joint_positions() == [6.0, 7.0, 8.0, 9.0, 10.0]
+            assert left.read_gripper_position() == 5.0
+            assert right.read_gripper_position() == 11.0
+        finally:
+            left.disconnect()
+            right.disconnect()
+
+    def test_slice_commands_preserve_the_other_arm_targets(self, dual_arm_writer):
+        left = ShmMujocoAdapter(
+            dof=5,
+            address="/fake/scene.xml",
+            joint_offset=0,
+            gripper_index=5,
+        )
+        right = ShmMujocoAdapter(
+            dof=5,
+            address="/fake/scene.xml",
+            joint_offset=6,
+            gripper_index=11,
+        )
+        try:
+            assert left.connect() is True
+            assert right.connect() is True
+            assert left.write_joint_positions([0.1] * 5) is True
+            first = dual_arm_writer.read_position_command(12)
+            assert first is not None
+            assert first.tolist() == pytest.approx([0.1] * 5 + list(range(5, 12)))
+
+            assert right.write_joint_positions([-0.2] * 5) is True
+            assert right.write_gripper_position(0.7) is True
+            second = dual_arm_writer.read_position_command(12)
+            assert second is not None
+            assert second.tolist() == pytest.approx([0.1] * 5 + [5.0] + [-0.2] * 5 + [0.7])
+        finally:
+            left.disconnect()
+            right.disconnect()
 
 
 class TestConnect:

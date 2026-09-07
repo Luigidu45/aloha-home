@@ -43,6 +43,8 @@ exclude = [
     "**/*.yml",
     "**/*.json",
     "**/*.urdf",
+    "**/*.xml",
+    "**/*.stl",
     "**/*.html",
     "**/*.css",
     "**/*.js",
@@ -677,6 +679,7 @@ ignore = [
     "*/Cargo.lock",
     "dimos/web/dimos_interface/themes.json",
     "dimos/manipulation/manipulation_module.py",
+    "dimos/robot/alohamini2/assets/meshes/*.stl",
     "misc/DimSim/scenes/apartment/objects/manifest.json",
     "misc/DimSim/src/engine.js",
 ]

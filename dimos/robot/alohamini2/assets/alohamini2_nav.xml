@@ -1,0 +1,263 @@
+<!--
+Copyright 2025-2026 Dimensional Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<!-- Reduced navigation-only model; the manipulation joints are intentionally rigid. -->
+<mujoco model="alohamini2_nav">
+  <compiler angle="radian" autolimits="true"/>
+  <option timestep="0.005" gravity="0 0 -9.81" integrator="implicitfast"/>
+
+  <visual>
+    <global azimuth="135" elevation="-25"/>
+    <headlight ambient="0.35 0.35 0.35" diffuse="0.7 0.7 0.7"/>
+  </visual>
+
+  <default>
+    <geom condim="3" solref="0.01 1" solimp="0.9 0.95 0.001"/>
+    <default class="cad_visual">
+      <geom type="mesh" contype="0" conaffinity="0" group="2" mass="0"/>
+    </default>
+  </default>
+
+  <asset>
+    <material name="cad_white" rgba="0.88 0.9 0.92 1" specular="0.25" shininess="0.4"/>
+    <material name="cad_dark" rgba="0.055 0.065 0.08 1" specular="0.2" shininess="0.3"/>
+    <material name="cad_camera" rgba="0.025 0.03 0.04 1" specular="0.35" shininess="0.5"/>
+    <material name="so101_yellow" rgba="1 0.82 0.12 1" specular="0.2" shininess="0.3"/>
+    <mesh name="cad_base_link" file="meshes/base_link.stl"/>
+    <mesh name="cad_vertical_link" file="meshes/vertical_link.stl"/>
+    <mesh name="cad_chest_camera" file="meshes/chest_camera.stl"/>
+    <mesh name="cad_wheel_2" file="meshes/link2_dp.stl"/>
+    <mesh name="cad_wheel_3" file="meshes/link3_dp.stl"/>
+    <mesh name="cad_wheel_4" file="meshes/link4_dp.stl"/>
+    <mesh name="cad_back_camera" file="meshes/back_camera.stl"/>
+    <mesh name="cad_front_camera" file="meshes/front_camera.stl"/>
+    <mesh name="so101_base_motor_holder" file="meshes/so101_base_motor_holder_so101_v1.stl"/>
+    <mesh name="so101_base" file="meshes/so101_base_so101_v2.stl"/>
+    <mesh name="so101_motor_holder_base" file="meshes/so101_motor_holder_so101_base_v1.stl"/>
+    <mesh name="so101_motor_holder_wrist" file="meshes/so101_motor_holder_so101_wrist_v1.stl"/>
+    <mesh name="so101_moving_jaw" file="meshes/so101_moving_jaw_so101_v1.stl"/>
+    <mesh name="so101_rotation_pitch" file="meshes/so101_rotation_pitch_so101_v1.stl"/>
+    <mesh name="so101_servo_no_horn" file="meshes/so101_sts3215_03a_no_horn_v1.stl"/>
+    <mesh name="so101_servo" file="meshes/so101_sts3215_03a_v1.stl"/>
+    <mesh name="so101_under_arm" file="meshes/so101_under_arm_so101_v1.stl"/>
+    <mesh name="so101_upper_arm" file="meshes/so101_upper_arm_so101_v1.stl"/>
+    <mesh name="so101_mounting_plate" file="meshes/so101_waveshare_mounting_plate_so101_v2.stl"/>
+    <mesh name="so101_wrist_roll_follower" file="meshes/so101_wrist_roll_follower_so101_v1.stl"/>
+    <mesh name="so101_wrist_roll_pitch" file="meshes/so101_wrist_roll_pitch_so101_v2.stl"/>
+    <mesh name="cad_wrist_camera" file="meshes/left_camera.stl"/>
+  </asset>
+
+  <worldbody>
+    <!--
+      The source URDF uses +X laterally and -Y forward. This reduced model is
+      authored directly in the ROS/DimOS convention: +X forward, +Y left.
+    -->
+    <body name="base_link" pos="0 0 0.064">
+      <freejoint name="root"/>
+      <inertial pos="0 0 0.38" mass="18" diaginertia="1.9 1.7 0.8"/>
+
+      <!-- Primitive collision envelope; the detailed CAD below is visual-only. -->
+      <geom
+        name="base_collision"
+        type="box"
+        pos="0 0 0.15"
+        size="0.22 0.23 0.09"
+        rgba="0 0 0 0"
+      />
+      <geom
+        name="ground_skid_collision"
+        type="box"
+        pos="0 0 -0.014"
+        size="0.17 0.17 0.05"
+        rgba="0 0 0 0"
+        friction="0.05 0.01 0.001"
+      />
+      <geom
+        name="tower_collision"
+        type="box"
+        pos="-0.04 0 0.63"
+        size="0.08 0.19 0.39"
+        rgba="0 0 0 0"
+      />
+      <geom
+        name="left_arm_collision"
+        type="capsule"
+        fromto="0.05 0.19 0.7 0.38 0.19 0.7"
+        size="0.055"
+        rgba="0 0 0 0"
+      />
+      <geom
+        name="right_arm_collision"
+        type="capsule"
+        fromto="0.05 -0.19 0.7 0.38 -0.19 0.7"
+        size="0.055"
+        rgba="0 0 0 0"
+      />
+
+      <!--
+        Detailed visuals reconstructed from the source URDF. The URDF uses
+        -Y forward/+X left, so this parent rotates its CAD into ROS +X/+Y.
+        All arm joints remain fixed at their zero pose for navigation.
+      -->
+      <body name="cad_visual_frame" quat="0.707106781 0 0 0.707106781">
+        <geom name="cad_base_link_visual" class="cad_visual" mesh="cad_base_link" material="cad_white"/>
+
+        <body name="cad_vertical_link_body" pos="0 0 0.096196">
+          <geom name="cad_vertical_link_visual" class="cad_visual" mesh="cad_vertical_link" material="cad_white"/>
+          <body
+            name="cad_chest_camera_body"
+            pos="-0.000225761876 -0.0690163598 0.447985437"
+            quat="0.5 0.5 0.5 -0.5"
+          >
+            <geom name="cad_chest_camera_visual" class="cad_visual" mesh="cad_chest_camera" material="cad_camera"/>
+            <!-- Offset to the lens face; URDF +Z is optical forward. -->
+            <camera name="chest_camera" pos="0 0 0.025" xyaxes="0 -1 0 -1 0 0" fovy="69"/>
+          </body>
+
+          <!--
+            SO101 arms in a rigid home pose matching the folded physical configuration.
+            The new-calibration joint values are baked into the body transforms:
+            shoulder lift +1.33368 rad, elbow +1.69 rad, wrist flex -1.53199 rad and gripper
+            +0.5 rad. The mounts yaw -90 deg so both folded arms face forward.
+          -->
+          <body name="cad_left_so101_base_body" pos="0.18726 -0.0599 0.4775" quat="0.707106781 0 0 -0.707106781">
+            <geom name="cad_left_so101_base_holder_visual" class="cad_visual" mesh="so101_base_motor_holder" material="so101_yellow" pos="-0.00636471 -9.94414e-05 -0.0024" quat="0.5 0.5 0.5 0.5"/>
+            <geom name="cad_left_so101_base_visual" class="cad_visual" mesh="so101_base" material="so101_yellow" pos="-0.00636471 -8.97657e-09 -0.0024" quat="0.5 0.5 0.5 0.5"/>
+            <geom name="cad_left_so101_base_servo_visual" class="cad_visual" mesh="so101_servo" material="cad_dark" pos="0.0263353 -8.97657e-09 0.0437"/>
+            <geom name="cad_left_so101_mounting_plate_visual" class="cad_visual" mesh="so101_mounting_plate" material="so101_yellow" pos="-0.0309827 -0.000199441 0.0474" quat="0.5 0.5 0.5 0.5"/>
+            <body name="cad_left_so101_shoulder_body" pos="0.0388353 -8.97657e-09 0.0624" quat="3.56167e-16 1.22818e-15 -1 -4.14635e-16">
+              <geom name="cad_left_so101_shoulder_servo_visual" class="cad_visual" mesh="so101_servo" material="cad_dark" pos="-0.0303992 0.000422241 -0.0417" quat="0.5 0.5 0.5 -0.5"/>
+              <geom name="cad_left_so101_motor_holder_base_visual" class="cad_visual" mesh="so101_motor_holder_base" material="so101_yellow" pos="-0.0675992 -0.000177759 0.0158499" quat="0.5 0.5 -0.5 0.5"/>
+              <geom name="cad_left_so101_rotation_pitch_visual" class="cad_visual" mesh="so101_rotation_pitch" material="so101_yellow" pos="0.0122008 2.22413e-05 0.0464" quat="0.707107 -0.707107 0 0"/>
+              <body name="cad_left_so101_upper_arm_body" pos="-0.0303992 -0.0182778 -0.0542" quat="0.70214304 -0.70214304 -0.0836370253 -0.0836370253">
+                <geom name="cad_left_so101_upper_arm_servo_visual" class="cad_visual" mesh="so101_servo" material="cad_dark" pos="-0.11257 -0.0155 0.0187" quat="0 -0.707107 0.707107 0"/>
+                <geom name="cad_left_so101_upper_arm_visual" class="cad_visual" mesh="so101_upper_arm" material="so101_yellow" pos="-0.065085 0.012 0.0182" quat="0 1 0 0"/>
+                <body name="cad_left_so101_lower_arm_body" pos="-0.11257 -0.028 0" quat="-0.0595665548 0 0 0.998224336">
+                  <geom name="cad_left_so101_under_arm_visual" class="cad_visual" mesh="so101_under_arm" material="so101_yellow" pos="-0.0648499 -0.032 0.0182" quat="0 1 0 0"/>
+                  <geom name="cad_left_so101_motor_holder_wrist_visual" class="cad_visual" mesh="so101_motor_holder_wrist" material="so101_yellow" pos="-0.0648499 -0.032 0.018" quat="0 1 0 0"/>
+                  <geom name="cad_left_so101_lower_arm_servo_visual" class="cad_visual" mesh="so101_servo" material="cad_dark" pos="-0.1224 0.0052 0.0187" quat="0 0 1 0"/>
+                  <body name="cad_left_so101_wrist_body" pos="-0.1349 0.0052 0" quat="0.0194019459 0 0 -0.999811765">
+                    <geom name="cad_left_so101_wrist_servo_visual" class="cad_visual" mesh="so101_servo_no_horn" material="cad_dark" pos="0 -0.0424 0.0306" quat="0.5 0.5 0.5 -0.5"/>
+                    <geom name="cad_left_so101_wrist_roll_pitch_visual" class="cad_visual" mesh="so101_wrist_roll_pitch" material="so101_yellow" pos="0 -0.028 0.0181" quat="0.5 -0.5 -0.5 -0.5"/>
+                    <body name="cad_left_so101_gripper_body" pos="0 -0.0611 0.0181" quat="0.0172091082 -0.0172091082 0.706897338 0.706897338">
+                      <geom name="cad_left_so101_gripper_servo_visual" class="cad_visual" mesh="so101_servo" material="cad_dark" pos="0.0077 0.0001 -0.0234" quat="0.707107 -0.707107 0 0" group="1"/>
+                      <geom name="cad_left_so101_wrist_roll_follower_visual" class="cad_visual" mesh="so101_wrist_roll_follower" material="so101_yellow" pos="0 -0.000218214 0.000949706" quat="0 1 0 0" group="1"/>
+                      <body name="cad_left_so101_moving_jaw_body" pos="0.0202 0.0188 -0.0234" quat="0.685124544 0.685124544 -0.174941017 0.174941017">
+                        <geom name="cad_left_so101_moving_jaw_visual" class="cad_visual" mesh="so101_moving_jaw" material="so101_yellow" pos="0 0 0.0189" group="1"/>
+                      </body>
+                      <body name="cad_left_camera_body" pos="0 0.055 0.04" quat="0.292401601 0.952279812 0.0836905016 0.0256975275">
+                        <geom name="cad_left_camera_visual" class="cad_visual" mesh="cad_wrist_camera" material="cad_camera"/>
+                        <!-- The virtual pinhole sits on the physical camera mesh lens face. -->
+                        <camera name="left_camera" pos="0 0 0.022" quat="0 1 0 0" fovy="90"/>
+                      </body>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+
+          <body name="cad_right_so101_base_body" pos="-0.18726 -0.0599 0.4775" quat="0.707106781 0 0 -0.707106781">
+            <geom name="cad_right_so101_base_holder_visual" class="cad_visual" mesh="so101_base_motor_holder" material="so101_yellow" pos="-0.00636471 -9.94414e-05 -0.0024" quat="0.5 0.5 0.5 0.5"/>
+            <geom name="cad_right_so101_base_visual" class="cad_visual" mesh="so101_base" material="so101_yellow" pos="-0.00636471 -8.97657e-09 -0.0024" quat="0.5 0.5 0.5 0.5"/>
+            <geom name="cad_right_so101_base_servo_visual" class="cad_visual" mesh="so101_servo" material="cad_dark" pos="0.0263353 -8.97657e-09 0.0437"/>
+            <geom name="cad_right_so101_mounting_plate_visual" class="cad_visual" mesh="so101_mounting_plate" material="so101_yellow" pos="-0.0309827 -0.000199441 0.0474" quat="0.5 0.5 0.5 0.5"/>
+            <body name="cad_right_so101_shoulder_body" pos="0.0388353 -8.97657e-09 0.0624" quat="3.56167e-16 1.22818e-15 -1 -4.14635e-16">
+              <geom name="cad_right_so101_shoulder_servo_visual" class="cad_visual" mesh="so101_servo" material="cad_dark" pos="-0.0303992 0.000422241 -0.0417" quat="0.5 0.5 0.5 -0.5"/>
+              <geom name="cad_right_so101_motor_holder_base_visual" class="cad_visual" mesh="so101_motor_holder_base" material="so101_yellow" pos="-0.0675992 -0.000177759 0.0158499" quat="0.5 0.5 -0.5 0.5"/>
+              <geom name="cad_right_so101_rotation_pitch_visual" class="cad_visual" mesh="so101_rotation_pitch" material="so101_yellow" pos="0.0122008 2.22413e-05 0.0464" quat="0.707107 -0.707107 0 0"/>
+              <body name="cad_right_so101_upper_arm_body" pos="-0.0303992 -0.0182778 -0.0542" quat="0.70214304 -0.70214304 -0.0836370253 -0.0836370253">
+                <geom name="cad_right_so101_upper_arm_servo_visual" class="cad_visual" mesh="so101_servo" material="cad_dark" pos="-0.11257 -0.0155 0.0187" quat="0 -0.707107 0.707107 0"/>
+                <geom name="cad_right_so101_upper_arm_visual" class="cad_visual" mesh="so101_upper_arm" material="so101_yellow" pos="-0.065085 0.012 0.0182" quat="0 1 0 0"/>
+                <body name="cad_right_so101_lower_arm_body" pos="-0.11257 -0.028 0" quat="-0.0595665548 0 0 0.998224336">
+                  <geom name="cad_right_so101_under_arm_visual" class="cad_visual" mesh="so101_under_arm" material="so101_yellow" pos="-0.0648499 -0.032 0.0182" quat="0 1 0 0"/>
+                  <geom name="cad_right_so101_motor_holder_wrist_visual" class="cad_visual" mesh="so101_motor_holder_wrist" material="so101_yellow" pos="-0.0648499 -0.032 0.018" quat="0 1 0 0"/>
+                  <geom name="cad_right_so101_lower_arm_servo_visual" class="cad_visual" mesh="so101_servo" material="cad_dark" pos="-0.1224 0.0052 0.0187" quat="0 0 1 0"/>
+                  <body name="cad_right_so101_wrist_body" pos="-0.1349 0.0052 0" quat="0.0194019459 0 0 -0.999811765">
+                    <geom name="cad_right_so101_wrist_servo_visual" class="cad_visual" mesh="so101_servo_no_horn" material="cad_dark" pos="0 -0.0424 0.0306" quat="0.5 0.5 0.5 -0.5"/>
+                    <geom name="cad_right_so101_wrist_roll_pitch_visual" class="cad_visual" mesh="so101_wrist_roll_pitch" material="so101_yellow" pos="0 -0.028 0.0181" quat="0.5 -0.5 -0.5 -0.5"/>
+                    <body name="cad_right_so101_gripper_body" pos="0 -0.0611 0.0181" quat="0.0172091082 -0.0172091082 0.706897338 0.706897338">
+                      <geom name="cad_right_so101_gripper_servo_visual" class="cad_visual" mesh="so101_servo" material="cad_dark" pos="0.0077 0.0001 -0.0234" quat="0.707107 -0.707107 0 0" group="1"/>
+                      <geom name="cad_right_so101_wrist_roll_follower_visual" class="cad_visual" mesh="so101_wrist_roll_follower" material="so101_yellow" pos="0 -0.000218214 0.000949706" quat="0 1 0 0" group="1"/>
+                      <body name="cad_right_so101_moving_jaw_body" pos="0.0202 0.0188 -0.0234" quat="0.685124544 0.685124544 -0.174941017 0.174941017">
+                        <geom name="cad_right_so101_moving_jaw_visual" class="cad_visual" mesh="so101_moving_jaw" material="so101_yellow" pos="0 0 0.0189" group="1"/>
+                      </body>
+                      <body name="cad_right_camera_body" pos="0 -0.055 0.04" quat="0.0258352466 0.0856592708 0.953562688 0.287599077">
+                        <geom name="cad_right_camera_visual" class="cad_visual" mesh="cad_wrist_camera" material="cad_camera"/>
+                        <!-- The virtual pinhole sits on the physical camera mesh lens face. -->
+                        <camera name="right_camera" pos="0 0 0.022" quat="0 1 0 0" fovy="90"/>
+                      </body>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+
+        <body
+          name="cad_wheel_2_body"
+          pos="-0.1337 0.076522 0.063355"
+          quat="0.183030835 -0.682977308 0.183013207 0.6830431"
+        >
+          <geom name="cad_wheel_2_visual" class="cad_visual" mesh="cad_wheel_2" material="cad_dark"/>
+        </body>
+        <body
+          name="cad_wheel_3_body"
+          pos="-0.0014342 -0.15301 0.063355"
+          quat="0.499998163 0.5 0.5 -0.500001837"
+        >
+          <geom name="cad_wheel_3_visual" class="cad_visual" mesh="cad_wheel_3" material="cad_dark"/>
+        </body>
+        <body
+          name="cad_wheel_4_body"
+          pos="0.13115 0.076408 0.063355"
+          quat="0.612370878 -0.612373127 0.35355479 -0.353553491"
+        >
+          <geom name="cad_wheel_4_visual" class="cad_visual" mesh="cad_wheel_4" material="cad_dark"/>
+        </body>
+        <body
+          name="cad_back_camera_body"
+          pos="0.00034085 0.16827 1.0972"
+          quat="0.220512875 -0.671842685 -0.671843532 -0.220517"
+        >
+          <geom name="cad_back_camera_visual" class="cad_visual" mesh="cad_back_camera" material="cad_camera"/>
+          <camera name="back_camera" pos="0 0 0.025" xyaxes="0 -1 0 -1 0 0" fovy="69"/>
+        </body>
+        <body
+          name="cad_front_camera_body"
+          pos="0.000309285648 -0.0549084505 1.10145848"
+          quat="-0.270593972 -0.653283172 -0.653283172 0.270593972"
+        >
+          <geom name="cad_front_camera_visual" class="cad_visual" mesh="cad_front_camera" material="cad_camera"/>
+          <camera name="front_camera" pos="0 0 0.025" xyaxes="0 -1 0 -1 0 0" fovy="69"/>
+        </body>
+      </body>
+
+      <!-- MuJoCo cameras look along their local -Z axis. -->
+      <camera name="nav_front" pos="0.24 0 0.58" xyaxes="0 -1 0 0 0 1" fovy="90"/>
+      <camera name="nav_left" pos="0 0.25 0.58" xyaxes="1 0 0 0 0 1" fovy="90"/>
+      <camera name="nav_back" pos="-0.15 0 0.58" xyaxes="0 1 0 0 0 1" fovy="90"/>
+      <camera name="nav_right" pos="0 -0.25 0.58" xyaxes="-1 0 0 0 0 1" fovy="90"/>
+
+      <site name="imu_site" pos="0 0 0.3" size="0.01"/>
+    </body>
+  </worldbody>
+
+  <sensor>
+    <gyro name="imu_gyro" site="imu_site"/>
+    <accelerometer name="imu_accel" site="imu_site"/>
+  </sensor>
+</mujoco>

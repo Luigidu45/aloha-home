@@ -31,6 +31,7 @@ from pathlib import Path
 import threading
 import time
 from typing import Any
+import xml.etree.ElementTree as ET
 
 import mujoco
 import numpy as np
@@ -155,6 +156,7 @@ class _WholeBodySimHooks:
         self._latest_pd_kp: NDArray[np.float64] | None = None
         self._latest_pd_kd: NDArray[np.float64] | None = None
         self._latest_pd_tau: NDArray[np.float64] | None = None
+        self._position_command_seeded = False
 
     def pre_step(self, engine: MujocoEngine) -> None:
         shm = self._shm
@@ -205,6 +207,9 @@ class _WholeBodySimHooks:
 
     def post_step(self, engine: MujocoEngine) -> None:
         shm = self._shm
+        if not self._position_command_seeded:
+            shm.initialize_position_command(engine.joint_positions)
+            self._position_command_seeded = True
         shm.write_joint_state(
             positions=engine.joint_positions,
             velocities=engine.joint_velocities,
@@ -246,6 +251,7 @@ class MujocoSimModuleConfig(ModuleConfig, DepthCameraConfig):
     robot_meshdir: str | Path | None = None
     robot_id: str = ""
     scene_entities: list[dict[str, Any]] = Field(default_factory=list)
+    include_legacy_office_person: bool = False
     spawn_xy: tuple[float, float] | None = None
     spawn_z: float | None = None
     spawn_yaw: float | None = None
@@ -255,6 +261,14 @@ class MujocoSimModuleConfig(ModuleConfig, DepthCameraConfig):
 
     # Camera config (matches former MujocoCameraConfig).
     camera_name: str = "wrist_camera"
+    # Extra RGB cameras rendered by the engine. Subclasses with named output
+    # ports can publish these alongside the primary ``color_image`` stream.
+    additional_camera_names: list[str] = Field(default_factory=list)
+    camera_geom_groups: list[int] | None = None
+    camera_geom_group_overrides: dict[str, list[int]] = Field(default_factory=dict)
+    camera_near_clip_fraction: float | None = Field(default=None, gt=0)
+    camera_max_geom: int | None = 10000
+    max_camera_renders_per_step: int | None = None
     width: int = 640
     height: int = 480
     fps: int = 15
@@ -304,6 +318,57 @@ class MujocoSimModuleConfig(ModuleConfig, DepthCameraConfig):
             "accelerometer_pelvis",
             "imu_accel",
         ]
+    )
+
+
+def add_legacy_office_person(spec_scene: mujoco.MjSpec) -> None:
+    """Add the textured mocap person used by the legacy Go2 office simulator."""
+    from dimos.utils.data import get_data
+
+    person_dir = get_data("person")
+    person_root = ET.Element("mujoco")
+    person_assets = ET.SubElement(person_root, "asset")
+    ET.SubElement(
+        person_assets,
+        "mesh",
+        name="person_mesh",
+        file=str(person_dir / "jeong_seun_34.obj"),
+    )
+    ET.SubElement(
+        person_assets,
+        "texture",
+        name="person_texture",
+        file=str(person_dir / "material_0.png"),
+        type="2d",
+    )
+    ET.SubElement(
+        person_assets,
+        "material",
+        name="person_material",
+        texture="person_texture",
+    )
+    person_world = ET.SubElement(person_root, "worldbody")
+    person_body = ET.SubElement(
+        person_world,
+        "body",
+        name="person",
+        pos="0 0 0",
+        mocap="true",
+    )
+    ET.SubElement(
+        person_body,
+        "geom",
+        name="person_geom",
+        type="mesh",
+        mesh="person_mesh",
+        material="person_material",
+        euler="1.5708 0 0",
+    )
+    person_spec = mujoco.MjSpec.from_string(ET.tostring(person_root, encoding="unicode"))
+    spec_scene.attach(
+        person_spec,
+        prefix="",
+        frame=spec_scene.worldbody.add_frame(),
     )
 
 
@@ -443,6 +508,8 @@ class MujocoSimModule(
                 max_geom=max_geom,
                 geom_groups=groups,
                 base_body_name=self.config.base_frame_id,
+                render_depth=self.config.enable_depth
+                or (self.config.enable_pointcloud and not self.config.enable_mujoco_lidar),
             )
 
         primary_needed = (
@@ -451,7 +518,21 @@ class MujocoSimModule(
             or (self.config.enable_pointcloud and not self.config.enable_mujoco_lidar)
         )
         if primary_needed:
-            add_camera(self.config.camera_name)
+            add_camera(
+                self.config.camera_name,
+                geom_groups=self.config.camera_geom_group_overrides.get(
+                    self.config.camera_name, self.config.camera_geom_groups
+                ),
+                max_geom=self.config.camera_max_geom,
+            )
+        for camera_name in self.config.additional_camera_names:
+            add_camera(
+                camera_name,
+                geom_groups=self.config.camera_geom_group_overrides.get(
+                    camera_name, self.config.camera_geom_groups
+                ),
+                max_geom=self.config.camera_max_geom,
+            )
 
         if self.config.enable_pointcloud and self.config.enable_mujoco_lidar:
             for camera_name in self._mujoco_lidar_camera_names():
@@ -476,6 +557,7 @@ class MujocoSimModule(
         engine_kwargs: dict[str, Any] = dict(
             headless=self.config.headless,
             cameras=cameras,
+            max_camera_renders_per_step=self.config.max_camera_renders_per_step,
             raycast_lidars=raycast_lidars,
             robot_sim_spec=self.config.robot_sim_spec,
             reset_joint_positions=self.config.reset_joint_positions,
@@ -545,7 +627,7 @@ class MujocoSimModule(
             gripper_joint_range=self._gripper_joint_range,
         )
         self._engine.set_step_hooks(
-            before=self._sim_hooks.pre_step,
+            before=self._before_sim_step,
             after=self._publish_shm_and_lcm,
         )
 
@@ -595,6 +677,14 @@ class MujocoSimModule(
             shm_key=shm_key,
         )
 
+    def _before_sim_step(self, engine: MujocoEngine) -> None:
+        """Apply module-owned controls immediately before one physics step."""
+        if self._sim_hooks is not None:
+            self._sim_hooks.pre_step(engine)
+
+    def _configure_robot_spec(self, spec_robot: mujoco.MjSpec) -> None:
+        """Apply robot-specific changes before attaching it to the scene."""
+
     def _compose_model(self) -> mujoco.MjModel:
         """Compose optional scene package MJCF + robot MJCF + scene-package entities."""
         from dimos.simulation.mujoco.scene_package_entity_composer import (
@@ -611,13 +701,19 @@ class MujocoSimModule(
             else:
                 spec_scene = mujoco.MjSpec()
 
+            if self.config.include_legacy_office_person:
+                add_legacy_office_person(spec_scene)
+
             spec_robot = mujoco.MjSpec.from_file(str(self.config.robot_mjcf))
             if self.config.robot_meshdir is not None:
                 spec_robot.meshdir = str(self.config.robot_meshdir)
+            self._configure_robot_spec(spec_robot)
 
             # Keep the robot controller timing stable when attached to a scene
             # package whose wrapper may have different default options.
             spec_scene.option.timestep = spec_robot.option.timestep
+            if self.config.camera_near_clip_fraction is not None:
+                spec_scene.visual.map.znear = self.config.camera_near_clip_fraction
 
             spawn_xy = self.config.spawn_xy or (0.0, 0.0)
             spawn_z = self.config.spawn_z if self.config.spawn_z is not None else 0.0

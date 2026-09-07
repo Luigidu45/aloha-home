@@ -18,6 +18,9 @@
 all_blueprints = {
     "a1z-planner-coordinator": "dimos.robot.manipulators.a1z.blueprints.basic:a1z_planner_coordinator",
     "alfred-nav": "dimos.robot.diy.alfred.blueprints.alfred_nav:alfred_nav",
+    "alohamini2-nav-manip-sim": "dimos.robot.alohamini2.blueprints.alohamini2_nav_sim:alohamini2_nav_manip_sim",
+    "alohamini2-nav-sim": "dimos.robot.alohamini2.blueprints.alohamini2_nav_sim:alohamini2_nav_sim",
+    "alohamini2-nav-sim-full": "dimos.robot.alohamini2.blueprints.alohamini2_nav_sim:alohamini2_nav_sim_full",
     "coordinator-a1z": "dimos.robot.manipulators.a1z.blueprints.basic:coordinator_a1z",
     "coordinator-basic": "dimos.control.blueprints.basic:coordinator_basic",
     "coordinator-cartesian-ik-mock": "dimos.robot.manipulators.piper.blueprints.teleop:coordinator_cartesian_ik_mock",
@@ -163,6 +166,9 @@ all_blueprints = {
 
 all_modules = {
     "alfred-high-level": "dimos.robot.diy.alfred.effector_high_level.AlfredHighLevel",
+    "aloha-mini2-arm-control": "dimos.robot.alohamini2.arm_control.AlohaMini2ArmControl",
+    "aloha-mini2-manipulation-module": "dimos.robot.alohamini2.manipulation_module.AlohaMini2ManipulationModule",
+    "aloha-mini2-sim-module": "dimos.robot.alohamini2.sim_module.AlohaMini2SimModule",
     "arm-command-module": "dimos.teleop.hosted.arm_command.ArmCommandModule",
     "arm-teleop-module": "dimos.teleop.quest.quest_extensions.ArmTeleopModule",
     "b-box-navigation-module": "dimos.navigation.bbox_navigation.BBoxNavigationModule",

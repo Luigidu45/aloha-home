@@ -226,6 +226,17 @@ class ManipShmWriter:
         self._increment_seq(SEQ_VELOCITIES)
         self._increment_seq(SEQ_EFFORTS)
 
+    def initialize_position_command(self, positions: list[float]) -> None:
+        """Seed position targets without publishing a new command.
+
+        Multi-device adapters can update disjoint slices of the same command
+        vector.  Seeding the untouched slices from the simulated state keeps
+        the first device command from pulling every other device toward zero.
+        """
+        n = min(len(positions), MAX_JOINTS)
+        arr = self._array(self.shm.pos_t, MAX_JOINTS, np.float64)
+        arr[:n] = positions[:n]
+
     def write_gripper_state(self, position: float) -> None:
         arr = self._array(self.shm.grp, 2, np.float64)
         arr[0] = position
@@ -356,27 +367,58 @@ class ManipShmReader:
         self.shm = ManipShmSet.attach(key)
 
     def read_positions(self, num_joints: int) -> list[float]:
+        return self.read_positions_slice(0, num_joints)
+
+    def read_positions_slice(self, offset: int, num_joints: int) -> list[float]:
+        self._validate_slice(offset, num_joints)
         arr = np.ndarray((MAX_JOINTS,), dtype=np.float64, buffer=self.shm.pos.buf)
-        return [float(x) for x in arr[:num_joints]]
+        return [float(x) for x in arr[offset : offset + num_joints]]
 
     def read_velocities(self, num_joints: int) -> list[float]:
+        return self.read_velocities_slice(0, num_joints)
+
+    def read_velocities_slice(self, offset: int, num_joints: int) -> list[float]:
+        self._validate_slice(offset, num_joints)
         arr = np.ndarray((MAX_JOINTS,), dtype=np.float64, buffer=self.shm.vel.buf)
-        return [float(x) for x in arr[:num_joints]]
+        return [float(x) for x in arr[offset : offset + num_joints]]
 
     def read_efforts(self, num_joints: int) -> list[float]:
+        return self.read_efforts_slice(0, num_joints)
+
+    def read_efforts_slice(self, offset: int, num_joints: int) -> list[float]:
+        self._validate_slice(offset, num_joints)
         arr = np.ndarray((MAX_JOINTS,), dtype=np.float64, buffer=self.shm.eff.buf)
-        return [float(x) for x in arr[:num_joints]]
+        return [float(x) for x in arr[offset : offset + num_joints]]
 
     def read_gripper_position(self) -> float:
         arr = np.ndarray((2,), dtype=np.float64, buffer=self.shm.grp.buf)
         return float(arr[0])
 
     def write_position_command(self, positions: list[float]) -> None:
-        n = min(len(positions), MAX_JOINTS)
+        self.write_position_command_slice(0, positions)
+
+    def write_position_command_slice(self, offset: int, positions: list[float]) -> None:
+        n = min(len(positions), MAX_JOINTS - offset)
+        self._validate_slice(offset, n)
         arr = np.ndarray((MAX_JOINTS,), dtype=np.float64, buffer=self.shm.pos_t.buf)
-        arr[:n] = positions[:n]
+        arr[offset : offset + n] = positions[:n]
         self._set_command_mode(CMD_MODE_POSITION)
         self._increment_seq(SEQ_POSITION_CMD)
+
+    def write_velocity_command_slice(self, offset: int, velocities: list[float]) -> None:
+        n = min(len(velocities), MAX_JOINTS - offset)
+        self._validate_slice(offset, n)
+        arr = np.ndarray((MAX_JOINTS,), dtype=np.float64, buffer=self.shm.vel_t.buf)
+        arr[offset : offset + n] = velocities[:n]
+        self._set_command_mode(CMD_MODE_VELOCITY)
+        self._increment_seq(SEQ_VELOCITY_CMD)
+
+    @staticmethod
+    def _validate_slice(offset: int, num_joints: int) -> None:
+        if offset < 0 or num_joints < 0 or offset + num_joints > MAX_JOINTS:
+            raise ValueError(
+                f"Joint slice [{offset}:{offset + num_joints}] exceeds SHM capacity {MAX_JOINTS}"
+            )
 
     def write_velocity_command(self, velocities: list[float]) -> None:
         n = min(len(velocities), MAX_JOINTS)

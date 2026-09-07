@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "pose": {
+    "left": {
+      "shoulder_pan": 0.0,
+      "shoulder_lift": -1.7453292519943224,
+      "elbow_flex": 1.5690509975429023,
+      "wrist_flex": 1.0506882097005865,
+      "wrist_roll": 0.0,
+      "gripper": -0.17453292519943295
+    },
+    "right": {
+      "shoulder_pan": 0.0,
+      "shoulder_lift": -1.7453292519943224,
+      "elbow_flex": 1.5690509975429023,
+      "wrist_flex": 1.0506882097005865,
+      "wrist_roll": 0.0,
+      "gripper": -0.17453292519943295
+    }
+  }
+}

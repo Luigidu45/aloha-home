@@ -56,6 +56,8 @@ from dimos.mapping.cli.pose_fill import main as _map_pose_fill_main
 from dimos.mapping.cli.rename import main as _map_rename_main
 from dimos.mapping.cli.replay import main as _map_replay_main
 from dimos.mapping.cli.replay_marker import main as _map_replay_marker_main
+from dimos.robot.alohamini2.tools.calibrate_so101_home import launch_so101_home_editor
+from dimos.robot.alohamini2.tools.design_print_colors import launch_alohamini2_color_designer
 from dimos.robot.manipulators.piper.cli import app as piper_app
 from dimos.robot.unitree.go2.cli.go2tool import app as go2tool_app
 from dimos.utils.cache import cache_usage_locked
@@ -172,6 +174,18 @@ main.add_typer(go2tool_app, name="go2tool")
 main.add_typer(piper_app, name="piper")
 main.command()(shell)
 main.add_typer(cache_app, name="cache")
+
+
+@main.command("alohamini2-calibrate-home")
+def alohamini2_calibrate_home() -> None:
+    """Interactively set and save both SO101 home poses."""
+    launch_so101_home_editor()
+
+
+@main.command("alohamini2-design-colors")
+def alohamini2_design_colors() -> None:
+    """Preview and save print colors for every AlohaMini2-SO101 STL piece."""
+    launch_alohamini2_color_designer()
 
 
 def arg_help(

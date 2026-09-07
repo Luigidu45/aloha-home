@@ -53,6 +53,8 @@ class ShmMujocoAdapter:
         dof: int = 7,
         address: str | None = None,
         hardware_id: str | None = None,
+        joint_offset: int = 0,
+        gripper_index: int | None = None,
         **_: Any,
     ) -> None:
         if address is None:
@@ -60,6 +62,13 @@ class ShmMujocoAdapter:
         self._dof = dof
         self._address = address
         self._hardware_id = hardware_id
+        if joint_offset < 0:
+            raise ValueError("joint_offset must be non-negative")
+        if gripper_index is not None and gripper_index < 0:
+            raise ValueError("gripper_index must be non-negative")
+        self._joint_offset = joint_offset
+        self._gripper_index = gripper_index
+        self._gripper_uses_joint_vector = gripper_index is not None
         self._shm_key = shm_key_from_path(address)
         self._shm: ManipShmReader | None = None
         self._connected = False
@@ -98,7 +107,28 @@ class ShmMujocoAdapter:
             time.sleep(_READY_WAIT_POLL_S)
 
         num_joints = self._shm.num_joints()
-        self._has_gripper = num_joints > self._dof
+        if self._joint_offset + self._dof > num_joints:
+            logger.error(
+                "Requested joint slice exceeds simulated joints",
+                offset=self._joint_offset,
+                dof=self._dof,
+                num_joints=num_joints,
+            )
+            self._shm.cleanup()
+            self._shm = None
+            return False
+        if self._gripper_index is None and self._joint_offset == 0 and num_joints > self._dof:
+            self._gripper_index = self._dof
+        self._has_gripper = self._gripper_index is not None
+        if self._gripper_index is not None and self._gripper_index >= num_joints:
+            logger.error(
+                "Requested gripper index exceeds simulated joints",
+                gripper_index=self._gripper_index,
+                num_joints=num_joints,
+            )
+            self._shm.cleanup()
+            self._shm = None
+            return False
         self._connected = True
         self._servos_enabled = True
         logger.info("ShmMujocoAdapter connected", dof=self._dof, gripper=self._has_gripper)
@@ -154,17 +184,17 @@ class ShmMujocoAdapter:
     def read_joint_positions(self) -> list[float]:
         if self._shm is None:
             return [0.0] * self._dof
-        return self._shm.read_positions(self._dof)
+        return self._shm.read_positions_slice(self._joint_offset, self._dof)
 
     def read_joint_velocities(self) -> list[float]:
         if self._shm is None:
             return [0.0] * self._dof
-        return self._shm.read_velocities(self._dof)
+        return self._shm.read_velocities_slice(self._joint_offset, self._dof)
 
     def read_joint_efforts(self) -> list[float]:
         if self._shm is None:
             return [0.0] * self._dof
-        return self._shm.read_efforts(self._dof)
+        return self._shm.read_efforts_slice(self._joint_offset, self._dof)
 
     def read_state(self) -> dict[str, int]:
         velocities = self.read_joint_velocities()
@@ -179,14 +209,14 @@ class ShmMujocoAdapter:
         if not self._servos_enabled or self._shm is None:
             return False
         self._control_mode = ControlMode.POSITION
-        self._shm.write_position_command(positions[: self._dof])
+        self._shm.write_position_command_slice(self._joint_offset, positions[: self._dof])
         return True
 
     def write_joint_velocities(self, velocities: list[float]) -> bool:
         if not self._servos_enabled or self._shm is None:
             return False
         self._control_mode = ControlMode.VELOCITY
-        self._shm.write_velocity_command(velocities[: self._dof])
+        self._shm.write_velocity_command_slice(self._joint_offset, velocities[: self._dof])
         return True
 
     def write_joint_efforts(self, efforts: list[float]) -> bool:
@@ -203,8 +233,8 @@ class ShmMujocoAdapter:
         # Hold current position.
         if self._shm is None:
             return False
-        positions = self._shm.read_positions(self._dof)
-        self._shm.write_position_command(positions)
+        positions = self._shm.read_positions_slice(self._joint_offset, self._dof)
+        self._shm.write_position_command_slice(self._joint_offset, positions)
         return True
 
     def write_enable(self, enable: bool) -> bool:
@@ -228,12 +258,21 @@ class ShmMujocoAdapter:
     def read_gripper_position(self) -> float | None:
         if not self._has_gripper or self._shm is None:
             return None
-        return self._shm.read_gripper_position()
+        if self._gripper_index is None:
+            return None
+        if not self._gripper_uses_joint_vector:
+            return self._shm.read_gripper_position()
+        return self._shm.read_positions_slice(self._gripper_index, 1)[0]
 
     def write_gripper_position(self, position: float) -> bool:
         if not self._has_gripper or self._shm is None:
             return False
-        self._shm.write_gripper_command(position)
+        if self._gripper_index is None:
+            return False
+        if not self._gripper_uses_joint_vector:
+            self._shm.write_gripper_command(position)
+            return True
+        self._shm.write_position_command_slice(self._gripper_index, [position])
         return True
 
     def read_force_torque(self) -> list[float] | None:

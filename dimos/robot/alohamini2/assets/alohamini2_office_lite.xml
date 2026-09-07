@@ -1,0 +1,88 @@
+<!--
+Copyright 2025-2026 Dimensional Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<!-- Lightweight primitive approximation of the Go2 office for fast navigation tests. -->
+<mujoco model="alohamini2_office_lite">
+  <compiler angle="radian" autolimits="true"/>
+  <option timestep="0.005" gravity="0 0 -9.81" integrator="implicitfast"/>
+
+  <visual>
+    <global azimuth="135" elevation="-25"/>
+    <!-- Required for wrist cameras mounted only centimeters from their grippers. -->
+    <map znear="0.0002"/>
+    <headlight ambient="0.4 0.4 0.4" diffuse="0.7 0.7 0.7"/>
+  </visual>
+
+  <asset>
+    <material name="floor_mat" rgba="0.62 0.43 0.24 1"/>
+    <material name="wall_mat" rgba="0.62 0.58 0.43 1"/>
+    <material name="desk_mat" rgba="0.8 0.8 0.78 1"/>
+    <material name="dark_mat" rgba="0.055 0.06 0.07 1"/>
+    <material name="curtain_mat" rgba="0.08 0.08 0.09 1"/>
+  </asset>
+
+  <default>
+    <geom condim="3" friction="1 0.01 0.001" solref="0.01 1"/>
+  </default>
+
+  <worldbody>
+    <light directional="true" pos="0 0 4" dir="0 0 -1"/>
+    <geom name="floor" type="plane" size="6 5 0.1" material="floor_mat"/>
+
+    <!-- Room envelope. -->
+    <geom name="north_wall" type="box" pos="0 4 1.5" size="5 0.08 1.5" material="wall_mat"/>
+    <geom name="south_wall" type="box" pos="0 -4 1.5" size="5 0.08 1.5" material="wall_mat"/>
+    <geom name="east_wall" type="box" pos="5 0 1.5" size="0.08 4 1.5" material="wall_mat"/>
+    <geom name="west_wall" type="box" pos="-5 0 1.5" size="0.08 4 1.5" material="wall_mat"/>
+    <geom name="curtain" type="box" pos="4.88 0 1.5" size="0.04 1.8 1.45" material="curtain_mat"/>
+
+    <!-- Two desk islands, reduced to boxes while preserving navigation obstacles. -->
+    <body name="desk_island_front" pos="1.7 -1.8 0">
+      <geom name="front_desk_top" type="box" pos="0 0 0.72" size="1.15 0.45 0.05" material="desk_mat"/>
+      <geom type="box" pos="-0.95 -0.32 0.35" size="0.05 0.05 0.35" material="dark_mat"/>
+      <geom type="box" pos="0.95 -0.32 0.35" size="0.05 0.05 0.35" material="dark_mat"/>
+      <geom type="box" pos="-0.95 0.32 0.35" size="0.05 0.05 0.35" material="dark_mat"/>
+      <geom type="box" pos="0.95 0.32 0.35" size="0.05 0.05 0.35" material="dark_mat"/>
+      <geom type="box" pos="-0.45 0 0.92" size="0.28 0.035 0.18" material="dark_mat"/>
+      <geom type="box" pos="0.45 0 0.92" size="0.28 0.035 0.18" material="dark_mat"/>
+    </body>
+
+    <body name="meeting_table" pos="1.7 2.25 0">
+      <geom name="meeting_table_top" type="box" pos="0 0 0.72" size="1.35 0.55 0.05" material="desk_mat"/>
+      <geom type="box" pos="-1.05 0 0.35" size="0.06 0.35 0.35" material="dark_mat"/>
+      <geom type="box" pos="1.05 0 0.35" size="0.06 0.35 0.35" material="dark_mat"/>
+    </body>
+
+    <!-- Cheap chair silhouettes around both tables. -->
+    <body name="chair_left" pos="0.25 -1.8 0">
+      <geom type="box" pos="0 0 0.42" size="0.22 0.22 0.06" material="dark_mat"/>
+      <geom type="box" pos="-0.18 0 0.68" size="0.05 0.22 0.25" material="dark_mat"/>
+    </body>
+    <body name="chair_right" pos="3.15 -1.8 0">
+      <geom type="box" pos="0 0 0.42" size="0.22 0.22 0.06" material="dark_mat"/>
+      <geom type="box" pos="0.18 0 0.68" size="0.05 0.22 0.25" material="dark_mat"/>
+    </body>
+    <body name="chair_meeting_left" pos="0.15 2.25 0">
+      <geom type="box" pos="0 0 0.42" size="0.22 0.22 0.06" material="dark_mat"/>
+      <geom type="box" pos="-0.18 0 0.68" size="0.05 0.22 0.25" material="dark_mat"/>
+    </body>
+    <body name="chair_meeting_right" pos="3.25 2.25 0">
+      <geom type="box" pos="0 0 0.42" size="0.22 0.22 0.06" material="dark_mat"/>
+      <geom type="box" pos="0.18 0 0.68" size="0.05 0.22 0.25" material="dark_mat"/>
+    </body>
+
+    <geom name="column" type="box" pos="-2.7 2.0 1.1" size="0.3 0.3 1.1" material="wall_mat"/>
+  </worldbody>
+</mujoco>
