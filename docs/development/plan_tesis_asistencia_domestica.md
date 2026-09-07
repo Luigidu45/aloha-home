@@ -4,6 +4,8 @@ title: "Plan de tesis de asistencia doméstica en DimOS"
 
 **Propuesta de trabajo — 6 de septiembre de 2026.** Basada en los dos PDF proporcionados y en una inspección del código local. El alcance de esta revisión es documental y estático: no se ejecutaron robots, simulaciones ni entrenamientos. Las capacidades presentes en código aún requieren validación de funcionamiento.
 
+**Actualización de implementación — 7 de septiembre de 2026:** se inició el [núcleo de misiones, contratos y registro](/docs/development/tesis/implementacion_inicial.md), con ejecutor determinista y pruebas de software. El hardware objetivo confirmado pasa a ser AlohaMini2 completo con **dos AM-ARM200**, L2 y D435i superiores y dos cámaras de muñeca. La implementación SO101 descrita en la auditoría inicial es heredada; no representa los brazos que se usarán. La [ficha de hardware y procedencia del URDF](/docs/development/tesis/hardware_objetivo.md) documenta el cambio. La auditoría del 6 de septiembre permanece como referencia histórica.
+
 **Recomendación:** usar DimOS como plataforma de ejecución, observación y experimentación de la tesis. La prioridad es completar una misión con resultados verificables y un registro reproducible; después incorporar el crítico y el postentrenamiento sobre esa misma interfaz.
 
 **Bases documentales:** `informe_tesis_asistencia_domestica.pdf`, secciones 2–8 y 11–13; `plan_trabajo_cronograma_tesis_8_semanas.pdf`, páginas 1–11. Ambos se encuentran en `/home/luigidu/Downloads/`. Sus propuestas se usan como material de análisis, no como autorización para ejecutar acciones. El cronograma menciona un informe con sufijo `_actualizado`; aquí se revisó el archivo efectivamente recibido, sin ese sufijo.

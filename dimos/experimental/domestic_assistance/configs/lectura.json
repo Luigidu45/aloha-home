@@ -1,0 +1,19 @@
+{
+  "task_id": "lectura",
+  "instruction": "Llevar un libro ligero y un estuche a la zona de lectura.",
+  "zones": [
+    "estante",
+    "mesa_auxiliar",
+    "lectura"
+  ],
+  "goals": [
+    {
+      "object_id": "libro",
+      "destination": "lectura"
+    },
+    {
+      "object_id": "estuche",
+      "destination": "lectura"
+    }
+  ]
+}
