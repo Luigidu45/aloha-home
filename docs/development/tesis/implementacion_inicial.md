@@ -4,6 +4,8 @@ title: "Asistencia doméstica: primer incremento ejecutable"
 
 **Estado: 7 de septiembre de 2026.** Implementación inicial de los contratos, ciclo de misión y registro propuestos en el [plan de tesis](/docs/development/plan_tesis_asistencia_domestica.md). La demo usa exclusivamente un ejecutor determinista de prueba: no controla MuJoCo ni hardware y no necesita un VLM, GPU o policy motora.
 
+**Referencia de regresión — 8 de septiembre de 2026:** la [Fase 0](/docs/development/tesis/baseline_fase_0.md) congela schema, verificador, hashes de configuración, rollouts nominales e invariantes antes de integrar simulación y hardware. Esta referencia de software no es el método experimental M0.
+
 **Hardware objetivo confirmado:** AlohaMini2 completo con dos AM-ARM200, LiDAR Unitree L2 superior, D435i superior y dos cámaras de muñeca. Sustituye la decisión anterior de usar SO101. La mini PC prevista es Beelink GTi15 Ultra; disponer de 24 GB de VRAM es una expectativa, no un recurso comprobado. Qwen3-VL-4B-Instruct es un candidato de supervisor; su tamaño y backend no están fijados. Todavía no hay datasets ni checkpoints motores.
 
 **Qué está implementado**

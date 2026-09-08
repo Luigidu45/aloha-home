@@ -664,6 +664,12 @@ driver/policy, percepción, verificación o registro.
 
 ## 16. Mejoras recomendadas
 
+La **Fase 0 de referencia congelada** se completó el 8 de septiembre de 2026.
+Sus versiones, hashes, rollouts golden e invariantes se describen en
+[Fase 0: referencia congelada](/docs/development/tesis/baseline_fase_0.md). Esta
+referencia es infraestructura de regresión y no debe confundirse con el método
+experimental M0 del supervisor.
+
 ### Prioridad inmediata: integración sin debilitar contratos
 
 1. Implementar adaptadores reales de navegación, ACT y observación, manteniendo
