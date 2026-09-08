@@ -1,0 +1,52 @@
+{
+  "task_id": "preparar_bandeja",
+  "instruction": "Colocar una bandeja en la mesa, cargar en ella vasos y platos de pl\u00e1stico y finalmente dejar la bandeja sobre la superficie elevada de la cocina.",
+  "zones": [
+    "almacen_bandeja",
+    "mesa",
+    "zona_vasos",
+    "zona_platos",
+    "zona_cocina"
+  ],
+  "targets": [
+    {
+      "target_id": "mesa_principal",
+      "kind": "surface"
+    },
+    {
+      "target_id": "bandeja",
+      "kind": "tray"
+    },
+    {
+      "target_id": "superficie_cocina",
+      "kind": "surface"
+    }
+  ],
+  "goals": [
+    {
+      "object_id": "vaso_1",
+      "destination": {
+        "zone": "zona_cocina",
+        "target_id": "bandeja",
+        "relation": "ON"
+      }
+    },
+    {
+      "object_id": "plato_1",
+      "destination": {
+        "zone": "zona_cocina",
+        "target_id": "bandeja",
+        "relation": "ON"
+      }
+    },
+    {
+      "object_id": "bandeja",
+      "manipulation_mode": "bimanual",
+      "destination": {
+        "zone": "zona_cocina",
+        "target_id": "superficie_cocina",
+        "relation": "ON"
+      }
+    }
+  ]
+}

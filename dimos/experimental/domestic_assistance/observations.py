@@ -44,3 +44,10 @@ class ObservationBuffer:
             if self._latest is None:
                 raise ValueError("no sensor observation has been received")
             return self._latest
+
+    def observe_after(self, captured_at: float) -> Observation | None:
+        """Return a newer snapshot without relabeling an old snapshot as fresh."""
+        with self._lock:
+            if self._latest is None or self._latest.captured_at <= captured_at:
+                return None
+            return self._latest

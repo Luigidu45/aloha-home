@@ -19,10 +19,12 @@ from typing import Protocol
 from dimos.experimental.domestic_assistance.contracts import (
     Action,
     Decision,
+    DecisionContext,
     ExecutionResult,
     Mission,
     Observation,
     Origin,
+    VerificationResult,
 )
 
 
@@ -50,13 +52,38 @@ class Executor(Protocol):
 class Observer(Protocol):
     def observe(self) -> Observation: ...
 
+    def observe_after(self, captured_at: float) -> Observation | None:
+        """Return a newer complete snapshot, or None without blocking if none is available."""
+        ...
+
 
 class Supervisor(Protocol):
-    def decide(
-        self, mission: Mission, observation: Observation, history: tuple[ExecutionResult, ...]
-    ) -> Decision:
+    def decide(self, mission: Mission, context: DecisionContext) -> Decision:
         """Return candidates without invoking tools. Model backends need bounded inference."""
         ...
+
+
+class Verifier(Protocol):
+    @property
+    def version(self) -> str: ...
+
+    def precondition_error(
+        self, mission: Mission, action: Action, state: Observation, max_fact_age_s: float
+    ) -> str | None: ...
+
+    def verify_action(
+        self,
+        mission: Mission,
+        action: Action,
+        before: Observation,
+        after: Observation,
+        result: ExecutionResult,
+        max_fact_age_s: float,
+    ) -> VerificationResult: ...
+
+    def mission_complete(
+        self, mission: Mission, state: Observation, max_fact_age_s: float
+    ) -> bool: ...
 
 
 class Clock(Protocol):

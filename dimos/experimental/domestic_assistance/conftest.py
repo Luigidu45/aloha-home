@@ -21,11 +21,16 @@ import pytest
 
 from dimos.experimental.domestic_assistance.contracts import (
     Action,
+    ComponentManifest,
+    ExperimentManifest,
     Goal,
     Limits,
     Mission,
+    MissionTarget,
     Origin,
+    PlacementTarget,
     RunMetadata,
+    SpatialRelation,
 )
 from dimos.experimental.domestic_assistance.rollouts import EpisodeJournal
 from dimos.experimental.domestic_assistance.runner import MissionRunner
@@ -69,7 +74,17 @@ def make_rig(tmp_path: Path) -> Iterator[Callable[..., Rig]]:
                 task_id="reading",
                 instruction="Bring book",
                 zones=("shelf", "desk"),
-                goals=(Goal(object_id="book", destination="desk"),),
+                targets=(MissionTarget(target_id="book_spot", kind="surface"),),
+                goals=(
+                    Goal(
+                        object_id="book",
+                        destination=PlacementTarget(
+                            zone="desk",
+                            target_id="book_spot",
+                            relation=SpatialRelation.ON,
+                        ),
+                    ),
+                ),
             )
             locations = {"book": "shelf"}
             executor = DeterministicExecutor(clock, locations, "shelf", faults)
@@ -80,10 +95,14 @@ def make_rig(tmp_path: Path) -> Iterator[Callable[..., Rig]]:
                 split_group="group",
                 seed=1,
                 origin=Origin.TEST,
-                code_version="test",
-                supervisor_version="scripted-v1",
-                executor_version="deterministic-v1",
-                verifier_version="observed-v1",
+                manifest=ExperimentManifest(
+                    experiment_id="domestic-test",
+                    method="software-test",
+                    code=ComponentManifest(name="code", version="test"),
+                    supervisor=ComponentManifest(name="supervisor", version="scripted-v2"),
+                    executor=ComponentManifest(name="executor", version="deterministic-v2"),
+                    verifier=ComponentManifest(name="verifier", version="observed-facts-v2"),
+                ),
             )
             journal = stack.enter_context(EpisodeJournal(tmp_path, metadata.episode_id))
             supervisor = ScriptedSupervisor(

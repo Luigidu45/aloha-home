@@ -18,11 +18,21 @@ from typing import Literal
 
 from dimos.experimental.domestic_assistance.contracts import (
     Action,
+    Arm,
+    EvidenceKind,
+    EvidenceRef,
     ExecutionResult,
+    GripperObservation,
+    GripperState,
+    Holder,
+    NavigationState,
     ObjectObservation,
     Observation,
     Origin,
     Outcome,
+    RobotObservation,
+    SpatialEvidence,
+    SpatialRelation,
 )
 from dimos.experimental.domestic_assistance.interfaces import Clock
 
@@ -55,11 +65,15 @@ class DeterministicExecutor:
         locations: dict[str, str],
         initial_zone: str,
         faults: dict[int, Fault] | None = None,
+        relations: dict[str, set[tuple[str, SpatialRelation]]] | None = None,
+        bimanual_objects: set[str] | None = None,
     ) -> None:
         self._clock = clock
         self._locations = dict(locations)
         self._robot_zone = initial_zone
-        self._held: str | None = None
+        self._held: dict[Arm, str | None] = {Arm.LEFT: None, Arm.RIGHT: None}
+        self._relations = {name: set(value) for name, value in (relations or {}).items()}
+        self._bimanual_objects = set(bimanual_objects or ())
         self._active: tuple[str, Action] | None = None
         self._faults = dict(faults or {})
         self._count = 0
@@ -70,24 +84,78 @@ class DeterministicExecutor:
         return Origin.TEST
 
     def observe(self) -> Observation:
+        captured_at = self._clock.time()
+
+        def evidence(identifier: str) -> EvidenceRef:
+            return EvidenceRef(
+                evidence_id=identifier,
+                kind=EvidenceKind.TEST,
+                source="deterministic-executor",
+                captured_at=captured_at,
+            )
+
+        held_arms: dict[str, list[Arm]] = {}
+        for arm, object_id in self._held.items():
+            if object_id is not None:
+                held_arms.setdefault(object_id, []).append(arm)
         return Observation(
-            captured_at=self._clock.time(),
+            captured_at=captured_at,
             origin=self.origin,
-            robot_zone=self._robot_zone,
-            base_stopped=self._active is None,
-            grippers_empty=self._held is None,
+            stage="deterministic-transfer",
+            robot=RobotObservation(
+                zone=self._robot_zone,
+                base_stopped=self._active is None,
+                navigation_state=(
+                    NavigationState.IDLE if self._active is None else NavigationState.MOVING
+                ),
+                observed_at=captured_at,
+                evidence=(evidence("test-robot-state"),),
+            ),
+            grippers=tuple(
+                GripperObservation(
+                    arm=arm,
+                    state=(GripperState.EMPTY if object_id is None else GripperState.HOLDING),
+                    object_id=object_id,
+                    observed_at=captured_at,
+                    evidence=(evidence(f"test-{arm.value}-gripper"),),
+                )
+                for arm, object_id in self._held.items()
+            ),
             objects=tuple(
                 ObjectObservation(
                     object_id=name,
-                    zone=self._robot_zone if self._held == name else zone,
-                    held=self._held == name,
+                    zone=self._robot_zone if name in held_arms else zone,
+                    held_by=(
+                        Holder.BOTH
+                        if len(held_arms.get(name, ())) == 2
+                        else Holder(held_arms[name][0].value)
+                        if name in held_arms
+                        else Holder.NONE
+                    ),
                     visible=zone == self._robot_zone,
-                    observed_at=self._clock.time(),
-                    evidence=(f"test-state:{name}",),
+                    observed_at=captured_at,
+                    evidence=(evidence(f"test-object-{name}"),),
+                    relations=tuple(
+                        SpatialEvidence(
+                            target_id=target,
+                            relation=relation,
+                            present=True,
+                            observed_at=captured_at,
+                            evidence=(evidence(f"test-relation-{name}-{target}"),),
+                        )
+                        for target, relation in sorted(
+                            self._relations.get(name, set()), key=lambda item: item[0]
+                        )
+                    ),
                 )
                 for name, zone in self._locations.items()
             ),
         )
+
+    def observe_after(self, captured_at: float) -> Observation | None:
+        if self._clock.time() <= captured_at:
+            return None
+        return self.observe()
 
     def start(self, decision_id: str, action: Action) -> None:
         if self._active is not None:
@@ -108,20 +176,61 @@ class DeterministicExecutor:
             return ExecutionResult(
                 outcome=Outcome.FAILED if fault == "failed" else Outcome.UNKNOWN,
                 detail=f"injected {fault}",
-                evidence=("test-fault",),
+                failure_code=f"injected_{fault}",
+                evidence=(self._execution_evidence("test-fault"),),
             )
         if action.skill == "NAVIGATE":
             assert action.zone is not None
             self._robot_zone = action.zone
+            for held in self._held.values():
+                if held is not None:
+                    self._locations[held] = action.zone
+                    self._move_dependents(held, action.zone)
         elif action.skill == "PICK":
-            self._held = action.object_id
+            assert action.object_id is not None
+            required = 2 if action.object_id in self._bimanual_objects else 1
+            empty_arms = [arm for arm, held in self._held.items() if held is None]
+            if len(empty_arms) < required:
+                return ExecutionResult(
+                    outcome=Outcome.FAILED,
+                    detail="no empty gripper",
+                    failure_code="no_empty_gripper",
+                )
+            for arm in empty_arms[:required]:
+                self._held[arm] = action.object_id
+            self._relations[action.object_id] = set()
         elif action.skill == "PLACE":
-            assert action.object_id is not None and action.zone is not None
+            assert (
+                action.object_id is not None
+                and action.zone is not None
+                and action.target_id is not None
+                and action.relation is not None
+            )
             self._locations[action.object_id] = action.zone
-            self._held = None
+            for arm, held in self._held.items():
+                if held == action.object_id:
+                    self._held[arm] = None
+            self._relations[action.object_id] = {(action.target_id, action.relation)}
+            self._move_dependents(action.object_id, action.zone)
         return ExecutionResult(
-            outcome=Outcome.SUCCESS, detail="test executor completed", evidence=("test-state",)
+            outcome=Outcome.SUCCESS,
+            detail="test executor completed",
+            evidence=(self._execution_evidence("test-execution"),),
         )
+
+    def _execution_evidence(self, evidence_id: str) -> EvidenceRef:
+        return EvidenceRef(
+            evidence_id=evidence_id,
+            kind=EvidenceKind.TEST,
+            source="deterministic-executor",
+            captured_at=self._clock.time(),
+        )
+
+    def _move_dependents(self, target_id: str, zone: str) -> None:
+        for object_id, relations in self._relations.items():
+            if any(target == target_id for target, _ in relations):
+                self._locations[object_id] = zone
+                self._move_dependents(object_id, zone)
 
     def cancel(self, decision_id: str) -> None:
         self.calls.append(("cancel", decision_id))

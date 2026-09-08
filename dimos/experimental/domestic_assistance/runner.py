@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Tick-driven mission lifecycle. Stop acknowledgement precedes any subsequent action."""
+"""Tick-driven mission lifecycle. Stop acknowledgement precedes subsequent action."""
 
 from dataclasses import dataclass
 from threading import Event, RLock
@@ -21,28 +21,39 @@ from typing import Literal
 
 from dimos.experimental.domestic_assistance.contracts import (
     Action,
+    AttemptRecord,
+    CandidateAssessment,
+    DecisionContext,
+    DispatchStatus,
     EpisodeSummary,
     ExecutionResult,
+    HistoryEntry,
+    Intervention,
     Limits,
     Mission,
     Observation,
     Outcome,
     RunMetadata,
+    VerificationResult,
 )
-from dimos.experimental.domestic_assistance.interfaces import Clock, Executor, Observer, Supervisor
+from dimos.experimental.domestic_assistance.interfaces import (
+    Clock,
+    Executor,
+    Observer,
+    Supervisor,
+    Verifier,
+)
 from dimos.experimental.domestic_assistance.rollouts import (
     DecisionFinished,
     DecisionStarted,
     EpisodeFinished,
+    EpisodeInvalidated,
     EpisodeJournal,
     EpisodeStarted,
     EventBody,
+    InterventionRecorded,
 )
-from dimos.experimental.domestic_assistance.verification import (
-    mission_complete,
-    precondition_error,
-    verify_action,
-)
+from dimos.experimental.domestic_assistance.verification import DEFAULT_VERIFIER
 
 Termination = Literal[
     "SUCCESS",
@@ -71,15 +82,19 @@ class SystemClock:
 class PendingAction:
     identifier: str
     action: Action
-    observation: Observation
+    context: DecisionContext
     started: float
+    dispatch_status: DispatchStatus = DispatchStatus.EXECUTED
+    executor_result: ExecutionResult | None = None
+    executor_completed_at: float | None = None
+    verification_deadline: float = 0.0
 
 
 class MissionRunner:
-    """One episode and one executor per instance. Calls are serialized, not threaded.
+    """Run one episode through nonblocking adapters and a durable event journal.
 
-    Adapters must bound their calls; this class cannot interrupt a blocking driver.
-    If cancellation is unconfirmed, the instance terminates and may never dispatch again.
+    This class serializes calls within one instance. The physical adapter must additionally
+    hold a process-wide hardware lease and enforce an independent watchdog/emergency stop.
     """
 
     def __init__(
@@ -92,11 +107,14 @@ class MissionRunner:
         journal: EpisodeJournal,
         limits: Limits = Limits(),
         clock: Clock | None = None,
+        verifier: Verifier = DEFAULT_VERIFIER,
     ) -> None:
         if executor.origin != metadata.origin:
             raise ValueError("executor origin does not match episode metadata")
         if journal.episode_id != metadata.episode_id:
             raise ValueError("journal does not belong to this episode")
+        if verifier.version != metadata.manifest.verifier.version:
+            raise ValueError("verifier version does not match episode manifest")
         self._mission = mission
         self._metadata = metadata
         self._executor = executor
@@ -105,11 +123,12 @@ class MissionRunner:
         self._journal = journal
         self._limits = limits
         self._clock = clock if clock is not None else SystemClock()
+        self._verifier = verifier
         self._lock = RLock()
         self._started = self._clock.monotonic()
         self._pending: PendingAction | None = None
         self._summary: EpisodeSummary | None = None
-        self._history: list[ExecutionResult] = []
+        self._history: list[HistoryEntry] = []
         self._decisions = 0
         self._last_action: Action | None = None
         self._attempts = 0
@@ -119,6 +138,9 @@ class MissionRunner:
         self._cancel_requested = Event()
         self._verified: set[str] = set()
         self._faulted = False
+        self._interventions: list[Intervention] = []
+        self._assistance_requested = False
+        self._exclusion_reason: str | None = None
         self._record(EpisodeStarted(mission=mission, metadata=metadata, limits=limits))
 
     @property
@@ -129,11 +151,32 @@ class MissionRunner:
         """Request episode cancellation; call tick until stopped or cancellation times out."""
         self._cancel_requested.set()
 
+    def record_intervention(self, intervention: Intervention) -> None:
+        """Record assistance without silently treating the episode as autonomous."""
+        with self._lock:
+            if self._summary is not None:
+                raise RuntimeError("cannot add an intervention to a closed episode")
+            if intervention.occurred_at > self._clock.time():
+                raise ValueError("intervention timestamp is in the future")
+            self._interventions.append(intervention)
+            self._record(InterventionRecorded(intervention=intervention))
+
+    def mark_invalid(self, reason: str) -> None:
+        """Exclude an externally invalidated run while retaining its complete record."""
+        if not reason.strip():
+            raise ValueError("exclusion reason must not be blank")
+        with self._lock:
+            if self._summary is not None:
+                raise RuntimeError("cannot invalidate a closed episode")
+            if self._exclusion_reason is not None:
+                raise RuntimeError("episode is already invalid")
+            self._exclusion_reason = reason
+            self._record(EpisodeInvalidated(reason=reason))
+
     def _record(self, body: EventBody) -> None:
         self._journal.append(body, self._clock.time(), self._clock.monotonic() - self._started)
 
-    def _observe(self) -> Observation:
-        observation = self._observer.observe()
+    def _validate_observation(self, observation: Observation) -> Observation:
         age = self._clock.time() - observation.captured_at
         if observation.origin != self._metadata.origin:
             raise ValueError("observation origin mismatch")
@@ -141,8 +184,11 @@ class MissionRunner:
             raise ValueError("stale observation or future timestamp")
         return observation
 
+    def _observe(self) -> Observation:
+        return self._validate_observation(self._observer.observe())
+
     def tick(self) -> EpisodeSummary | None:
-        """Advance at most one lifecycle step. No sleeps or executor work in background threads."""
+        """Advance at most one lifecycle step; all boundary calls must return promptly."""
         with self._lock:
             if self._faulted:
                 raise RuntimeError(
@@ -153,13 +199,12 @@ class MissionRunner:
             try:
                 self._tick()
             except BaseException:
-                # A journal/disk error must not leave motion running silently.
                 self._faulted = True
                 if self._pending is not None:
                     try:
                         self._executor.cancel(self._pending.identifier)
                     except Exception:
-                        pass  # Preserve the original failure; the runner is permanently faulted.
+                        pass
                 raise
             return self._summary
 
@@ -177,8 +222,11 @@ class MissionRunner:
             else:
                 self._request_stop(
                     ExecutionResult(
-                        outcome=Outcome.UNKNOWN if reason == "CANCELLED" else Outcome.TIMEOUT,
+                        outcome=Outcome.CANCELLED if reason == "CANCELLED" else Outcome.TIMEOUT,
                         detail=reason,
+                        failure_code="episode_cancelled"
+                        if reason == "CANCELLED"
+                        else "mission_timeout",
                     ),
                     reason,
                 )
@@ -200,10 +248,20 @@ class MissionRunner:
         except Exception as exc:
             self._finish("ERROR", str(exc))
             return
+
+        context = DecisionContext(
+            observation=observation,
+            history=tuple(self._history),
+            attempts=(
+                (AttemptRecord(action=self._last_action, consecutive_attempts=self._attempts),)
+                if self._last_action is not None
+                else ()
+            ),
+        )
         try:
-            decision = self._supervisor.decide(self._mission, observation, tuple(self._history))
+            decision = self._supervisor.decide(self._mission, context)
             for candidate in decision.candidates:
-                self._mission.validate_action(candidate)
+                self._mission.validate_action(candidate.action)
             action = decision.selected
         except (ValueError, StopIteration) as exc:
             self._finish("INVALID_DECISION", str(exc))
@@ -211,7 +269,7 @@ class MissionRunner:
         except Exception as exc:
             self._finish("ERROR", str(exc))
             return
-        # Inference may consume the remaining budget or make its input stale.
+
         if self._cancel_requested.is_set():
             self._finish("CANCELLED")
             return
@@ -221,6 +279,24 @@ class MissionRunner:
         if self._clock.time() - observation.captured_at > self._limits.max_observation_age_s:
             self._finish("STALE_OBSERVATION", "observation aged during decision generation")
             return
+
+        assessments = tuple(
+            CandidateAssessment(
+                action=candidate.action,
+                eligible=(
+                    error := self._verifier.precondition_error(
+                        self._mission,
+                        candidate.action,
+                        observation,
+                        self._limits.max_fact_age_s,
+                    )
+                )
+                is None,
+                rejection_reason=error,
+            )
+            for candidate in decision.candidates
+        )
+        selected_assessment = next(item for item in assessments if item.action == action)
         attempts = self._attempts + 1 if action == self._last_action else 1
         if attempts > self._limits.max_consecutive_attempts:
             self._finish("RETRY_LIMIT")
@@ -230,48 +306,75 @@ class MissionRunner:
         self._pending = PendingAction(
             identifier=f"decision-{self._decisions:04d}",
             action=action,
-            observation=observation,
+            context=context,
             started=self._clock.monotonic(),
         )
         self._record(
             DecisionStarted(
                 decision_id=self._pending.identifier,
-                observation=observation,
+                context=context,
                 decision=decision,
+                candidate_assessments=assessments,
             )
         )
+
         if action.skill in {"ASK", "ABORT"}:
+            self._assistance_requested = action.skill == "ASK"
             self._complete(
-                ExecutionResult(outcome=Outcome.FAILED, detail=action.reason or ""), observation
+                VerificationResult(
+                    outcome=Outcome.FAILED,
+                    predicate="terminal_control_decision",
+                    detail=action.reason or "",
+                ),
+                observation,
+                None,
+                DispatchStatus.TERMINAL_CONTROL,
             )
             self._finish("ASK" if action.skill == "ASK" else "ABORT", action.reason or "")
             return
-        error = precondition_error(action, observation)
-        target = observation.object(action.object_id)
-        if (
-            action.skill in {"PICK", "PLACE"}
-            and target is not None
-            and (self._clock.time() - target.observed_at > self._limits.max_observation_age_s)
-        ):
-            error = "target observation is stale"
-        if error is not None:
-            self._complete(ExecutionResult(outcome=Outcome.FAILED, detail=error), observation)
+
+        if not selected_assessment.eligible:
+            self._complete(
+                VerificationResult(
+                    outcome=Outcome.FAILED,
+                    predicate="precondition_rejected",
+                    detail=selected_assessment.rejection_reason or "invalid precondition",
+                ),
+                observation,
+                None,
+                DispatchStatus.REJECTED_PRECONDITION,
+            )
             return
+
         if action.object_id is not None and action.skill in {"PICK", "PLACE"}:
             self._verified.discard(action.object_id)
         try:
             self._executor.start(self._pending.identifier, action)
         except Exception as exc:
+            self._pending.dispatch_status = DispatchStatus.DISPATCH_FAILED
             self._request_stop(
-                ExecutionResult(outcome=Outcome.UNKNOWN, detail=f"dispatch error: {exc}"),
+                ExecutionResult(
+                    outcome=Outcome.UNKNOWN,
+                    detail=f"dispatch error: {exc}",
+                    failure_code="dispatch_error",
+                ),
                 "ERROR",
             )
 
     def _poll_action(self) -> None:
         pending = self._pending
         assert pending is not None
+        if pending.executor_result is not None:
+            self._poll_post_observation()
+            return
         if self._clock.monotonic() - pending.started >= self._limits.skill_timeout_s:
-            self._request_stop(ExecutionResult(outcome=Outcome.TIMEOUT, detail="skill deadline"))
+            self._request_stop(
+                ExecutionResult(
+                    outcome=Outcome.TIMEOUT,
+                    detail="skill deadline",
+                    failure_code="skill_timeout",
+                )
+            )
             return
         try:
             result = self._executor.poll(pending.identifier)
@@ -285,15 +388,22 @@ class MissionRunner:
                 )
                 self._request_stop(
                     ExecutionResult(
-                        outcome=Outcome.UNKNOWN if reason == "CANCELLED" else Outcome.TIMEOUT,
+                        outcome=Outcome.CANCELLED if reason == "CANCELLED" else Outcome.TIMEOUT,
                         detail=reason,
+                        failure_code="episode_cancelled"
+                        if reason == "CANCELLED"
+                        else "mission_timeout",
                     ),
                     reason,
                 )
                 return
             if self._clock.monotonic() - pending.started >= self._limits.skill_timeout_s:
                 self._request_stop(
-                    ExecutionResult(outcome=Outcome.TIMEOUT, detail="skill deadline")
+                    ExecutionResult(
+                        outcome=Outcome.TIMEOUT,
+                        detail="skill deadline",
+                        failure_code="skill_timeout",
+                    )
                 )
                 return
             if not self._executor.is_idle():
@@ -301,47 +411,124 @@ class MissionRunner:
                     ExecutionResult(
                         outcome=Outcome.UNKNOWN,
                         detail="executor reported completion before stopping",
+                        failure_code="completion_before_stop",
                     ),
                     "ERROR",
                 )
                 return
         except Exception as exc:
-            self._request_stop(ExecutionResult(outcome=Outcome.UNKNOWN, detail=str(exc)), "ERROR")
+            self._request_stop(
+                ExecutionResult(
+                    outcome=Outcome.UNKNOWN,
+                    detail=str(exc),
+                    failure_code="executor_poll_error",
+                ),
+                "ERROR",
+            )
             return
+        pending.executor_result = result
+        pending.executor_completed_at = self._clock.time()
+        pending.verification_deadline = (
+            self._clock.monotonic() + self._limits.verification_timeout_s
+        )
+        self._poll_post_observation()
+
+    def _poll_post_observation(self) -> None:
+        pending = self._pending
+        assert pending is not None and pending.executor_result is not None
         try:
-            after = self._observe()
-            if after.captured_at < pending.observation.captured_at:
-                raise ValueError("next observation predates action")
+            assert pending.executor_completed_at is not None
+            after = self._observer.observe_after(pending.executor_completed_at)
+            if after is not None:
+                after = self._validate_observation(after)
         except ValueError as exc:
-            self._complete(ExecutionResult(outcome=Outcome.UNKNOWN, detail=str(exc)), None)
+            self._complete(
+                VerificationResult(
+                    outcome=Outcome.UNKNOWN,
+                    predicate="post_action_observation",
+                    detail=str(exc),
+                ),
+                None,
+                pending.executor_result,
+                pending.dispatch_status,
+            )
             self._finish("STALE_OBSERVATION", str(exc))
             return
         except Exception as exc:
-            self._complete(ExecutionResult(outcome=Outcome.UNKNOWN, detail=str(exc)), None)
+            self._complete(
+                VerificationResult(
+                    outcome=Outcome.UNKNOWN,
+                    predicate="post_action_observation",
+                    detail=str(exc),
+                ),
+                None,
+                pending.executor_result,
+                pending.dispatch_status,
+            )
             self._finish("ERROR", str(exc))
             return
-        verified = verify_action(pending.action, pending.observation, after, result)
-        self._verified.intersection_update(
-            goal.object_id
-            for goal in self._mission.goals
-            if (obj := after.object(goal.object_id)) is not None
-            and obj.zone == goal.destination
-            and obj.held is False
+        if after is None:
+            if self._clock.monotonic() < pending.verification_deadline:
+                return
+            result = pending.executor_result
+            verification = VerificationResult(
+                outcome=result.outcome if result.outcome != Outcome.SUCCESS else Outcome.UNKNOWN,
+                predicate="post_action_observation_timeout",
+                detail=(
+                    result.detail
+                    if result.outcome != Outcome.SUCCESS
+                    else "no newer observation arrived before the verification deadline"
+                ),
+                evidence=result.evidence,
+            )
+            self._complete(verification, None, result, pending.dispatch_status)
+            return
+
+        execution_result = pending.executor_result
+        verified = self._verifier.verify_action(
+            self._mission,
+            pending.action,
+            pending.context.observation,
+            after,
+            execution_result,
+            self._limits.max_fact_age_s,
         )
+        self._retain_still_satisfied_goals(after)
         if pending.action.skill == "VERIFY" and verified.outcome == Outcome.SUCCESS:
             assert pending.action.object_id is not None
             if any(
                 goal.object_id == pending.action.object_id
-                and goal.destination == pending.action.zone
+                and goal.destination.zone == pending.action.zone
+                and goal.destination.target_id == pending.action.target_id
+                and goal.destination.relation == pending.action.relation
                 for goal in self._mission.goals
             ):
                 self._verified.add(pending.action.object_id)
-        self._complete(verified, after, result)
-        if self._verified == {goal.object_id for goal in self._mission.goals} and mission_complete(
-            self._mission,
-            after,
+        self._complete(verified, after, execution_result, pending.dispatch_status)
+        if self._verified == {goal.object_id for goal in self._mission.goals} and (
+            self._verifier.mission_complete(self._mission, after, self._limits.max_fact_age_s)
         ):
             self._finish("SUCCESS")
+
+    def _retain_still_satisfied_goals(self, state: Observation) -> None:
+        satisfied: set[str] = set()
+        for goal in self._mission.goals:
+            obj = state.object(goal.object_id)
+            if obj is None:
+                continue
+            destination = goal.destination
+            relation = obj.relation(destination.target_id, destination.relation)
+            if (
+                obj.zone == destination.zone
+                and relation is not None
+                and relation.present
+                and obj.held_by is not None
+                and obj.held_by.value == "none"
+                and state.captured_at - obj.observed_at <= self._limits.max_fact_age_s
+                and state.captured_at - relation.observed_at <= self._limits.max_fact_age_s
+            ):
+                satisfied.add(goal.object_id)
+        self._verified.intersection_update(satisfied)
 
     def _request_stop(self, result: ExecutionResult, reason: Termination | None = None) -> None:
         assert self._pending is not None
@@ -352,7 +539,11 @@ class MissionRunner:
             self._executor.cancel(self._pending.identifier)
         except Exception as exc:
             self._stop_reason = "ERROR"
-            self._stopping = ExecutionResult(outcome=Outcome.UNKNOWN, detail=f"cancel error: {exc}")
+            self._stopping = ExecutionResult(
+                outcome=Outcome.UNKNOWN,
+                detail=f"cancel error: {exc}",
+                failure_code="cancel_error",
+            )
 
     def _poll_stop(self) -> None:
         try:
@@ -361,9 +552,25 @@ class MissionRunner:
             idle = False
         if not idle and self._clock.monotonic() < self._stop_deadline:
             return
-        assert self._stopping is not None
+        assert self._stopping is not None and self._pending is not None
+        stopping = self._stopping
         reason = self._stop_reason
-        self._complete(self._stopping, None)
+        executor_result = (
+            None if self._pending.dispatch_status == DispatchStatus.DISPATCH_FAILED else stopping
+        )
+        if executor_result is not None:
+            self._pending.executor_completed_at = self._clock.time()
+        self._complete(
+            VerificationResult(
+                outcome=stopping.outcome,
+                predicate="stopped_after_cancellation",
+                detail=stopping.detail,
+                evidence=stopping.evidence,
+            ),
+            None,
+            executor_result,
+            self._pending.dispatch_status,
+        )
         self._stopping = None
         if not idle:
             self._finish("CANCEL_UNCONFIRMED", "stop could not be confirmed; no further dispatch")
@@ -372,28 +579,45 @@ class MissionRunner:
 
     def _complete(
         self,
-        result: ExecutionResult,
+        verification_result: VerificationResult,
         after: Observation | None,
-        execution_result: ExecutionResult | None = None,
+        executor_result: ExecutionResult | None,
+        dispatch_status: DispatchStatus,
     ) -> None:
         assert self._pending is not None
+        duration = self._clock.monotonic() - self._pending.started
+        entry = HistoryEntry(
+            decision_id=self._pending.identifier,
+            action=self._pending.action,
+            dispatch_status=dispatch_status,
+            executor_result=executor_result,
+            executor_completed_at=(
+                self._pending.executor_completed_at if executor_result is not None else None
+            ),
+            verification_result=verification_result,
+            duration_s=duration,
+        )
         self._record(
             DecisionFinished(
-                decision_id=self._pending.identifier,
-                result=result,
-                execution_result=execution_result,
+                history_entry=entry,
                 next_observation=after,
-                duration_s=self._clock.monotonic() - self._pending.started,
             )
         )
-        self._history.append(result)
+        self._history.append(entry)
         self._pending = None
 
     def _finish(self, reason: Termination, detail: str = "") -> None:
+        mission_success = reason == "SUCCESS"
+        assisted = self._assistance_requested or bool(self._interventions)
         summary = EpisodeSummary(
             reason=reason,
-            autonomous_success=reason == "SUCCESS",
-            assistance_requested=reason == "ASK",
+            mission_success=mission_success,
+            autonomous_success=mission_success and not assisted,
+            assistance_requested=self._assistance_requested,
+            intervention_count=len(self._interventions),
+            intervention_duration_s=sum(item.duration_s for item in self._interventions),
+            experiment_valid=self._exclusion_reason is None,
+            exclusion_reason=self._exclusion_reason,
             decisions=self._decisions,
             duration_s=self._clock.monotonic() - self._started,
             detail=detail,

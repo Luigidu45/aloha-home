@@ -10,12 +10,12 @@ title: "Asistencia doméstica: primer incremento ejecutable"
 
 | Pieza | Comportamiento |
 | --- | --- |
-| [Contratos](/dimos/experimental/domestic_assistance/contracts.py) | Catálogo cerrado NAVIGATE, SEARCH, VERIFY, PICK, PLACE, ASK y ABORT; argumentos exactos, zonas/objetos registrados, procedencia y timestamps. Campos adicionales como un resultado terminal dentro de la observación se rechazan. |
-| [Interfaces](/dimos/experimental/domestic_assistance/interfaces.py) | Ejecutor con start/poll/cancel/is_idle; observador y supervisor independientes del tipo de brazo. Solo el runner despacha acciones. |
-| [Runner](/dimos/experimental/domestic_assistance/runner.py) | Una acción activa por instancia, límites de misión/skill/intentos, petición de cancelación y espera de confirmación. Si la parada no se confirma, termina con CANCEL_UNCONFIRMED y no vuelve a despachar. |
-| [Observaciones](/dimos/experimental/domestic_assistance/observations.py) | Buffer de snapshots inmutables; no reemplaza una observación nueva por otra antigua ni actualiza artificialmente sus timestamps. No hace aún fusión de sensores. |
-| [Verificación](/dimos/experimental/domestic_assistance/verification.py) | Una finalización del ejecutor solo se considera éxito semántico con evidencia posterior. PICK exige base detenida, objeto visible y pinzas observadas vacías. El cierre exitoso exige VERIFY de los objetos en sus destinos. |
-| [Registro y auditoría](/dimos/experimental/domestic_assistance/rollouts.py) | JSONL por episodio, creación exclusiva y fsync por evento. Guarda inicio antes de despachar, resultado del ejecutor separado de verificación, estado posterior y cierre. Detecta secuencias inválidas, episodios incompletos, keyframes ausentes y éxito sin verificaciones registradas. |
+| [Contratos](/dimos/experimental/domestic_assistance/contracts.py) | Catálogo cerrado, destinos relacionales `IN`/`ON`, evidencia tipada, estado bimanual, contexto de decisión, manifiesto experimental, escenarios e intervenciones. La etiqueta terminal no forma parte de la observación. |
+| [Interfaces](/dimos/experimental/domestic_assistance/interfaces.py) | Ejecutor no bloqueante, observador capaz de entregar snapshots posteriores, supervisor con contexto reproducible y verificador inyectable. Solo el runner despacha acciones. |
+| [Runner](/dimos/experimental/domestic_assistance/runner.py) | Separa rechazo, despacho, ejecución y verificación; espera percepción posterior, conserva límites y cancelación confirmada, y registra ayuda o exclusión experimental. |
+| [Observaciones](/dimos/experimental/domestic_assistance/observations.py) | Buffer de snapshots inmutables con lectura estrictamente posterior; no reemplaza estados nuevos ni actualiza artificialmente timestamps. La fusión de sensores sigue perteneciendo al adaptador. |
+| [Verificación](/dimos/experimental/domestic_assistance/verification.py) | Exige hechos frescos y evidencia posterior. Distingue búsqueda sin hallazgo de resultado inconcluso y comprueba relaciones con cesto, bandeja o superficie, no solo coincidencia de zona. |
+| [Registro y auditoría](/dimos/experimental/domestic_assistance/rollouts.py) | JSONL v2 con fsync, contexto exacto del modelo, evaluaciones de candidatos, historial reproducible, intervención, validez, hashes y verificación semántica auditable. |
 | [Supervisor de prueba](/dimos/experimental/domestic_assistance/supervisor.py) | Secuencia reproducible con reintento acotado y petición de ayuda ante UNKNOWN. Usa el contrato que implementará después el VLM. No es una política aprendida. |
 | [Ejecutor determinista](/dimos/experimental/domestic_assistance/testing_executor.py) | Efectos semánticos artificiales e inyección de fallo, evidencia desconocida, timeout y cancelación no confirmada. Su origen siempre es test. |
 
@@ -24,14 +24,14 @@ title: "Asistencia doméstica: primer incremento ejecutable"
 Desde la raíz del repositorio y con el entorno instalado, el primer caso traslada un solo objeto. Genera un archivo distinto por ejecución y no sobrescribe episodios anteriores:
 
 ```bash
-.venv/bin/python -m dimos.experimental.domestic_assistance.demo_mission --task lectura --output /tmp/dimos-domestic-demo
+.venv/bin/python -m dimos.experimental.domestic_assistance.demo_mission --task recoger_ropa --output /tmp/dimos-domestic-demo
 ```
 
 Para probar las dos tareas con dos objetos y las rutas de recuperación:
 
 ```bash
-.venv/bin/python -m dimos.experimental.domestic_assistance.demo_mission --task lectura --objects 2 --output /tmp/dimos-domestic-demo
-.venv/bin/python -m dimos.experimental.domestic_assistance.demo_mission --task ordenar_sala --objects 2 --output /tmp/dimos-domestic-demo
+.venv/bin/python -m dimos.experimental.domestic_assistance.demo_mission --task recoger_ropa --output /tmp/dimos-domestic-demo
+.venv/bin/python -m dimos.experimental.domestic_assistance.demo_mission --task preparar_bandeja --output /tmp/dimos-domestic-demo
 .venv/bin/python -m dimos.experimental.domestic_assistance.demo_mission --fault failed --output /tmp/dimos-domestic-demo
 .venv/bin/python -m dimos.experimental.domestic_assistance.demo_mission --fault unknown --output /tmp/dimos-domestic-demo
 .venv/bin/python -m dimos.experimental.domestic_assistance.demo_mission --fault timeout --output /tmp/dimos-domestic-demo
@@ -65,7 +65,7 @@ Los métodos del adaptador deben retornar rápido y tener plazos propios en RPC/
 
 - Modelo exacto estándar/Pro que llegará, controladores y SDK de base/elevación/brazos, IDs de servos, dispositivos y límites calibrados.
 - Cámaras de muñeca concretas, resolución/frecuencia, sincronización y sus transformaciones; extrínsecos de D435i y L2 superiores.
-- Confirmación de objetos y posiciones de las tareas. Por ahora se conservan lectura y ordenar_sala como configuraciones provisionales y se comienza con un objeto.
+- Confirmación física de prendas, vaso, plato, cesto, bandeja, mesa y superficie elevada. Las configuraciones actuales fijan tres prendas y, para mantener 19 decisiones, un vaso y un plato en el piloto de bandeja.
 - Se proponen keyframes antes/después de cada habilidad y video opcional; todavía no hay captura automática ni política de retención implementada.
 - Elección y prueba del backend Qwen y del ejecutor motor. No se han instalado modelos ni iniciado entrenamientos.
 

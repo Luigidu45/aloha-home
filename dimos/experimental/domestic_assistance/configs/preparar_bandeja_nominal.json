@@ -1,0 +1,125 @@
+{
+  "scenario_id": "preparar_bandeja_nominal_01",
+  "task_id": "preparar_bandeja",
+  "split_group": "bandeja_layout_a",
+  "initial_robot_zone": "almacen_bandeja",
+  "initial_placements": [
+    {
+      "object_id": "bandeja",
+      "zone": "almacen_bandeja"
+    },
+    {
+      "object_id": "vaso_1",
+      "zone": "zona_vasos"
+    },
+    {
+      "object_id": "plato_1",
+      "zone": "zona_platos"
+    }
+  ],
+  "perturbations": [],
+  "reset_checklist": [
+    "Colocar bandeja, vaso y plato en sus marcas fotografiadas.",
+    "Comprobar vacias la mesa, la bandeja y la superficie de cocina.",
+    "Comprobar ambas pinzas vacias y la base detenida."
+  ],
+  "nominal_actions": [
+    {
+      "skill": "PICK",
+      "object_id": "bandeja"
+    },
+    {
+      "skill": "NAVIGATE",
+      "zone": "mesa"
+    },
+    {
+      "skill": "PLACE",
+      "object_id": "bandeja",
+      "zone": "mesa",
+      "target_id": "mesa_principal",
+      "relation": "ON"
+    },
+    {
+      "skill": "NAVIGATE",
+      "zone": "zona_vasos"
+    },
+    {
+      "skill": "SEARCH",
+      "object_id": "vaso_1"
+    },
+    {
+      "skill": "PICK",
+      "object_id": "vaso_1"
+    },
+    {
+      "skill": "NAVIGATE",
+      "zone": "mesa"
+    },
+    {
+      "skill": "PLACE",
+      "object_id": "vaso_1",
+      "zone": "mesa",
+      "target_id": "bandeja",
+      "relation": "ON"
+    },
+    {
+      "skill": "NAVIGATE",
+      "zone": "zona_platos"
+    },
+    {
+      "skill": "SEARCH",
+      "object_id": "plato_1"
+    },
+    {
+      "skill": "PICK",
+      "object_id": "plato_1"
+    },
+    {
+      "skill": "NAVIGATE",
+      "zone": "mesa"
+    },
+    {
+      "skill": "PLACE",
+      "object_id": "plato_1",
+      "zone": "mesa",
+      "target_id": "bandeja",
+      "relation": "ON"
+    },
+    {
+      "skill": "PICK",
+      "object_id": "bandeja"
+    },
+    {
+      "skill": "NAVIGATE",
+      "zone": "zona_cocina"
+    },
+    {
+      "skill": "PLACE",
+      "object_id": "bandeja",
+      "zone": "zona_cocina",
+      "target_id": "superficie_cocina",
+      "relation": "ON"
+    },
+    {
+      "skill": "VERIFY",
+      "object_id": "bandeja",
+      "zone": "zona_cocina",
+      "target_id": "superficie_cocina",
+      "relation": "ON"
+    },
+    {
+      "skill": "VERIFY",
+      "object_id": "vaso_1",
+      "zone": "zona_cocina",
+      "target_id": "bandeja",
+      "relation": "ON"
+    },
+    {
+      "skill": "VERIFY",
+      "object_id": "plato_1",
+      "zone": "zona_cocina",
+      "target_id": "bandeja",
+      "relation": "ON"
+    }
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "scenario_id": "recoger_ropa_nominal_01",
+  "task_id": "recoger_ropa",
+  "split_group": "ropa_layout_a",
+  "initial_robot_zone": "suelo_norte",
+  "initial_placements": [
+    {
+      "object_id": "camiseta",
+      "zone": "suelo_norte"
+    },
+    {
+      "object_id": "pantalon",
+      "zone": "suelo_centro"
+    },
+    {
+      "object_id": "toalla",
+      "zone": "suelo_sur"
+    }
+  ],
+  "perturbations": [],
+  "reset_checklist": [
+    "Colocar cada prenda en la marca fotografiada de su zona.",
+    "Comprobar que el cesto este vacio y en su marca.",
+    "Comprobar ambas pinzas vacias y la base detenida."
+  ],
+  "nominal_actions": [
+    {
+      "skill": "NAVIGATE",
+      "zone": "suelo_norte"
+    },
+    {
+      "skill": "SEARCH",
+      "object_id": "camiseta"
+    },
+    {
+      "skill": "PICK",
+      "object_id": "camiseta"
+    },
+    {
+      "skill": "NAVIGATE",
+      "zone": "zona_cesto"
+    },
+    {
+      "skill": "PLACE",
+      "object_id": "camiseta",
+      "zone": "zona_cesto",
+      "target_id": "cesto_ropa",
+      "relation": "IN"
+    },
+    {
+      "skill": "VERIFY",
+      "object_id": "camiseta",
+      "zone": "zona_cesto",
+      "target_id": "cesto_ropa",
+      "relation": "IN"
+    },
+    {
+      "skill": "NAVIGATE",
+      "zone": "suelo_centro"
+    },
+    {
+      "skill": "SEARCH",
+      "object_id": "pantalon"
+    },
+    {
+      "skill": "PICK",
+      "object_id": "pantalon"
+    },
+    {
+      "skill": "NAVIGATE",
+      "zone": "zona_cesto"
+    },
+    {
+      "skill": "PLACE",
+      "object_id": "pantalon",
+      "zone": "zona_cesto",
+      "target_id": "cesto_ropa",
+      "relation": "IN"
+    },
+    {
+      "skill": "VERIFY",
+      "object_id": "pantalon",
+      "zone": "zona_cesto",
+      "target_id": "cesto_ropa",
+      "relation": "IN"
+    },
+    {
+      "skill": "NAVIGATE",
+      "zone": "suelo_sur"
+    },
+    {
+      "skill": "SEARCH",
+      "object_id": "toalla"
+    },
+    {
+      "skill": "PICK",
+      "object_id": "toalla"
+    },
+    {
+      "skill": "NAVIGATE",
+      "zone": "zona_cesto"
+    },
+    {
+      "skill": "PLACE",
+      "object_id": "toalla",
+      "zone": "zona_cesto",
+      "target_id": "cesto_ropa",
+      "relation": "IN"
+    },
+    {
+      "skill": "VERIFY",
+      "object_id": "toalla",
+      "zone": "zona_cesto",
+      "target_id": "cesto_ropa",
+      "relation": "IN"
+    }
+  ]
+}

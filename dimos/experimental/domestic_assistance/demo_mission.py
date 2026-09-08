@@ -15,14 +15,23 @@
 """Run an explicitly artificial mission and audit its journal, without robot/model services."""
 
 import argparse
+import hashlib
 from pathlib import Path
 from typing import cast
 from uuid import uuid4
 
-from dimos.experimental.domestic_assistance.contracts import Limits, Mission, Origin, RunMetadata
+from dimos.experimental.domestic_assistance.contracts import (
+    ComponentManifest,
+    ExperimentManifest,
+    Limits,
+    Mission,
+    Origin,
+    RunMetadata,
+    Scenario,
+)
 from dimos.experimental.domestic_assistance.rollouts import EpisodeJournal, audit_episode
 from dimos.experimental.domestic_assistance.runner import MissionRunner
-from dimos.experimental.domestic_assistance.supervisor import ScriptedSupervisor, transfer_script
+from dimos.experimental.domestic_assistance.supervisor import ScriptedSupervisor
 from dimos.experimental.domestic_assistance.testing_executor import (
     DeterministicExecutor,
     Fault,
@@ -32,37 +41,57 @@ from dimos.experimental.domestic_assistance.testing_executor import (
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--task", choices=("lectura", "ordenar_sala"), default="lectura")
+    parser.add_argument(
+        "--task",
+        choices=("recoger_ropa", "preparar_bandeja"),
+        default="recoger_ropa",
+    )
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--objects", type=int, choices=(1, 2), default=1)
     parser.add_argument("--fault", choices=("failed", "unknown", "timeout", "cancel_unconfirmed"))
     parser.add_argument("--code-version", default="development-uncommitted")
     args = parser.parse_args()
-    mission = Mission.model_validate_json(
-        (Path(__file__).parent / "configs" / f"{args.task}.json").read_text()
-    )
-    mission = mission.model_copy(update={"goals": mission.goals[: args.objects]})
+    config_directory = Path(__file__).parent / "configs"
+    mission_path = config_directory / f"{args.task}.json"
+    scenario_path = config_directory / f"{args.task}_nominal.json"
+    mission = Mission.model_validate_json(mission_path.read_text())
+    scenario = Scenario.model_validate_json(scenario_path.read_text())
+    scenario.validate_mission(mission)
     clock = ManualClock()
-    locations = {
-        goal.object_id: mission.zones[index % 2] for index, goal in enumerate(mission.goals)
+    locations = {item.object_id: item.zone for item in scenario.initial_placements}
+    relations = {
+        item.object_id: {(item.target_id, item.relation)}
+        for item in scenario.initial_placements
+        if item.target_id is not None and item.relation is not None
     }
     executor = DeterministicExecutor(
         clock,
         locations,
-        mission.zones[0],
+        scenario.initial_robot_zone,
         faults={3: cast("Fault", args.fault)} if args.fault else None,
+        relations=relations,
+        bimanual_objects={
+            goal.object_id for goal in mission.goals if goal.manipulation_mode == "bimanual"
+        },
     )
+    component = ComponentManifest(name="domestic-assistance", version=args.code_version)
     metadata = RunMetadata(
         episode_id=f"test-{uuid4().hex}",
-        scenario_id=f"{args.task}-{args.objects}-objects-artificial",
+        scenario_id=scenario.scenario_id,
         session_id="demo",
-        split_group="software-test-only",
+        split_group=scenario.split_group,
         seed=0,
         origin=Origin.TEST,
-        code_version=args.code_version,
-        supervisor_version="scripted-v1",
-        executor_version="deterministic-v1",
-        verifier_version="observed-facts-v1",
+        manifest=ExperimentManifest(
+            experiment_id="domestic-assistance-software-test",
+            method="software-test",
+            code=component,
+            supervisor=ComponentManifest(name="scripted-supervisor", version="scripted-v2"),
+            executor=ComponentManifest(name="deterministic-executor", version="deterministic-v2"),
+            verifier=ComponentManifest(name="observed-facts", version="observed-facts-v2"),
+            mission_config_sha256=hashlib.sha256(mission_path.read_bytes()).hexdigest(),
+            scenario_config_sha256=hashlib.sha256(scenario_path.read_bytes()).hexdigest(),
+            code_dirty=args.code_version == "development-uncommitted",
+        ),
     )
     with EpisodeJournal(args.output, metadata.episode_id) as journal:
         runner = MissionRunner(
@@ -70,7 +99,7 @@ def main() -> None:
             metadata,
             executor,
             executor,
-            ScriptedSupervisor(transfer_script(mission, locations)),
+            ScriptedSupervisor(scenario.nominal_actions),
             journal,
             limits=Limits(skill_timeout_s=1, cancellation_timeout_s=1),
             clock=clock,

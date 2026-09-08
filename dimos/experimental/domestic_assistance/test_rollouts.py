@@ -45,18 +45,19 @@ def test_auditor_detects_missing_evidence_and_corrupted_sequence(make_rig):
     rig.journal.close()
     rows = [json.loads(line) for line in rig.journal.path.read_text().splitlines()]
     rows[1]["sequence"] = 99
-    rows[1]["body"]["observation"]["keyframes"] = [
+    rows[1]["body"]["context"]["observation"]["keyframes"] = [
         {
+            "keyframe_id": "missing-frame",
             "camera": "top",
             "path": "missing.jpg",
-            "captured_at": rows[1]["body"]["observation"]["captured_at"],
+            "captured_at": rows[1]["body"]["context"]["observation"]["captured_at"],
         }
     ]
     rig.journal.path.write_text("\n".join(json.dumps(row) for row in rows) + "\n")
     report = audit_episode(rig.journal.path)
     assert report.complete is False
     assert "line 2: invalid sequence or elapsed time" in report.errors
-    assert "missing keyframe: missing.jpg" in report.errors
+    assert "missing evidence file: missing.jpg" in report.errors
 
 
 def test_auditor_rejects_fabricated_terminal_success(make_rig):
@@ -65,6 +66,7 @@ def test_auditor_rejects_fabricated_terminal_success(make_rig):
     rig.journal.close()
     rows = [json.loads(line) for line in rig.journal.path.read_text().splitlines()]
     rows[-1]["body"]["summary"]["reason"] = "SUCCESS"
+    rows[-1]["body"]["summary"]["mission_success"] = True
     rows[-1]["body"]["summary"]["autonomous_success"] = True
     rig.journal.path.write_text("\n".join(json.dumps(row) for row in rows) + "\n")
     report = audit_episode(rig.journal.path)

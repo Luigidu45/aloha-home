@@ -16,8 +16,13 @@ import pytest
 
 from dimos.experimental.domestic_assistance.contracts import (
     Action,
+    BehaviorMetadata,
+    Candidate,
     Decision,
+    DispatchStatus,
     ExecutionResult,
+    GripperState,
+    Intervention,
     Limits,
     Origin,
     Outcome,
@@ -69,7 +74,9 @@ def test_timeout_confirms_stop_before_retry(make_rig):
         JournalEvent.model_validate_json(line) for line in rig.journal.path.read_text().splitlines()
     ]
     results = [
-        event.body.result.outcome for event in events if isinstance(event.body, DecisionFinished)
+        event.body.history_entry.verification_result.outcome
+        for event in events
+        if isinstance(event.body, DecisionFinished)
     ]
     assert results[0] == Outcome.TIMEOUT
     assert rig.runner.summary.autonomous_success is True
@@ -133,9 +140,12 @@ def test_unregistered_candidate_prevents_all_dispatch(make_rig, monkeypatch):
         rig.supervisor,
         "decide",
         lambda *args: Decision(
-            candidates=(valid, invalid),
+            candidates=(
+                Candidate(action=valid, generation_rank=0),
+                Candidate(action=invalid, generation_rank=1),
+            ),
             selected=valid,
-            behavior="test",
+            behavior=BehaviorMetadata(policy="test", method="scripted"),
         ),
     )
     rig.finish()
@@ -185,7 +195,17 @@ def test_cancel_during_decision_prevents_dispatch(make_rig, monkeypatch):
 
 def test_missing_other_gripper_state_prevents_pick(make_rig, monkeypatch):
     rig = make_rig(actions=(Action(skill="PICK", object_id="book"),))
-    state = rig.executor.observe().model_copy(update={"grippers_empty": None})
+    current = rig.executor.observe()
+    state = current.model_copy(
+        update={
+            "grippers": tuple(
+                gripper.model_copy(
+                    update={"state": GripperState.UNKNOWN, "object_id": None, "evidence": ()}
+                )
+                for gripper in current.grippers
+            )
+        }
+    )
     monkeypatch.setattr(rig.executor, "observe", lambda: state)
     rig.finish()
     assert rig.runner.summary.reason == "RETRY_LIMIT"
@@ -251,8 +271,80 @@ def test_disk_failure_cancels_and_permanently_faults_runner(make_rig, monkeypatc
 
 def test_manipulation_without_known_stopped_base_is_not_dispatched(make_rig, monkeypatch):
     rig = make_rig(actions=(Action(skill="PICK", object_id="book"),))
-    state = rig.executor.observe().model_copy(update={"base_stopped": None})
+    current = rig.executor.observe()
+    state = current.model_copy(
+        update={"robot": current.robot.model_copy(update={"base_stopped": None})}
+    )
     monkeypatch.setattr(rig.executor, "observe", lambda: state)
+    rig.finish()
+    assert rig.runner.summary.reason == "RETRY_LIMIT"
+    assert rig.executor.calls == []
+
+
+def test_precondition_rejection_is_not_logged_as_executor_failure(make_rig, monkeypatch):
+    rig = make_rig(actions=(Action(skill="PICK", object_id="book"),))
+    current = rig.executor.observe()
+    state = current.model_copy(
+        update={"robot": current.robot.model_copy(update={"base_stopped": None})}
+    )
+    monkeypatch.setattr(rig.executor, "observe", lambda: state)
+    rig.runner.tick()
+    events = [
+        JournalEvent.model_validate_json(line) for line in rig.journal.path.read_text().splitlines()
+    ]
+    finished = next(event.body for event in events if isinstance(event.body, DecisionFinished))
+    assert finished.history_entry.dispatch_status == DispatchStatus.REJECTED_PRECONDITION
+    assert finished.history_entry.executor_result is None
+
+
+def test_runner_waits_for_a_new_post_action_observation(make_rig, monkeypatch):
+    rig = make_rig()
+    rig.runner.tick()
+    rig.clock.advance(0.1)
+    monkeypatch.setattr(rig.executor, "observe_after", lambda *_: None)
+    rig.runner.tick()
+    assert rig.runner.summary is None
+    events = [
+        JournalEvent.model_validate_json(line) for line in rig.journal.path.read_text().splitlines()
+    ]
+    assert not any(isinstance(event.body, DecisionFinished) for event in events)
+    rig.clock.advance(0.1)
+    new_snapshot = rig.executor.observe()
+    monkeypatch.setattr(
+        rig.executor,
+        "observe_after",
+        lambda captured_at: new_snapshot if new_snapshot.captured_at > captured_at else None,
+    )
+    rig.runner.tick()
+    events = [
+        JournalEvent.model_validate_json(line) for line in rig.journal.path.read_text().splitlines()
+    ]
+    assert any(isinstance(event.body, DecisionFinished) for event in events)
+
+
+def test_human_intervention_preserves_success_but_removes_autonomous_label(make_rig):
+    rig = make_rig()
+    rig.runner.record_intervention(
+        Intervention(
+            kind="VERBAL",
+            occurred_at=rig.clock.time(),
+            duration_s=1.5,
+            detail="operator identified the destination",
+        )
+    )
+    rig.finish()
+    assert rig.runner.summary.mission_success is True
+    assert rig.runner.summary.autonomous_success is False
+    assert rig.runner.summary.intervention_count == 1
+    assert audit_episode(rig.journal.path).complete is True
+
+
+def test_fresh_snapshot_with_stale_manipulation_facts_is_rejected(make_rig, monkeypatch):
+    rig = make_rig(actions=(Action(skill="PICK", object_id="book"),))
+    stale_facts = rig.executor.observe()
+    rig.clock.advance(3)
+    snapshot = stale_facts.model_copy(update={"captured_at": rig.clock.time()})
+    monkeypatch.setattr(rig.executor, "observe", lambda: snapshot)
     rig.finish()
     assert rig.runner.summary.reason == "RETRY_LIMIT"
     assert rig.executor.calls == []

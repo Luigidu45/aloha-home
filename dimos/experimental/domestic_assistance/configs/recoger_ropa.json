@@ -1,0 +1,42 @@
+{
+  "task_id": "recoger_ropa",
+  "instruction": "Recoger tres prendas del suelo en posiciones cercanas y depositarlas dentro del cesto de ropa.",
+  "zones": [
+    "suelo_norte",
+    "suelo_centro",
+    "suelo_sur",
+    "zona_cesto"
+  ],
+  "targets": [
+    {
+      "target_id": "cesto_ropa",
+      "kind": "basket"
+    }
+  ],
+  "goals": [
+    {
+      "object_id": "camiseta",
+      "destination": {
+        "zone": "zona_cesto",
+        "target_id": "cesto_ropa",
+        "relation": "IN"
+      }
+    },
+    {
+      "object_id": "pantalon",
+      "destination": {
+        "zone": "zona_cesto",
+        "target_id": "cesto_ropa",
+        "relation": "IN"
+      }
+    },
+    {
+      "object_id": "toalla",
+      "destination": {
+        "zone": "zona_cesto",
+        "target_id": "cesto_ropa",
+        "relation": "IN"
+      }
+    }
+  ]
+}

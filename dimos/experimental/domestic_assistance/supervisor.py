@@ -16,10 +16,11 @@
 
 from dimos.experimental.domestic_assistance.contracts import (
     Action,
+    BehaviorMetadata,
+    Candidate,
     Decision,
-    ExecutionResult,
+    DecisionContext,
     Mission,
-    Observation,
     Outcome,
 )
 
@@ -30,23 +31,31 @@ class ScriptedSupervisor:
         self._index = 0
         self._seen_results = 0
 
-    def decide(
-        self, mission: Mission, observation: Observation, history: tuple[ExecutionResult, ...]
-    ) -> Decision:
+    def decide(self, mission: Mission, context: DecisionContext) -> Decision:
+        history = context.history
         if len(history) > self._seen_results:
             self._seen_results = len(history)
-            if history[-1].outcome == Outcome.SUCCESS:
+            latest = history[-1].verification_result
+            if latest.outcome == Outcome.SUCCESS and latest.predicate != "search_not_found":
                 self._index += 1
-            elif history[-1].outcome == Outcome.UNKNOWN:
+            elif latest.outcome == Outcome.UNKNOWN:
                 action = Action(skill="ASK", reason="Outcome has insufficient evidence")
-                return Decision(candidates=(action,), selected=action, behavior="scripted-v1")
+                return self._decision(action)
         if self._index >= len(self._actions):
             action = Action(
                 skill="ABORT", reason="Script exhausted without verified mission success"
             )
         else:
             action = self._actions[self._index]
-        return Decision(candidates=(action,), selected=action, behavior="scripted-v1")
+        return self._decision(action)
+
+    @staticmethod
+    def _decision(action: Action) -> Decision:
+        return Decision(
+            candidates=(Candidate(action=action, generation_rank=0),),
+            selected=action,
+            behavior=BehaviorMetadata(policy="scripted-v2", method="scripted"),
+        )
 
 
 def transfer_script(mission: Mission, source_zones: dict[str, str]) -> tuple[Action, ...]:
@@ -57,9 +66,21 @@ def transfer_script(mission: Mission, source_zones: dict[str, str]) -> tuple[Act
                 Action(skill="NAVIGATE", zone=source_zones[goal.object_id]),
                 Action(skill="SEARCH", object_id=goal.object_id),
                 Action(skill="PICK", object_id=goal.object_id),
-                Action(skill="NAVIGATE", zone=goal.destination),
-                Action(skill="PLACE", object_id=goal.object_id, zone=goal.destination),
-                Action(skill="VERIFY", object_id=goal.object_id, zone=goal.destination),
+                Action(skill="NAVIGATE", zone=goal.destination.zone),
+                Action(
+                    skill="PLACE",
+                    object_id=goal.object_id,
+                    zone=goal.destination.zone,
+                    target_id=goal.destination.target_id,
+                    relation=goal.destination.relation,
+                ),
+                Action(
+                    skill="VERIFY",
+                    object_id=goal.object_id,
+                    zone=goal.destination.zone,
+                    target_id=goal.destination.target_id,
+                    relation=goal.destination.relation,
+                ),
             )
         )
     return tuple(actions)
