@@ -28,7 +28,7 @@ registra:
 
 - ID `domestic-assistance-software-reference-v1`;
 - journal schema v2;
-- verificador `observed-facts-v2`;
+- verificador `observed-facts-v2` y fingerprint de su política;
 - origen exclusivamente `test`;
 - hashes SHA-256 de las dos misiones y sus escenarios nominales;
 - número de decisiones y eventos esperado;

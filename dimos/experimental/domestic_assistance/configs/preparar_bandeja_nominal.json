@@ -1,4 +1,5 @@
 {
+  "config_schema_version": 1,
   "scenario_id": "preparar_bandeja_nominal_01",
   "task_id": "preparar_bandeja",
   "split_group": "bandeja_layout_a",

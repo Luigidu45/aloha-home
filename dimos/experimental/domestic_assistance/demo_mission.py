@@ -15,19 +15,17 @@
 """Run an explicitly artificial mission and audit its journal, without robot/model services."""
 
 import argparse
-import hashlib
 from pathlib import Path
 from typing import cast
 from uuid import uuid4
 
+from dimos.experimental.domestic_assistance.configuration import load_config_bundle
 from dimos.experimental.domestic_assistance.contracts import (
     ComponentManifest,
     ExperimentManifest,
     Limits,
-    Mission,
     Origin,
     RunMetadata,
-    Scenario,
 )
 from dimos.experimental.domestic_assistance.rollouts import EpisodeJournal, audit_episode
 from dimos.experimental.domestic_assistance.runner import MissionRunner
@@ -37,6 +35,7 @@ from dimos.experimental.domestic_assistance.testing_executor import (
     Fault,
     ManualClock,
 )
+from dimos.experimental.domestic_assistance.verification import DEFAULT_VERIFIER
 
 
 def main() -> None:
@@ -53,9 +52,9 @@ def main() -> None:
     config_directory = Path(__file__).parent / "configs"
     mission_path = config_directory / f"{args.task}.json"
     scenario_path = config_directory / f"{args.task}_nominal.json"
-    mission = Mission.model_validate_json(mission_path.read_text())
-    scenario = Scenario.model_validate_json(scenario_path.read_text())
-    scenario.validate_mission(mission)
+    bundle = load_config_bundle(mission_path, scenario_path)
+    mission = bundle.mission
+    scenario = bundle.scenario
     clock = ManualClock()
     locations = {item.object_id: item.zone for item in scenario.initial_placements}
     relations = {
@@ -87,9 +86,13 @@ def main() -> None:
             code=component,
             supervisor=ComponentManifest(name="scripted-supervisor", version="scripted-v2"),
             executor=ComponentManifest(name="deterministic-executor", version="deterministic-v2"),
-            verifier=ComponentManifest(name="observed-facts", version="observed-facts-v2"),
-            mission_config_sha256=hashlib.sha256(mission_path.read_bytes()).hexdigest(),
-            scenario_config_sha256=hashlib.sha256(scenario_path.read_bytes()).hexdigest(),
+            verifier=ComponentManifest(
+                name=DEFAULT_VERIFIER.name,
+                version=DEFAULT_VERIFIER.version,
+                sha256=DEFAULT_VERIFIER.fingerprint,
+            ),
+            mission_config_sha256=bundle.mission_config_sha256,
+            scenario_config_sha256=bundle.scenario_config_sha256,
             code_dirty=args.code_version == "development-uncommitted",
         ),
     )

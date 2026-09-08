@@ -97,7 +97,11 @@ def _run_reference_rollout(
             code=ComponentManifest(name="domestic-assistance", version="phase-0"),
             supervisor=ComponentManifest(name="scripted-supervisor", version="scripted-v2"),
             executor=ComponentManifest(name="deterministic-executor", version="deterministic-v2"),
-            verifier=ComponentManifest(name="observed-facts", version=DEFAULT_VERIFIER.version),
+            verifier=ComponentManifest(
+                name=DEFAULT_VERIFIER.name,
+                version=DEFAULT_VERIFIER.version,
+                sha256=DEFAULT_VERIFIER.fingerprint,
+            ),
             mission_config_sha256=_sha256(mission_path),
             scenario_config_sha256=_sha256(scenario_path),
         ),
@@ -135,6 +139,7 @@ def test_phase_zero_freezes_schema_verifier_and_configuration_hashes():
     assert baseline["journal_schema_version"] == JournalEvent.model_fields["schema_version"].default
     assert baseline["verifier_name"] == "observed-facts"
     assert baseline["verifier_version"] == DEFAULT_VERIFIER.version
+    assert baseline["verifier_sha256"] == DEFAULT_VERIFIER.fingerprint
     assert baseline["origin"] == Origin.TEST.value
     assert [task["task_id"] for task in baseline["tasks"]] == [
         "recoger_ropa",

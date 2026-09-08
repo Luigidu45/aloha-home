@@ -14,9 +14,14 @@
 
 """Conservative semantic checks over timestamped, observable facts."""
 
+import hashlib
+import json
+from typing import Any
+
 from dimos.experimental.domestic_assistance.contracts import (
     Action,
     Arm,
+    ComponentManifest,
     ExecutionResult,
     GripperState,
     Holder,
@@ -25,6 +30,31 @@ from dimos.experimental.domestic_assistance.contracts import (
     Outcome,
     VerificationResult,
 )
+from dimos.experimental.domestic_assistance.interfaces import Verifier
+
+_OBSERVED_FACTS_V2_POLICY = {
+    "name": "observed-facts",
+    "version": "observed-facts-v2",
+    "preconditions": {
+        "manipulation_requires_fresh_stopped_base": True,
+        "pick_requires_visible_colocated_unheld_object": True,
+        "pick_requires_fresh_empty_grippers": True,
+        "place_requires_consistent_held_object": True,
+    },
+    "postconditions": {
+        "require_newer_snapshot": True,
+        "navigate": "fresh_arrival_and_stop",
+        "search": "fresh_positive_or_negative_visibility",
+        "pick": "fresh_object_and_gripper_holding_agreement",
+        "place_verify": "fresh_positive_relation_and_release",
+        "mission": "all_goals_freshly_satisfied_and_base_stopped",
+    },
+}
+
+
+def _policy_fingerprint(policy: dict[str, Any]) -> str:
+    encoded = json.dumps(policy, sort_keys=True, separators=(",", ":")).encode()
+    return hashlib.sha256(encoded).hexdigest()
 
 
 def _fresh(observed_at: float, state: Observation, max_fact_age_s: float) -> bool:
@@ -35,7 +65,9 @@ def _fresh(observed_at: float, state: Observation, max_fact_age_s: float) -> boo
 class ObservedFactsVerifier:
     """Fixed verification policy shared by all experimental methods in a campaign."""
 
+    name = "observed-facts"
     version = "observed-facts-v2"
+    fingerprint = _policy_fingerprint(_OBSERVED_FACTS_V2_POLICY)
 
     def precondition_error(
         self,
@@ -283,6 +315,34 @@ class ObservedFactsVerifier:
 
 
 DEFAULT_VERIFIER = ObservedFactsVerifier()
+
+
+class VerifierRegistry:
+    """Resolve frozen verifier implementations recorded by episode manifests."""
+
+    def __init__(self, verifiers: tuple[Verifier, ...] = ()) -> None:
+        self._verifiers: dict[tuple[str, str], Verifier] = {}
+        for verifier in verifiers:
+            self.register(verifier)
+
+    def register(self, verifier: Verifier) -> None:
+        key = (verifier.name, verifier.version)
+        if key in self._verifiers:
+            raise ValueError(f"verifier is already registered: {key}")
+        self._verifiers[key] = verifier
+
+    def resolve(self, component: ComponentManifest) -> Verifier:
+        key = (component.name, component.version)
+        try:
+            verifier = self._verifiers[key]
+        except KeyError as exc:
+            raise ValueError(f"verifier is not registered: {key}") from exc
+        if component.sha256 is not None and component.sha256.lower() != verifier.fingerprint:
+            raise ValueError(f"verifier fingerprint does not match registry: {key}")
+        return verifier
+
+
+DEFAULT_VERIFIER_REGISTRY = VerifierRegistry((DEFAULT_VERIFIER,))
 
 
 def precondition_error(

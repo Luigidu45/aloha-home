@@ -1,4 +1,5 @@
 {
+  "config_schema_version": 1,
   "scenario_id": "recoger_ropa_nominal_01",
   "task_id": "recoger_ropa",
   "split_group": "ropa_layout_a",

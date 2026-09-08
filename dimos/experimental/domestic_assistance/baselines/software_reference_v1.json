@@ -3,14 +3,15 @@
   "journal_schema_version": 2,
   "verifier_name": "observed-facts",
   "verifier_version": "observed-facts-v2",
+  "verifier_sha256": "5fca5a0abe47c503c0aa2a44ece26237dad2e39f910141546c08efb6240468e9",
   "origin": "test",
   "tasks": [
     {
       "task_id": "recoger_ropa",
       "mission_config": "configs/recoger_ropa.json",
-      "mission_config_sha256": "95562c7032baa797f1128f49a790415e7ecff858fdbd1333fc6e3d83cbc8a16c",
+      "mission_config_sha256": "3f8da917359ab785e8674ded2fb7b52d01b8debf61a7e4615a508c8c54bccceb",
       "scenario_config": "configs/recoger_ropa_nominal.json",
-      "scenario_config_sha256": "8ecd15325ed285efc8a09336dc17852f570e816c30e23be8760e2144f17cf05b",
+      "scenario_config_sha256": "e8fcc35306bcf0514b17c7ebfdce9c2302e2526b88201294d99f1bcff464c68c",
       "expected_decisions": 18,
       "expected_events": 38,
       "expected_action_skills": [
@@ -65,9 +66,9 @@
     {
       "task_id": "preparar_bandeja",
       "mission_config": "configs/preparar_bandeja.json",
-      "mission_config_sha256": "a7cf77d3ae472b163473177f093f07832d3c23d3fc83f8358c2fdf8b16eed916",
+      "mission_config_sha256": "5ddf9d342e5a1c601e9f36a3c89c14518821e63c3b120fbc0d55f805ab4afa57",
       "scenario_config": "configs/preparar_bandeja_nominal.json",
-      "scenario_config_sha256": "610933e46b775fb377ba96267ad0defd444b4196bb76384a9c486f392c1d256c",
+      "scenario_config_sha256": "2e83fc9554e967c10c05bdb428f1309d50bb3ba750afdb218ed8b578daa3b90c",
       "expected_decisions": 19,
       "expected_events": 40,
       "expected_action_skills": [

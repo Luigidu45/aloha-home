@@ -63,12 +63,14 @@ Las responsabilidades están deliberadamente separadas:
 ```text
 domestic_assistance/
 ├── contracts.py                  Datos y reglas estructurales compartidas
+├── configuration.py              Carga conjunta, versión y hashes de configs
 ├── interfaces.py                 Fronteras entre núcleo y adaptadores
 ├── observations.py               Buffer del último snapshot perceptivo
 ├── supervisor.py                 Supervisor secuencial de referencia
 ├── runner.py                     Máquina de estados de un episodio
 ├── verification.py               Precondiciones y postcondiciones semánticas
 ├── rollouts.py                   Journal JSONL y auditoría reproducible
+├── metrics.py                    Métricas offline derivadas del journal
 ├── testing_executor.py           Mundo determinista exclusivo para pruebas
 ├── demo_mission.py               Ejecutable local de demostración
 ├── configs/
@@ -82,6 +84,8 @@ domestic_assistance/
 ├── test_runner.py
 ├── test_rollouts.py
 ├── test_configs.py
+├── test_metrics.py
+├── test_verification.py
 └── test_testing_executor.py
 ```
 
@@ -670,6 +674,11 @@ Sus versiones, hashes, rollouts golden e invariantes se describen en
 referencia es infraestructura de regresión y no debe confundirse con el método
 experimental M0 del supervisor.
 
+La **Fase 1 de configuración y reproducibilidad** también está completada. El
+detalle de configs versionados, validación simbólica, fingerprints, registro de
+verificadores y métricas offline está en
+[Fase 1: configuración y reproducibilidad](/docs/development/tesis/fase_1_configuracion_reproducibilidad.md).
+
 ### Prioridad inmediata: integración sin debilitar contratos
 
 1. Implementar adaptadores reales de navegación, ACT y observación, manteniendo
@@ -686,10 +695,6 @@ experimental M0 del supervisor.
 - Separar las propiedades de manipulación del `Goal`. Un futuro `ObjectSpec`
   podría indicar bimanualidad, brazo preferido, fragilidad, tamaño y familia de
   policy; actualmente `manipulation_mode` está ligado a la meta final.
-- Versionar explícitamente los JSON de misión y escenario y centralizar su carga
-  en un `ConfigBundle` que calcule hashes y valide ambos juntos.
-- Validar en `Scenario` que no haya colocaciones iniciales duplicadas y decidir
-  si todos los objetos de la misión deben aparecer obligatoriamente.
 - Añadir registro separado de poses/tolerancias para zonas y destinos. No deben
   incrustarse coordenadas de un mapa concreto en la misión semántica.
 - Definir dominio de reloj, `received_at` y política de sincronización. Un único
@@ -714,16 +719,8 @@ experimental M0 del supervisor.
 
 ### Mejoras de auditoría y datos de tesis
 
-- Registrar el hash de la implementación/configuración del verificador, no solo
-  su string de versión. El auditor actual reproduce únicamente
-  `DEFAULT_VERIFIER`.
-- Añadir un registro de versiones de verificadores para poder auditar journals
-  antiguos después de introducir `observed-facts-v3`.
 - Definir política de privacidad, retención y anonimización para imágenes del
   hogar antes de capturar datos físicos.
-- Añadir métricas derivadas sin modificar el journal original: éxito por misión,
-  éxito autónomo, intervenciones, tiempo, reintentos, fallos por skill y cobertura
-  de evidencia.
 - Reservar `split_group` por disposición física u hogar, evitando que variantes
   casi idénticas aparezcan a la vez en entrenamiento y evaluación.
 
@@ -757,11 +754,31 @@ La arquitectura sirve precisamente para que esas afirmaciones futuras se
 midan, se separen y queden respaldadas por evidencia, en lugar de deducirse de
 que una secuencia de comandos terminó.
 
-## 18. Documentos relacionados
+## 18. Componentes añadidos en la Fase 1
+
+[`configuration.py`](/dimos/experimental/domestic_assistance/configuration.py)
+es el único cargador recomendado para los pares misión/escenario activos. Exige
+`config_schema_version`, valida el plan y calcula los hashes que entran al
+manifiesto experimental.
+
+[`metrics.py`](/dimos/experimental/domestic_assistance/metrics.py) relee journals
+cerrados y auditados para producir métricas de solo lectura. Mantiene separados
+éxito físico y autónomo, resultados de ejecución y verificación, y excluye de
+las tasas los episodios marcados como experimentalmente inválidos.
+
+[`test_verification.py`](/dimos/experimental/domestic_assistance/test_verification.py)
+y [`test_metrics.py`](/dimos/experimental/domestic_assistance/test_metrics.py)
+protegen el registro de verificadores y la derivación inmutable de métricas. Las
+pruebas de configuración también cubren versiones ausentes, objetos duplicados
+o faltantes y guiones nominales incoherentes.
+
+## 19. Documentos relacionados
 
 - [Plan de tesis de asistencia doméstica](/docs/development/plan_tesis_asistencia_domestica.md)
 - [Estado de la implementación inicial](/docs/development/tesis/implementacion_inicial.md)
 - [Hardware objetivo AlohaMini2](/docs/development/tesis/hardware_objetivo.md)
+- [Fase 0: referencia congelada](/docs/development/tesis/baseline_fase_0.md)
+- [Fase 1: configuración y reproducibilidad](/docs/development/tesis/fase_1_configuracion_reproducibilidad.md)
 - [Sistema de módulos de DimOS](/docs/usage/modules.md)
 - [Composición mediante Blueprints](/docs/usage/blueprints.md)
 - [Guía de testing](/docs/development/testing.md)

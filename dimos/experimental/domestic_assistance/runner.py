@@ -115,6 +115,10 @@ class MissionRunner:
             raise ValueError("journal does not belong to this episode")
         if verifier.version != metadata.manifest.verifier.version:
             raise ValueError("verifier version does not match episode manifest")
+        if verifier.name != metadata.manifest.verifier.name:
+            raise ValueError("verifier name does not match episode manifest")
+        if metadata.manifest.verifier.sha256 != verifier.fingerprint:
+            raise ValueError("verifier fingerprint does not match episode manifest")
         self._mission = mission
         self._metadata = metadata
         self._executor = executor

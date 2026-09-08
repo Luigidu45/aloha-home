@@ -39,7 +39,11 @@ from dimos.experimental.domestic_assistance.contracts import (
     RunMetadata,
     Seconds,
 )
-from dimos.experimental.domestic_assistance.verification import DEFAULT_VERIFIER
+from dimos.experimental.domestic_assistance.interfaces import Verifier
+from dimos.experimental.domestic_assistance.verification import (
+    DEFAULT_VERIFIER_REGISTRY,
+    VerifierRegistry,
+)
 
 
 class EpisodeStarted(Contract):
@@ -180,7 +184,9 @@ def _check_file_reference(
             errors.append(f"evidence hash mismatch: {uri}")
 
 
-def audit_episode(path: Path) -> AuditReport:
+def audit_episode(
+    path: Path, verifier_registry: VerifierRegistry = DEFAULT_VERIFIER_REGISTRY
+) -> AuditReport:
     """Check journal structure, exact model inputs and evidence without inventing labels."""
     errors: list[str] = []
     pending: DecisionStarted | None = None
@@ -195,6 +201,7 @@ def audit_episode(path: Path) -> AuditReport:
     history: list[HistoryEntry] = []
     interventions: list[Intervention] = []
     exclusion_reason: str | None = None
+    verifier: Verifier | None = None
 
     for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
         try:
@@ -216,8 +223,10 @@ def audit_episode(path: Path) -> AuditReport:
             started = body
             if body.metadata.episode_id != path.stem:
                 errors.append("journal filename and episode identifier mismatch")
-            if body.metadata.manifest.verifier.version != DEFAULT_VERIFIER.version:
-                errors.append("auditor cannot reproduce the recorded verifier version")
+            try:
+                verifier = verifier_registry.resolve(body.metadata.manifest.verifier)
+            except ValueError as exc:
+                errors.append(f"auditor cannot reproduce the recorded verifier: {exc}")
         elif started is None:
             errors.append("event without episode start")
         if started is not None and event.episode_id != started.metadata.episode_id:
@@ -244,7 +253,9 @@ def audit_episode(path: Path) -> AuditReport:
                 except ValueError as exc:
                     errors.append(str(exc))
                 for assessment in body.candidate_assessments:
-                    rejection = DEFAULT_VERIFIER.precondition_error(
+                    if verifier is None:
+                        break
+                    rejection = verifier.precondition_error(
                         started.mission,
                         assessment.action,
                         body.context.observation,
@@ -283,16 +294,20 @@ def audit_episode(path: Path) -> AuditReport:
             if pending is not None and entry.verification_result.outcome == Outcome.SUCCESS:
                 if body.next_observation is None or entry.executor_result is None:
                     errors.append("semantic success without execution result and observation")
-                elif started is not None and (
-                    DEFAULT_VERIFIER.verify_action(
-                        started.mission,
-                        entry.action,
-                        pending.context.observation,
-                        body.next_observation,
-                        entry.executor_result,
-                        started.limits.max_fact_age_s,
-                    ).outcome
-                    != Outcome.SUCCESS
+                elif (
+                    started is not None
+                    and verifier is not None
+                    and (
+                        verifier.verify_action(
+                            started.mission,
+                            entry.action,
+                            pending.context.observation,
+                            body.next_observation,
+                            entry.executor_result,
+                            started.limits.max_fact_age_s,
+                        ).outcome
+                        != Outcome.SUCCESS
+                    )
                 ):
                     errors.append("success without verified semantic effect")
                 elif entry.action.skill == "VERIFY" and started is not None:
@@ -339,7 +354,8 @@ def audit_episode(path: Path) -> AuditReport:
                 started is None
                 or latest is None
                 or verified != {goal.object_id for goal in started.mission.goals}
-                or not DEFAULT_VERIFIER.mission_complete(
+                or verifier is None
+                or not verifier.mission_complete(
                     started.mission, latest, started.limits.max_fact_age_s
                 )
             ):

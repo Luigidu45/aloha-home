@@ -65,7 +65,13 @@ class Supervisor(Protocol):
 
 class Verifier(Protocol):
     @property
+    def name(self) -> str: ...
+
+    @property
     def version(self) -> str: ...
+
+    @property
+    def fingerprint(self) -> str: ...
 
     def precondition_error(
         self, mission: Mission, action: Action, state: Observation, max_fact_age_s: float

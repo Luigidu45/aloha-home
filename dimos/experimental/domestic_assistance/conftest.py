@@ -40,6 +40,7 @@ from dimos.experimental.domestic_assistance.testing_executor import (
     Fault,
     ManualClock,
 )
+from dimos.experimental.domestic_assistance.verification import DEFAULT_VERIFIER
 
 
 @dataclass
@@ -101,7 +102,11 @@ def make_rig(tmp_path: Path) -> Iterator[Callable[..., Rig]]:
                     code=ComponentManifest(name="code", version="test"),
                     supervisor=ComponentManifest(name="supervisor", version="scripted-v2"),
                     executor=ComponentManifest(name="executor", version="deterministic-v2"),
-                    verifier=ComponentManifest(name="verifier", version="observed-facts-v2"),
+                    verifier=ComponentManifest(
+                        name=DEFAULT_VERIFIER.name,
+                        version=DEFAULT_VERIFIER.version,
+                        sha256=DEFAULT_VERIFIER.fingerprint,
+                    ),
                 ),
             )
             journal = stack.enter_context(EpisodeJournal(tmp_path, metadata.episode_id))

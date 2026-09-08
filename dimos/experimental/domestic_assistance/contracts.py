@@ -160,6 +160,7 @@ class MissionTarget(Contract):
 
 
 class Mission(Contract):
+    config_schema_version: Literal[1] = 1
     task_id: Identifier
     instruction: Annotated[str, Field(min_length=1)]
     zones: Annotated[tuple[Identifier, ...], Field(min_length=1)]
@@ -491,6 +492,7 @@ class Perturbation(Contract):
 
 
 class Scenario(Contract):
+    config_schema_version: Literal[1] = 1
     scenario_id: Identifier
     task_id: Identifier
     split_group: Identifier
@@ -501,12 +503,24 @@ class Scenario(Contract):
     nominal_actions: Annotated[tuple[Action, ...], Field(min_length=1)]
 
     def validate_mission(self, mission: Mission) -> None:
+        if self.config_schema_version != mission.config_schema_version:
+            raise ValueError("mission and scenario schema versions do not match")
         if self.task_id != mission.task_id:
             raise ValueError("scenario task does not match mission")
         if self.initial_robot_zone not in mission.zones:
             raise ValueError("initial robot zone is not registered")
         object_ids = {goal.object_id for goal in mission.goals}
         target_ids = {target.target_id for target in mission.targets}
+        placement_ids = [placement.object_id for placement in self.initial_placements]
+        if len(set(placement_ids)) != len(placement_ids):
+            raise ValueError("scenario initial placements must be unique")
+        if set(placement_ids) != object_ids:
+            missing = sorted(object_ids - set(placement_ids))
+            extra = sorted(set(placement_ids) - object_ids)
+            raise ValueError(
+                f"scenario must place every mission object exactly once; "
+                f"missing={missing}, extra={extra}"
+            )
         for placement in self.initial_placements:
             if placement.zone not in mission.zones:
                 raise ValueError("initial placement zone is not registered")
@@ -516,6 +530,120 @@ class Scenario(Contract):
                 raise ValueError("initial placement target is not registered")
         for action in self.nominal_actions:
             mission.validate_action(action)
+        self._validate_nominal_plan(mission)
+
+    def _validate_nominal_plan(self, mission: Mission) -> None:
+        """Symbolically check the nominal plan without claiming physical feasibility."""
+        robot_zone = self.initial_robot_zone
+        object_zones = {
+            placement.object_id: placement.zone for placement in self.initial_placements
+        }
+        relations = {
+            placement.object_id: (
+                {(placement.target_id, placement.relation)}
+                if placement.target_id is not None and placement.relation is not None
+                else set()
+            )
+            for placement in self.initial_placements
+        }
+        held: set[str] = set()
+        verified: set[str] = set()
+
+        def move_with_dependents(target_id: str, zone: str, visited: set[str]) -> None:
+            if target_id in visited:
+                raise ValueError("nominal plan contains a cyclic placement relation")
+            visited.add(target_id)
+            for object_id, object_relations in relations.items():
+                if any(target == target_id for target, _ in object_relations):
+                    object_zones[object_id] = zone
+                    move_with_dependents(object_id, zone, visited.copy())
+
+        def occupied_grippers() -> int:
+            modes = {goal.object_id: goal.manipulation_mode for goal in mission.goals}
+            return sum(2 if modes[object_id] == "bimanual" else 1 for object_id in held)
+
+        for index, action in enumerate(self.nominal_actions, start=1):
+            prefix = f"nominal action {index} ({action.skill})"
+            if action.skill in {"ASK", "ABORT"}:
+                raise ValueError(f"{prefix}: terminal control is not nominal")
+            if action.skill == "NAVIGATE":
+                assert action.zone is not None
+                robot_zone = action.zone
+                for object_id in held:
+                    object_zones[object_id] = robot_zone
+                    move_with_dependents(object_id, robot_zone, set())
+            elif action.skill == "SEARCH":
+                assert action.object_id is not None
+                if action.object_id in held or object_zones[action.object_id] != robot_zone:
+                    raise ValueError(f"{prefix}: object is not searchable in the robot zone")
+            elif action.skill == "PICK":
+                assert action.object_id is not None
+                if action.object_id in held or object_zones[action.object_id] != robot_zone:
+                    raise ValueError(f"{prefix}: object is not available in the robot zone")
+                mode = next(
+                    goal.manipulation_mode
+                    for goal in mission.goals
+                    if goal.object_id == action.object_id
+                )
+                required = 2 if mode == "bimanual" else 1
+                if occupied_grippers() + required > 2:
+                    raise ValueError(f"{prefix}: insufficient free grippers")
+                held.add(action.object_id)
+                relations[action.object_id] = set()
+                verified.discard(action.object_id)
+            elif action.skill == "PLACE":
+                assert (
+                    action.object_id is not None
+                    and action.zone is not None
+                    and action.target_id is not None
+                    and action.relation is not None
+                )
+                if action.object_id not in held or action.zone != robot_zone:
+                    raise ValueError(f"{prefix}: object is not held at the destination zone")
+                if (
+                    action.target_id in object_zones
+                    and object_zones[action.target_id] != action.zone
+                ):
+                    raise ValueError(f"{prefix}: movable target is not in the destination zone")
+                held.remove(action.object_id)
+                object_zones[action.object_id] = action.zone
+                relations[action.object_id] = {(action.target_id, action.relation)}
+                move_with_dependents(action.object_id, action.zone, set())
+                verified.discard(action.object_id)
+            elif action.skill == "VERIFY":
+                assert (
+                    action.object_id is not None
+                    and action.zone is not None
+                    and action.target_id is not None
+                    and action.relation is not None
+                )
+                if (
+                    action.object_id in held
+                    or object_zones[action.object_id] != action.zone
+                    or (action.target_id, action.relation) not in relations[action.object_id]
+                ):
+                    raise ValueError(f"{prefix}: requested relation is not established")
+                if any(
+                    goal.object_id == action.object_id
+                    and goal.destination.zone == action.zone
+                    and goal.destination.target_id == action.target_id
+                    and goal.destination.relation == action.relation
+                    for goal in mission.goals
+                ):
+                    verified.add(action.object_id)
+
+        for goal in mission.goals:
+            destination = goal.destination
+            if (
+                goal.object_id in held
+                or object_zones[goal.object_id] != destination.zone
+                or (destination.target_id, destination.relation) not in relations[goal.object_id]
+            ):
+                raise ValueError(f"nominal plan does not establish the goal for {goal.object_id}")
+            if goal.object_id not in verified:
+                raise ValueError(
+                    f"nominal plan does not explicitly verify the goal for {goal.object_id}"
+                )
 
 
 class Intervention(Contract):

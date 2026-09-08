@@ -1,4 +1,5 @@
 {
+  "config_schema_version": 1,
   "task_id": "preparar_bandeja",
   "instruction": "Colocar una bandeja en la mesa, cargar en ella vasos y platos de pl\u00e1stico y finalmente dejar la bandeja sobre la superficie elevada de la cocina.",
   "zones": [

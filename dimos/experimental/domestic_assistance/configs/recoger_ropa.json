@@ -1,4 +1,5 @@
 {
+  "config_schema_version": 1,
   "task_id": "recoger_ropa",
   "instruction": "Recoger tres prendas del suelo en posiciones cercanas y depositarlas dentro del cesto de ropa.",
   "zones": [
