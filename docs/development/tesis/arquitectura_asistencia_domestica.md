@@ -679,6 +679,12 @@ detalle de configs versionados, validación simbólica, fingerprints, registro d
 verificadores y métricas offline está en
 [Fase 1: configuración y reproducibilidad](/docs/development/tesis/fase_1_configuracion_reproducibilidad.md).
 
+La **Fase 2 de simulación e integración DimOS** está implementada para su
+alcance de software: navegación real del stack DimOS en MuJoCo, manipulación
+simbólica explícita, observaciones sincronizadas, cancelación, keyframes y
+journals auditables. Sus límites y validación se detallan en
+[Fase 2: simulación e integración DimOS](/docs/development/tesis/fase_2_simulacion_integracion_dimos.md).
+
 ### Prioridad inmediata: integración sin debilitar contratos
 
 1. Implementar adaptadores reales de navegación, ACT y observación, manteniendo
@@ -772,13 +778,28 @@ protegen el registro de verificadores y la derivación inmutable de métricas. L
 pruebas de configuración también cubren versiones ausentes, objetos duplicados
 o faltantes y guiones nominales incoherentes.
 
-## 19. Documentos relacionados
+## 19. Componentes añadidos en la Fase 2
+
+[`simulation.py`](/dimos/experimental/domestic_assistance/simulation.py) define
+el mapa de zonas, el adaptador de navegación DimOS, el mundo simbólico, el
+ejecutor compuesto y el observador sincronizado con keyframes.
+
+[`simulation_module.py`](/dimos/experimental/domestic_assistance/simulation_module.py)
+es el módulo dueño del episodio. Los Blueprints de ropa y bandeja están en
+[`alohamini2_domestic_sim.py`](/dimos/robot/alohamini2/blueprints/alohamini2_domestic_sim.py).
+
+[`test_simulation.py`](/dimos/experimental/domestic_assistance/test_simulation.py)
+protege las fronteras de navegación, cancelación, percepción y los dos rollouts
+nominales completos.
+
+## 20. Documentos relacionados
 
 - [Plan de tesis de asistencia doméstica](/docs/development/plan_tesis_asistencia_domestica.md)
 - [Estado de la implementación inicial](/docs/development/tesis/implementacion_inicial.md)
 - [Hardware objetivo AlohaMini2](/docs/development/tesis/hardware_objetivo.md)
 - [Fase 0: referencia congelada](/docs/development/tesis/baseline_fase_0.md)
 - [Fase 1: configuración y reproducibilidad](/docs/development/tesis/fase_1_configuracion_reproducibilidad.md)
+- [Fase 2: simulación e integración DimOS](/docs/development/tesis/fase_2_simulacion_integracion_dimos.md)
 - [Sistema de módulos de DimOS](/docs/usage/modules.md)
 - [Composición mediante Blueprints](/docs/usage/blueprints.md)
 - [Guía de testing](/docs/development/testing.md)

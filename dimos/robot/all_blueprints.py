@@ -18,6 +18,8 @@
 all_blueprints = {
     "a1z-planner-coordinator": "dimos.robot.manipulators.a1z.blueprints.basic:a1z_planner_coordinator",
     "alfred-nav": "dimos.robot.diy.alfred.blueprints.alfred_nav:alfred_nav",
+    "alohamini2-domestic-clothes-sim": "dimos.robot.alohamini2.blueprints.alohamini2_domestic_sim:alohamini2_domestic_clothes_sim",
+    "alohamini2-domestic-tray-sim": "dimos.robot.alohamini2.blueprints.alohamini2_domestic_sim:alohamini2_domestic_tray_sim",
     "alohamini2-nav-manip-sim": "dimos.robot.alohamini2.blueprints.alohamini2_nav_sim:alohamini2_nav_manip_sim",
     "alohamini2-nav-sim": "dimos.robot.alohamini2.blueprints.alohamini2_nav_sim:alohamini2_nav_sim",
     "alohamini2-nav-sim-full": "dimos.robot.alohamini2.blueprints.alohamini2_nav_sim:alohamini2_nav_sim_full",
@@ -192,6 +194,7 @@ all_modules = {
     "desk-static-tf-module": "dimos.perception.fiducial.blueprints.desk_marker_tf.DeskStaticTfModule",
     "detection2-d-module": "dimos.perception.detection.module2D.Detection2DModule",
     "detection3-d-module": "dimos.perception.detection.module3D.Detection3DModule",
+    "domestic-assistance-simulation-module": "dimos.experimental.domestic_assistance.simulation_module.DomesticAssistanceSimulationModule",
     "drone-camera-module": "dimos.robot.drone.camera_module.DroneCameraModule",
     "drone-connection-module": "dimos.robot.drone.connection_module.DroneConnectionModule",
     "drone-tracking-module": "dimos.robot.drone.drone_tracking_module.DroneTrackingModule",

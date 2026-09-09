@@ -1,0 +1,43 @@
+{
+  "config_schema_version": 1,
+  "task_id": "recoger_ropa",
+  "map_id": "alohamini2_office_lite_v1",
+  "zones": [
+    {
+      "zone": "suelo_norte",
+      "frame_id": "world",
+      "x": -1.0,
+      "y": 1.0,
+      "yaw": 0.0,
+      "position_tolerance_m": 0.35,
+      "yaw_tolerance_rad": 3.141592653589793
+    },
+    {
+      "zone": "suelo_centro",
+      "frame_id": "world",
+      "x": -0.35,
+      "y": 0.45,
+      "yaw": 0.0,
+      "position_tolerance_m": 0.35,
+      "yaw_tolerance_rad": 3.141592653589793
+    },
+    {
+      "zone": "suelo_sur",
+      "frame_id": "world",
+      "x": -0.8,
+      "y": -0.35,
+      "yaw": 0.0,
+      "position_tolerance_m": 0.35,
+      "yaw_tolerance_rad": 3.141592653589793
+    },
+    {
+      "zone": "zona_cesto",
+      "frame_id": "world",
+      "x": -1.75,
+      "y": 0.2,
+      "yaw": 0.0,
+      "position_tolerance_m": 0.35,
+      "yaw_tolerance_rad": 3.141592653589793
+    }
+  ]
+}

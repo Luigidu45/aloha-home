@@ -450,6 +450,7 @@ class ExperimentManifest(Contract):
     verifier: ComponentManifest
     mission_config_sha256: Sha256 | None = None
     scenario_config_sha256: Sha256 | None = None
+    environment_config_sha256: Sha256 | None = None
     prompt_sha256: Sha256 | None = None
     code_dirty: bool = False
 

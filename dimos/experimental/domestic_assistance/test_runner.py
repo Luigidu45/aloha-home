@@ -62,6 +62,26 @@ def test_acceptance_is_not_completion(make_rig):
     assert report.complete is False
 
 
+def test_journal_durations_remain_auditable_when_clock_advances_between_reads(
+    make_rig, monkeypatch
+):
+    rig = make_rig()
+    original = rig.clock.monotonic
+    offset = 0.0
+
+    def sampled_monotonic():
+        nonlocal offset
+        offset += 0.00001
+        return original() + offset
+
+    monkeypatch.setattr(rig.clock, "monotonic", sampled_monotonic)
+    rig.finish()
+
+    report = audit_episode(rig.journal.path)
+    assert report.complete is True
+    assert report.errors == ()
+
+
 def test_timeout_confirms_stop_before_retry(make_rig):
     rig = make_rig(faults={1: "timeout"})
     rig.finish()

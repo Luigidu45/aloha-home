@@ -177,8 +177,9 @@ class MissionRunner:
             self._exclusion_reason = reason
             self._record(EpisodeInvalidated(reason=reason))
 
-    def _record(self, body: EventBody) -> None:
-        self._journal.append(body, self._clock.time(), self._clock.monotonic() - self._started)
+    def _record(self, body: EventBody, elapsed_s: float | None = None) -> None:
+        elapsed = self._clock.monotonic() - self._started if elapsed_s is None else elapsed_s
+        self._journal.append(body, self._clock.time(), elapsed)
 
     def _validate_observation(self, observation: Observation) -> Observation:
         age = self._clock.time() - observation.captured_at
@@ -319,7 +320,8 @@ class MissionRunner:
                 context=context,
                 decision=decision,
                 candidate_assessments=assessments,
-            )
+            ),
+            self._pending.started - self._started,
         )
 
         if action.skill in {"ASK", "ABORT"}:
@@ -589,7 +591,8 @@ class MissionRunner:
         dispatch_status: DispatchStatus,
     ) -> None:
         assert self._pending is not None
-        duration = self._clock.monotonic() - self._pending.started
+        completed = self._clock.monotonic()
+        duration = completed - self._pending.started
         entry = HistoryEntry(
             decision_id=self._pending.identifier,
             action=self._pending.action,
@@ -605,7 +608,8 @@ class MissionRunner:
             DecisionFinished(
                 history_entry=entry,
                 next_observation=after,
-            )
+            ),
+            completed - self._started,
         )
         self._history.append(entry)
         self._pending = None
@@ -613,6 +617,8 @@ class MissionRunner:
     def _finish(self, reason: Termination, detail: str = "") -> None:
         mission_success = reason == "SUCCESS"
         assisted = self._assistance_requested or bool(self._interventions)
+        completed = self._clock.monotonic()
+        duration = completed - self._started
         summary = EpisodeSummary(
             reason=reason,
             mission_success=mission_success,
@@ -623,8 +629,8 @@ class MissionRunner:
             experiment_valid=self._exclusion_reason is None,
             exclusion_reason=self._exclusion_reason,
             decisions=self._decisions,
-            duration_s=self._clock.monotonic() - self._started,
+            duration_s=duration,
             detail=detail,
         )
-        self._record(EpisodeFinished(summary=summary))
+        self._record(EpisodeFinished(summary=summary), duration)
         self._summary = summary

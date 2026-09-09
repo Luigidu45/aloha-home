@@ -1,0 +1,52 @@
+{
+  "config_schema_version": 1,
+  "task_id": "preparar_bandeja",
+  "map_id": "alohamini2_office_lite_v1",
+  "zones": [
+    {
+      "zone": "almacen_bandeja",
+      "frame_id": "world",
+      "x": -1.0,
+      "y": 1.0,
+      "yaw": 0.0,
+      "position_tolerance_m": 0.35,
+      "yaw_tolerance_rad": 3.141592653589793
+    },
+    {
+      "zone": "mesa",
+      "frame_id": "world",
+      "x": 1.7,
+      "y": 1.15,
+      "yaw": 1.5707963267948966,
+      "position_tolerance_m": 0.35,
+      "yaw_tolerance_rad": 3.141592653589793
+    },
+    {
+      "zone": "zona_vasos",
+      "frame_id": "world",
+      "x": 0.0,
+      "y": -0.55,
+      "yaw": 0.0,
+      "position_tolerance_m": 0.35,
+      "yaw_tolerance_rad": 3.141592653589793
+    },
+    {
+      "zone": "zona_platos",
+      "frame_id": "world",
+      "x": -1.0,
+      "y": -1.0,
+      "yaw": 0.0,
+      "position_tolerance_m": 0.35,
+      "yaw_tolerance_rad": 3.141592653589793
+    },
+    {
+      "zone": "zona_cocina",
+      "frame_id": "world",
+      "x": -2.5,
+      "y": -1.5,
+      "yaw": 0.0,
+      "position_tolerance_m": 0.35,
+      "yaw_tolerance_rad": 3.141592653589793
+    }
+  ]
+}

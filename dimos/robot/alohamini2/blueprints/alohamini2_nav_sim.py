@@ -275,6 +275,12 @@ _alohamini2_navigation = _navigation_stack(
     lidar_fps=4.0,
 )
 
+
+def alohamini2_navigation_sim_stack() -> Blueprint:
+    """Return the lightweight navigation stack for composition by other blueprints."""
+    return _alohamini2_navigation
+
+
 _alohamini2_navigation_full = _navigation_stack(
     scene_xml=ALOHA_MINI2_OFFICE_SCENE_MJCF,
     include_person=True,
