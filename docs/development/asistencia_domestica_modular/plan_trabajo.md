@@ -4,7 +4,7 @@ title: "Plan de tesis: asistencia doméstica modular con DimOS, VLM y ACT"
 
 # Plan de trabajo por fases
 
-**Fecha:** 12 de septiembre de 2026. **Estado:** planificación; las fases de implementación que siguen están pendientes.
+**Fecha:** 12 de septiembre de 2026. **Estado:** F0 completada; F1–F10 pendientes. Véase el [registro de cierre de F0](/docs/development/asistencia_domestica_modular/fase_0_limpieza.md).
 
 Este plan persigue la propuesta actual: un asistente robótico que permita a una persona con movilidad reducida solicitar, supervisar y completar tareas de acceso a objetos mediante lenguaje natural. Integra DimOS, memoria y navegación semántica, supervisión visual y habilidades de manipulación ACT. El éxito final requiere entregar el objeto correcto en una región accesible acordada.
 
@@ -12,7 +12,7 @@ Se considera un único tesista, tres meses disponibles y la llegada del AlohaMin
 
 La fuente es `propuesta_tesis_asistencia_domestica.pdf`, once páginas, proporcionada por el usuario en `/home/luigidu/Downloads/`. SHA-256: `9d6d12973f432c250a37a78bcc2a29f43a00cd25770a74926702163e524fa642`. Se revisaron el código y los documentos presentes en el checkout con HEAD `ea4980756`; esta revisión no incluye ensayos físicos.
 
-**La implementación antigua en `dimos/experimental/domestic_assistance` está descartada por decisión del usuario.** No se adopta como núcleo, no se importarán sus contratos y no se heredan sus misiones ni objetivos científicos. Su retirada se programa en F0. La creación de este plan no ha eliminado ese código ni ha restaurado los documentos antiguos que ya estaban borrados en el árbol de trabajo.
+**La implementación antigua en `dimos/experimental/domestic_assistance` fue retirada en F0 por decisión del usuario**, junto con su blueprint dependiente y las entradas generadas. No se adopta como núcleo, no se importarán sus contratos y no se heredan sus misiones ni objetivos científicos. El stack genérico de navegación AlohaMini2 se conserva.
 
 ## 1. Qué debe demostrar la tesis
 
@@ -108,6 +108,8 @@ El flujo será: solicitud → contexto de memoria y percepción → propuesta VL
 Las fases F0–F7 producen un piloto de integración sin hardware. Sus criterios se refieren explícitamente a software, imágenes offline o simulación. Ninguna acredita éxito físico. La numeración expresa dependencias; la preparación documental de hardware y datos empieza desde F1.
 
 ### F0. Retirar el proyecto descartado y fijar el punto de partida
+
+**Estado:** completada el 12 de septiembre de 2026. Se retiraron 32 archivos del paquete y un archivo de blueprints, se regeneró el registro y pasaron 54 pruebas focalizadas. [Cambios, entorno y verificaciones](/docs/development/asistencia_domestica_modular/fase_0_limpieza.md).
 
 **Objetivo:** eliminar ambigüedad sobre qué trabajo corresponde a la tesis actual. **Depende de:** nada. **Aporta a:** O5–O7 y reproducibilidad.
 
@@ -253,7 +255,7 @@ ACT utiliza imágenes y estado articular para generar bloques de acciones; el si
 
 ### Hito H1. Qué debe estar disponible antes del robot
 
-- [ ] Proyecto descartado retirado sin romper el stack conservado.
+- [x] Proyecto descartado retirado; registro, descubrimiento y configuración/carga de blueprints conservados comprobados en F0.
 - [ ] Misión, catálogo, lugares y contratos nuevos documentados.
 - [ ] Navegación entre estaciones y observaciones accesibles en simulación.
 - [ ] Memoria que distingue información histórica de confirmación actual.
@@ -393,7 +395,7 @@ Las configuraciones, metadatos y scripts pertenecen al repositorio. Videos, data
 
 ### Orden inmediato de ejecución
 
-1. Completar F0 con retirada del paquete antiguo, blueprint dependiente y regeneración del registro.
+1. F0 completada: paquete antiguo y blueprint dependiente retirados; registro regenerado y validado.
 2. Crear la definición de misión A, el catálogo mínimo y la ficha de interfaces de F1.
 3. Hacer que una solicitud atraviese un ciclo nuevo del gestor con pruebas de fallo, usando primero un ejecutor artificial explícito.
 4. Conectar ese ciclo con las estaciones y observaciones de DimOS; incorporar memoria y VLM progresivamente.

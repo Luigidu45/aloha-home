@@ -1,0 +1,44 @@
+{
+  "phase": "F0",
+  "recorded_on": "2026-09-12",
+  "base_commit": "cada8ed7b43bcfd3f566ce4c10ece5053fccc56d",
+  "branch": "feat/aloha-home",
+  "initial_worktree": "clean",
+  "python": "3.12.3",
+  "platform": "Linux-7.0.0-31-generic-x86_64-with-glibc2.39",
+  "installed_packages": {
+    "dimos": "0.0.14b1",
+    "pytest": "8.3.5",
+    "mujoco": "3.5.0",
+    "numpy": "2.3.5",
+    "pydantic": "2.12.5",
+    "reactivex": "4.1.0",
+    "torch": "2.10.0",
+    "lerobot": null,
+    "langchain": "1.2.3",
+    "ruff": "0.14.3"
+  },
+  "file_sha256": {
+    "pyproject.toml": "430fc40023cb2a8dd3a3589c521d192e75630d90f4739abda903309512963747",
+    "uv.lock": "ce9530326fd923d5a1864aebeb1e6bf4046ae93572c12a755317073caf6ce4d1",
+    "dimos/robot/all_blueprints.py": "18cdbd513337ed8c2f54d334b8cb5675cac58c30772bf69c4e5a1f67ebb3ac3f"
+  },
+  "registry_counts": {
+    "all_blueprints": 145,
+    "all_modules": 137
+  },
+  "preserved_alohamini2_blueprints": [
+    "alohamini2-nav-manip-sim",
+    "alohamini2-nav-sim",
+    "alohamini2-nav-sim-full"
+  ],
+  "removed_package_tracked_files": 32,
+  "removed_blueprint_files": 1,
+  "validation": {
+    "registry_discovery_blueprint_configuration_passed": 48,
+    "blueprint_loading_and_command_math_passed": 6,
+    "second_run_deselected": 153,
+    "physical_validation": false,
+    "dynamic_simulation_validation": false
+  }
+}
