@@ -308,7 +308,7 @@ class AlohaMini2SimModule(MujocoSimModule):
                     data=frame.rgb,
                     format=ImageFormat.RGB,
                     frame_id=f"{camera_name}_color_optical_frame",
-                    ts=time.time(),
+                    ts=frame.timestamp,
                 )
                 output.publish(image)
                 if camera_name == self.config.camera_name:

@@ -32,6 +32,7 @@ from dimos.robot.alohamini2.config import (
     ALOHA_MINI2_SO101_HOME,
 )
 from dimos.robot.alohamini2.sim_module import (
+    AlohaMini2SimModule,
     HolonomicCommandBuffer,
     PlanarVelocity,
     apply_planar_velocity,
@@ -40,6 +41,7 @@ from dimos.robot.alohamini2.sim_module import (
 )
 from dimos.robot.alohamini2.so101_home import apply_so101_home_pose, load_so101_home_pose
 from dimos.simulation.engines.mujoco_engine import (
+    CameraFrame,
     MujocoEngine,
     RaycastLidarConfig,
     RaycastLidarFrame,
@@ -355,3 +357,36 @@ def test_planar_driver_rotates_without_tipping() -> None:
         abs=0.03,
     )
     np.testing.assert_allclose(engine.data.qpos[4:6], [0.0, 0.0], atol=1e-3)
+
+
+@pytest.fixture
+def camera_publisher(mocker):
+    module = AlohaMini2SimModule(camera_name="front_camera", additional_camera_names=[])
+    frame = CameraFrame(
+        rgb=np.ones((2, 2, 3), dtype=np.uint8),
+        depth=np.zeros((2, 2), dtype=np.float32),
+        cam_pos=np.zeros(3),
+        cam_mat=np.eye(3),
+        fovy=69.0,
+        timestamp=10.0,
+    )
+    engine = mocker.Mock(spec=MujocoEngine)
+    engine.read_camera.return_value = frame
+    engine.connected = True
+    mocker.patch.object(module, "_engine", engine)
+    mocker.patch.object(module, "_publish_tf")
+    yield module
+    module.stop()
+
+
+def test_camera_publication_preserves_capture_timestamp(camera_publisher, mocker):
+    published = mocker.patch.object(
+        camera_publisher.front_camera_image,
+        "publish",
+        side_effect=lambda _: camera_publisher._stop_event.set(),
+    )
+    camera_publisher._publish_loop()
+    image = published.call_args.args[0]
+    assert image.ts == 10.0
+    assert image.frame_id == "front_camera_color_optical_frame"
+    np.testing.assert_array_equal(image.data, np.ones((2, 2, 3), dtype=np.uint8))

@@ -187,6 +187,7 @@ def _navigation_stack(
     lidar_height: int,
     lidar_fps: float,
     articulated_so101: bool = False,
+    spawn_xy: tuple[float, float] | None = None,
 ) -> Blueprint:
     return (
         autoconnect(
@@ -194,7 +195,7 @@ def _navigation_stack(
                 robot_mjcf=ALOHA_MINI2_NAV_MJCF,
                 scene_xml=scene_xml,
                 include_legacy_office_person=include_person,
-                spawn_xy=global_config.mujoco_start_pos_float,
+                spawn_xy=spawn_xy if spawn_xy is not None else global_config.mujoco_start_pos_float,
                 spawn_z=0.0,
                 headless=global_config.viewer == "none",
                 dof=SO101_TOTAL_SIM_JOINTS if articulated_so101 else 0,
@@ -257,29 +258,30 @@ def _navigation_stack(
     )
 
 
-_alohamini2_navigation = _navigation_stack(
-    scene_xml=ALOHA_MINI2_OFFICE_LITE_MJCF,
-    include_person=False,
-    camera_width=256,
-    camera_height=144,
-    camera_fps=2,
-    camera_geom_groups=[0, 1],
-    camera_geom_group_overrides={
-        "left_camera": [0, 1],
-        "right_camera": [0, 1],
-    },
-    camera_max_geom=256,
-    max_camera_renders_per_step=1,
-    lidar_width=40,
-    lidar_height=12,
-    lidar_fps=4.0,
-)
+def alohamini2_navigation_sim_stack(
+    *,
+    scene_xml: Path = ALOHA_MINI2_OFFICE_LITE_MJCF,
+    spawn_xy: tuple[float, float] | None = None,
+) -> Blueprint:
+    """Compose the lightweight navigation stack in a chosen scene."""
+    return _navigation_stack(
+        scene_xml=scene_xml,
+        include_person=False,
+        camera_width=256,
+        camera_height=144,
+        camera_fps=2,
+        camera_geom_groups=[0, 1],
+        camera_geom_group_overrides={"left_camera": [0, 1], "right_camera": [0, 1]},
+        camera_max_geom=256,
+        max_camera_renders_per_step=1,
+        lidar_width=40,
+        lidar_height=12,
+        lidar_fps=4.0,
+        spawn_xy=spawn_xy,
+    )
 
 
-def alohamini2_navigation_sim_stack() -> Blueprint:
-    """Return the lightweight navigation stack for composition by other blueprints."""
-    return _alohamini2_navigation
-
+_alohamini2_navigation = alohamini2_navigation_sim_stack()
 
 _alohamini2_navigation_full = _navigation_stack(
     scene_xml=ALOHA_MINI2_OFFICE_SCENE_MJCF,

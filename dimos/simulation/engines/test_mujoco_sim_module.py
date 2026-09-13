@@ -24,7 +24,7 @@ from unittest.mock import MagicMock
 import numpy as np
 import pytest
 
-from dimos.simulation.engines.mujoco_engine import CameraFrame, MujocoEngine
+from dimos.simulation.engines.mujoco_engine import CameraFrame, MujocoEngine, RaycastLidarFrame
 from dimos.simulation.engines.mujoco_sim_module import MujocoSimModule, MujocoSimModuleConfig
 
 
@@ -475,3 +475,24 @@ def test_engine_request_reset_to_applies_pose_in_sim_loop(freejoint_engine: Mujo
         [0.0, 0.0, np.sin(0.15), np.cos(0.15)],
         atol=1e-8,
     )
+
+
+@pytest.fixture
+def lidar_publisher(mocker):
+    module = MujocoSimModule(mujoco_lidar_camera_names=["front", "back"])
+    engine = mocker.Mock(spec=MujocoEngine)
+    engine.read_raycast_lidar.side_effect = [
+        RaycastLidarFrame(points=np.array([[1.0, 0.0, 0.5]], dtype=np.float32), timestamp=10.0),
+        RaycastLidarFrame(points=np.array([[-1.0, 0.0, 0.5]], dtype=np.float32), timestamp=12.0),
+    ]
+    mocker.patch.object(module, "_engine", engine)
+    yield module
+    module.stop()
+
+
+def test_combined_lidar_uses_oldest_contributing_capture_time(lidar_publisher, mocker):
+    published = mocker.patch.object(lidar_publisher.pointcloud, "publish")
+    lidar_publisher._generate_mujoco_lidar_pointcloud()
+    cloud = published.call_args.args[0]
+    assert cloud.ts == 10.0
+    np.testing.assert_array_equal(cloud.as_numpy()[0], [[1.0, 0.0, 0.5], [-1.0, 0.0, 0.5]])

@@ -4,7 +4,7 @@ title: "Plan de tesis: asistencia doméstica modular con DimOS, VLM y ACT"
 
 # Plan de trabajo por fases
 
-**Fecha:** 12 de septiembre de 2026. **Estado:** F0 y F1 completadas; F2–F10 pendientes. Véanse el [registro de cierre de F0](/docs/development/asistencia_domestica_modular/fase_0_limpieza.md) y los [contratos, decisiones y cierre de F1](/docs/development/asistencia_domestica_modular/fase_1_definicion.md).
+**Actualización:** 13 de septiembre de 2026. **Estado:** F0, F1 y F2 completadas; F3–F10 pendientes. Véanse el [registro de F0](/docs/development/asistencia_domestica_modular/fase_0_limpieza.md), los [contratos y decisiones de F1](/docs/development/asistencia_domestica_modular/fase_1_definicion.md) y la [simulación, resultados y reproducción de F2](/docs/development/asistencia_domestica_modular/fase_2_simulacion.md).
 
 Este plan persigue la propuesta actual: un asistente robótico que permita a una persona con movilidad reducida solicitar, supervisar y completar tareas de acceso a objetos mediante lenguaje natural. Integra DimOS, memoria y navegación semántica, supervisión visual y habilidades de manipulación ACT. El éxito final requiere entregar el objeto correcto en una región accesible acordada.
 
@@ -85,7 +85,7 @@ El [software de AlohaMini para LeRobot](https://github.com/liyiteng/lerobot_aloh
 
 ## 4. Organización prevista en este repositorio
 
-F1 implementa los contratos, la configuración del piloto y los chequeos de escritorio en `dimos/experimental/household_assistant/`, junto con su documentación. Las demás incorporaciones de esta tabla son **destinos propuestos** y se crearán progresivamente cuando contengan comportamiento verificable, evitando esqueletos vacíos. No habrá imports desde el paquete descartado.
+F1 implementa los contratos, la configuración del piloto y los chequeos de escritorio en `dimos/experimental/household_assistant/`. F2 añade estaciones simuladas, adaptador espacial, grabación/lectura offline, escenas y el blueprint `household-navigation-sim`. Las demás incorporaciones de esta tabla son **destinos propuestos** y se crearán progresivamente cuando contengan comportamiento verificable, evitando esqueletos vacíos. No habrá imports desde el paquete descartado.
 
 | Ubicación | Responsabilidad |
 | --- | --- |
@@ -147,6 +147,8 @@ Trabajo:
 **Criterio de cierre:** diez casos de escritorio representativos pueden describirse sin ambigüedad, incluyendo objeto ausente, dos candidatos, imagen obsoleta, agarre incierto y cancelación. No se aceptan destinos desconocidos ni habilidades sin ejecutor. Los casos no requieren un VLM ni un robot para comprobar las reglas.
 
 ### F2. Preparar una escena de navegación y observación útil
+
+**Estado:** completada el 13 de septiembre de 2026. El usuario confirmó una vivienda sintética. Se comprobaron recorrido entre las dos mesas, llegada/parada, observaciones recientes, cancelación durante movimiento y paso bloqueado. Pasaron 63 pruebas rápidas, doce comprobaciones de MuJoCo y una del registro; se guardaron grabaciones y un manifiesto. [Entregables, comandos, evidencia y límites](/docs/development/asistencia_domestica_modular/fase_2_simulacion.md).
 
 **Objetivo:** ensayar la parte espacial del ciclo en DimOS. **Depende de:** F0 y nombres/configuración de F1. **Aporta a:** O2, O5; C1.
 
@@ -259,13 +261,13 @@ ACT utiliza imágenes y estado articular para generar bloques de acciones; el si
 
 - [x] Proyecto descartado retirado; registro, descubrimiento y configuración/carga de blueprints conservados comprobados en F0.
 - [x] Misión, catálogo, lugares y contratos nuevos documentados y comprobados en F1.
-- [ ] Navegación entre estaciones y observaciones accesibles en simulación.
+- [x] Navegación entre estaciones y observaciones accesibles en simulación, comprobadas en F2.
 - [ ] Memoria que distingue información histórica de confirmación actual.
 - [ ] Gestor con éxito, fallo, incertidumbre, consulta y cancelación comprobados.
 - [ ] VLM real recibe imágenes y propone acciones validadas.
 - [ ] Interfaz por texto completa un ciclo desde otro dispositivo.
 - [ ] Captura, representación de acciones y adaptador ACT preparados.
-- [ ] Registros identifican qué partes son simuladas o artificiales.
+- [x] Registros de F1/F2 identifican evidencia artificial y simulada; las siguientes fases deben conservar esta distinción.
 - [ ] Protocolo experimental redactado antes de ajustar el sistema con hardware.
 
 Si H1 se completa, ya existe un asistente integrado de software que puede ensayarse; todavía faltan localización física, agarres aprendidos, transporte real y verificación sensorial física. El progreso se mide por componentes y evidencia, no con un porcentaje de «tesis terminada».
@@ -399,8 +401,8 @@ Las configuraciones, metadatos y scripts pertenecen al repositorio. Videos, data
 
 1. F0 completada: paquete antiguo y blueprint dependiente retirados; registro regenerado y validado.
 2. F1 completada: misiones A/B, catálogo, contratos, casos de escritorio y ficha de interfaces disponibles.
-3. F2: preparar las estaciones de la misión y las observaciones en la simulación conservada.
-4. F3–F5: incorporar memoria, completar el ciclo del gestor con pruebas de fallo y conectar el supervisor VLM con imágenes.
+3. F2 completada: estaciones, navegación semántica, observaciones recientes y grabaciones disponibles en la simulación conservada.
+4. Siguiente paso, F3: incorporar memoria y percepción del objetivo. Después, F4–F5 completan el ciclo del gestor y conectan el supervisor VLM con imágenes.
 5. F6–F7: probar el ciclo desde la interfaz mientras se deja listo el pipeline ACT para el primer día de captura física.
 
 Este orden permite avanzar desde ahora hacia las contribuciones del PDF y deja identificada la evidencia que todavía dependerá del robot.

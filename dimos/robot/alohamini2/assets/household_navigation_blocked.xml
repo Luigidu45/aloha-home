@@ -1,0 +1,6 @@
+<mujoco model="household_navigation_blocked">
+  <include file="household_navigation.xml"/>
+  <worldbody>
+    <geom name="blocked_passage" type="box" pos="0 0 1.25" size="0.08 1.2 1.25" rgba="0.75 0.2 0.15 1"/>
+  </worldbody>
+</mujoco>

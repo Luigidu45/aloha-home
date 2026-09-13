@@ -4,6 +4,11 @@ title: "AlohaMini2 Navigation Simulation"
 
 # AlohaMini2 navigation simulation
 
+For the household assistance thesis pilot, `household-navigation-sim` reuses this
+navigation stack in a synthetic living room and bedroom. It adds semantic station
+RPCs, observed arrival and cancellation, and reproducible sensor recordings. See
+the [F2 setup and validation](/docs/development/asistencia_domestica_modular/fase_2_simulacion.md).
+
 `alohamini2-nav-sim` runs a reduced, navigation-only AlohaMini2 model in
 MuJoCo. The base is holonomic and accepts body-frame `Twist` commands. Four
 raycast cameras produce a world-frame point cloud for voxel mapping, costmap

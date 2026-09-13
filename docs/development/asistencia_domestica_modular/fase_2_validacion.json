@@ -1,0 +1,272 @@
+{
+  "phase": "F2",
+  "date": "2026-09-13",
+  "baseline_commit": "dbe6fe27a0952d2988cef5b08ebb7bb124780be2",
+  "scope": "MuJoCo navigation; no physical actuation, object perception or grasp validation",
+  "route_recording": ".ignore.f2/route_final",
+  "blocked_recording": ".ignore.f2/blocked_01",
+  "route": {
+    "origin": "simulation",
+    "localization": "mujoco_ground_truth",
+    "clock_id": "unix",
+    "blocked": false,
+    "snapshots": [
+      {
+        "status": {
+          "request_id": "c1ce78eb65be43e590e75957bb1fc824",
+          "place_id": "mesa_sala",
+          "purpose": "observe",
+          "state": "arrived",
+          "reason": "arrival_and_stop_confirmed",
+          "ts": 1789301160.0061808,
+          "started_at": 1789301150.2274435,
+          "origin": "simulation",
+          "localization": "mujoco_ground_truth",
+          "clock_id": "unix",
+          "pose": {
+            "ts": 1789301159.9994256,
+            "x": -2.3308312164806253,
+            "y": 0.520314652854076,
+            "yaw": 1.896875056391201,
+            "frame_id": "world"
+          }
+        },
+        "evidence": [
+          {
+            "origin": "simulation",
+            "source": "mujoco_ground_truth_localization",
+            "reference": "mujoco_ground_truth_localization@1789301159.999425650",
+            "captured_at": 1789301159.9994256,
+            "clock_id": "unix",
+            "frame_id": "world"
+          },
+          {
+            "origin": "simulation",
+            "source": "front_camera_image",
+            "reference": "front_camera_image@1789301159.852478504",
+            "captured_at": 1789301159.8524785,
+            "clock_id": "unix",
+            "frame_id": "front_camera_color_optical_frame"
+          },
+          {
+            "origin": "simulation",
+            "source": "raycast_pointcloud",
+            "reference": "raycast_pointcloud@1789301159.912410259",
+            "captured_at": 1789301159.9124103,
+            "clock_id": "unix",
+            "frame_id": "world"
+          }
+        ],
+        "arrays": "mesa_sala.npz",
+        "image": "mesa_sala.png",
+        "sha256": "412dbea29a99dee52ab93abb2ed1e035e95de4abba7cb50a3ffb8a5e74924bb4",
+        "point_count": 1566
+      },
+      {
+        "status": {
+          "request_id": "27f77c4dea914a23acbf21875d5722b7",
+          "place_id": "mesa_dormitorio",
+          "purpose": "observe",
+          "state": "arrived",
+          "reason": "arrival_and_stop_confirmed",
+          "ts": 1789301188.92818,
+          "started_at": 1789301160.0297642,
+          "origin": "simulation",
+          "localization": "mujoco_ground_truth",
+          "clock_id": "unix",
+          "pose": {
+            "ts": 1789301188.9226649,
+            "x": 2.6632354073863476,
+            "y": 0.4111953672429525,
+            "yaw": 1.39529071154204,
+            "frame_id": "world"
+          }
+        },
+        "evidence": [
+          {
+            "origin": "simulation",
+            "source": "mujoco_ground_truth_localization",
+            "reference": "mujoco_ground_truth_localization@1789301188.922664881",
+            "captured_at": 1789301188.9226649,
+            "clock_id": "unix",
+            "frame_id": "world"
+          },
+          {
+            "origin": "simulation",
+            "source": "front_camera_image",
+            "reference": "front_camera_image@1789301188.493257523",
+            "captured_at": 1789301188.4932575,
+            "clock_id": "unix",
+            "frame_id": "front_camera_color_optical_frame"
+          },
+          {
+            "origin": "simulation",
+            "source": "raycast_pointcloud",
+            "reference": "raycast_pointcloud@1789301188.573408604",
+            "captured_at": 1789301188.5734086,
+            "clock_id": "unix",
+            "frame_id": "world"
+          }
+        ],
+        "arrays": "mesa_dormitorio.npz",
+        "image": "mesa_dormitorio.png",
+        "sha256": "763bb16428720c449f0ad1a26e8499fbc79eb68440b2f61025ecf52b0bbdc51e",
+        "point_count": 1581
+      }
+    ],
+    "results": [
+      {
+        "request_id": "c1ce78eb65be43e590e75957bb1fc824",
+        "place_id": "mesa_sala",
+        "purpose": "observe",
+        "state": "arrived",
+        "reason": "arrival_and_stop_confirmed",
+        "ts": 1789301159.492041,
+        "started_at": 1789301150.2274435,
+        "origin": "simulation",
+        "localization": "mujoco_ground_truth",
+        "clock_id": "unix",
+        "pose": {
+          "ts": 1789301159.48809,
+          "x": -2.3308312164806253,
+          "y": 0.520314652854076,
+          "yaw": 1.896875056391201,
+          "frame_id": "world"
+        }
+      },
+      {
+        "request_id": "27f77c4dea914a23acbf21875d5722b7",
+        "place_id": "mesa_dormitorio",
+        "purpose": "observe",
+        "state": "arrived",
+        "reason": "arrival_and_stop_confirmed",
+        "ts": 1789301188.3819978,
+        "started_at": 1789301160.0297642,
+        "origin": "simulation",
+        "localization": "mujoco_ground_truth",
+        "clock_id": "unix",
+        "pose": {
+          "ts": 1789301188.3768828,
+          "x": 2.6632354073863476,
+          "y": 0.4111953672429525,
+          "yaw": 1.39529071154204,
+          "frame_id": "world"
+        }
+      },
+      {
+        "request_id": "baa261caff8843078db797ce37c00efe",
+        "place_id": "mesa_sala",
+        "purpose": "observe",
+        "state": "cancelled",
+        "reason": "cancel_requested",
+        "ts": 1789301193.6519713,
+        "started_at": 1789301188.952325,
+        "origin": "simulation",
+        "localization": "mujoco_ground_truth",
+        "clock_id": "unix",
+        "pose": {
+          "ts": 1789301193.650261,
+          "x": 2.7835353566844536,
+          "y": 0.2917346863244777,
+          "yaw": -1.0466205804980382,
+          "frame_id": "world"
+        }
+      }
+    ],
+    "inputs": {
+      "dimos/experimental/household_assistant/configs/spatial_sim.json": "95038d059abf08c0e0ca7f42b8ea477a4a3ae8ea8ab79ec18cb69795c1a04a9b",
+      "dimos/experimental/household_assistant/configs/pilot.json": "4ae8bb3b3d4cf17b7f172ddd6be8200ce2874465fc028934693b4b4ad7d1a789",
+      "dimos/robot/alohamini2/assets/alohamini2_nav.xml": "fbfacc664fbe3998ddf43e20c13abc8cb6141526d1babe956f812e14f56d200d",
+      "dimos/robot/alohamini2/assets/household_navigation.xml": "c150fe2ed365b738ee71aff0a4d6d78bf59727c86f86b75511b9a33299cd3b5a",
+      "dimos/experimental/household_assistant/demo_spatial.py": "5eff1f54a84f4ebba45e3b9d018635a38ee96e18ea948fe52bed843788b4d0ec",
+      "dimos/experimental/household_assistant/spatial.py": "51b35db30fafd1449f5cdf85b8af2d1752c66ef305d60a9cb9adf6d5022a92a9",
+      "dimos/experimental/household_assistant/spatial_module.py": "dabc631ed1f5f4f53ec36aed8191f8f74dbf166399cf7c49b04829e9d69bc815"
+    },
+    "git_head": "dbe6fe27a0952d2988cef5b08ebb7bb124780be2",
+    "versions": {
+      "mujoco": "3.5.0",
+      "numpy": "2.3.5"
+    },
+    "transport": "zenoh",
+    "initial_costmap_cells": 27650,
+    "cancel_requested_at": 1789301193.072246,
+    "cancel_initial": {
+      "request_id": "baa261caff8843078db797ce37c00efe",
+      "place_id": "mesa_sala",
+      "purpose": "observe",
+      "state": "stopping",
+      "reason": "cancel_requested",
+      "ts": 1789301193.0726607,
+      "started_at": 1789301188.952325,
+      "origin": "simulation",
+      "localization": "mujoco_ground_truth",
+      "clock_id": "unix",
+      "pose": {
+        "ts": 1789301193.043296,
+        "x": 2.7804825363969456,
+        "y": 0.29689990599420985,
+        "yaw": -1.0301205804980382,
+        "frame_id": "world"
+      }
+    },
+    "cancel_latency_s": 0.5797252655029297,
+    "post_cancel_drift_m": 0.0,
+    "passed": true,
+    "samples": 440
+  },
+  "blocked": {
+    "origin": "simulation",
+    "localization": "mujoco_ground_truth",
+    "clock_id": "unix",
+    "blocked": true,
+    "snapshots": [],
+    "results": [
+      {
+        "request_id": "6477bc57235b47f69cd63e6c6a961cca",
+        "place_id": "mesa_dormitorio",
+        "purpose": "observe",
+        "state": "failed",
+        "reason": "navigation_timeout_or_blocked",
+        "ts": 1789301048.8947914,
+        "started_at": 1789301033.2555783,
+        "origin": "simulation",
+        "localization": "mujoco_ground_truth",
+        "clock_id": "unix",
+        "pose": {
+          "ts": 1789301048.891499,
+          "x": -2.5,
+          "y": -1.0,
+          "yaw": 0.0,
+          "frame_id": "world"
+        }
+      }
+    ],
+    "inputs": {
+      "dimos/experimental/household_assistant/configs/spatial_sim.json": "95038d059abf08c0e0ca7f42b8ea477a4a3ae8ea8ab79ec18cb69795c1a04a9b",
+      "dimos/experimental/household_assistant/configs/pilot.json": "4ae8bb3b3d4cf17b7f172ddd6be8200ce2874465fc028934693b4b4ad7d1a789",
+      "dimos/robot/alohamini2/assets/alohamini2_nav.xml": "fbfacc664fbe3998ddf43e20c13abc8cb6141526d1babe956f812e14f56d200d",
+      "dimos/robot/alohamini2/assets/household_navigation_blocked.xml": "be2020f55bfce044febab375c6635517daaeb688967359d7155a0c7ce994ace5",
+      "dimos/robot/alohamini2/assets/household_navigation.xml": "c150fe2ed365b738ee71aff0a4d6d78bf59727c86f86b75511b9a33299cd3b5a",
+      "dimos/experimental/household_assistant/demo_spatial.py": "09632d0e0b5c211b9bbd6d5dc847c25af59997d93aae32b0ffe28dda1c6345a3",
+      "dimos/experimental/household_assistant/spatial.py": "51b35db30fafd1449f5cdf85b8af2d1752c66ef305d60a9cb9adf6d5022a92a9",
+      "dimos/experimental/household_assistant/spatial_module.py": "dabc631ed1f5f4f53ec36aed8191f8f74dbf166399cf7c49b04829e9d69bc815"
+    },
+    "git_head": "dbe6fe27a0952d2988cef5b08ebb7bb124780be2",
+    "versions": {
+      "mujoco": "3.5.0",
+      "numpy": "2.3.5"
+    },
+    "transport": "zenoh",
+    "initial_costmap_cells": 18486,
+    "passed": true,
+    "samples": 163
+  },
+  "checks": {
+    "fast_tests_passed": 63,
+    "existing_mujoco_tests_passed": 10,
+    "new_scene_tests_passed": 2,
+    "blueprint_registry_checks_passed": 1,
+    "mypy_source_files_passed": 11,
+    "offline_replay_snapshots": 2
+  }
+}

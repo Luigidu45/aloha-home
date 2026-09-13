@@ -1,0 +1,33 @@
+<!-- Synthetic F2 environment; dimensions are not measurements of the user's home. -->
+<mujoco model="household_navigation">
+  <compiler angle="radian" autolimits="true"/>
+  <option timestep="0.005" gravity="0 0 -9.81" integrator="implicitfast"/>
+  <visual><map znear="0.0002"/><headlight ambient="0.5 0.5 0.5" diffuse="0.7 0.7 0.7"/></visual>
+  <worldbody>
+    <light directional="true" pos="0 0 4" dir="0 0 -1"/>
+    <geom name="floor" type="plane" size="4.2 3.2 0.1" rgba="0.65 0.61 0.53 1"/>
+    <geom name="north" type="box" pos="0 3 1.25" size="4 0.08 1.25" rgba="0.82 0.83 0.85 1"/>
+    <geom name="south" type="box" pos="0 -3 1.25" size="4 0.08 1.25" rgba="0.82 0.83 0.85 1"/>
+    <geom name="west" type="box" pos="-4 0 1.25" size="0.08 3 1.25" rgba="0.82 0.83 0.85 1"/>
+    <geom name="east" type="box" pos="4 0 1.25" size="0.08 3 1.25" rgba="0.72 0.80 0.90 1"/>
+    <geom name="partition_north" type="box" pos="0 2.1 1.25" size="0.08 0.9 1.25" rgba="0.72 0.80 0.90 1"/>
+    <geom name="partition_south" type="box" pos="0 -2.1 1.25" size="0.08 0.9 1.25" rgba="0.72 0.80 0.90 1"/>
+    <body name="pickup_table" pos="-2.5 1.6 0">
+      <geom name="pickup_top" type="box" pos="0 0 0.70" size="0.6 0.4 0.05" rgba="0.6 0.35 0.17 1"/>
+      <geom type="box" pos="0 0 0.325" size="0.5 0.3 0.325" rgba="0.35 0.2 0.1 1"/>
+    </body>
+    <body name="delivery_table" pos="2.5 1.6 0">
+      <geom name="delivery_top" type="box" pos="0 0 0.70" size="0.6 0.4 0.05" rgba="0.75 0.75 0.65 1"/>
+      <geom type="box" pos="0 0 0.325" size="0.5 0.3 0.325" rgba="0.4 0.4 0.35 1"/>
+      <geom name="delivery_region" type="box" pos="0 -0.12 0.751" size="0.22 0.18 0.001" rgba="0.1 0.6 0.2 1" contype="0" conaffinity="0"/>
+    </body>
+    <body name="bottle_fixture" pos="-2.5 1.28 0.86">
+      <geom type="cylinder" size="0.035 0.11" rgba="0.12 0.55 0.9 1"/>
+      <geom type="cylinder" pos="0 0 0.12" size="0.024 0.01" rgba="0.9 0.9 0.95 1"/>
+    </body>
+    <body name="remote_fixture" pos="-3.2 -0.15 0.016">
+      <geom type="box" size="0.025 0.09 0.015" rgba="0.04 0.04 0.05 1"/>
+    </body>
+    <geom name="bed" type="box" pos="2.6 -2.0 0.28" size="0.7 0.8 0.28" rgba="0.2 0.35 0.6 1"/>
+  </worldbody>
+</mujoco>

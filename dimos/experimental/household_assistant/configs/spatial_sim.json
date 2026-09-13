@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "origin": "simulation",
+  "clock_id": "unix",
+  "frame_id": "world",
+  "stations": [
+    {
+      "place_id": "mesa_sala",
+      "observe": {
+        "x": -2.5,
+        "y": 0.5,
+        "yaw": 1.5707963267948966,
+        "lift_height_m": null,
+        "position_tolerance_m": 0.25,
+        "yaw_tolerance_rad": 0.4
+      },
+      "manipulate": {
+        "x": -2.5,
+        "y": 0.65,
+        "yaw": 1.5707963267948966,
+        "lift_height_m": null,
+        "position_tolerance_m": 0.12,
+        "yaw_tolerance_rad": 0.15
+      },
+      "surface_height_m": 0.75,
+      "physical_reach_validated": false
+    },
+    {
+      "place_id": "mesa_dormitorio",
+      "observe": {
+        "x": 2.5,
+        "y": 0.5,
+        "yaw": 1.5707963267948966,
+        "lift_height_m": null,
+        "position_tolerance_m": 0.25,
+        "yaw_tolerance_rad": 0.4
+      },
+      "manipulate": {
+        "x": 2.5,
+        "y": 0.65,
+        "yaw": 1.5707963267948966,
+        "lift_height_m": null,
+        "position_tolerance_m": 0.12,
+        "yaw_tolerance_rad": 0.15
+      },
+      "surface_height_m": 0.75,
+      "physical_reach_validated": false
+    },
+    {
+      "place_id": "suelo_sala",
+      "observe": {
+        "x": -3.2,
+        "y": -1.2,
+        "yaw": 1.5707963267948966,
+        "lift_height_m": null,
+        "position_tolerance_m": 0.25,
+        "yaw_tolerance_rad": 0.4
+      },
+      "manipulate": {
+        "x": -3.2,
+        "y": -0.6499999999999999,
+        "yaw": 1.5707963267948966,
+        "lift_height_m": null,
+        "position_tolerance_m": 0.12,
+        "yaw_tolerance_rad": 0.15
+      },
+      "surface_height_m": 0.0,
+      "physical_reach_validated": false
+    }
+  ]
+}

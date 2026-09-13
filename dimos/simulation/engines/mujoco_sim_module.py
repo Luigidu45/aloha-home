@@ -1120,14 +1120,14 @@ class MujocoSimModule(
             return
 
         all_points: list[NDArray[Any]] = []
-        latest_ts = 0.0
+        capture_times: list[float] = []
         for camera_name in self._mujoco_lidar_camera_names():
             frame = engine.read_raycast_lidar(camera_name)
             if frame is None:
                 continue
             if frame.points.size > 0:
                 all_points.append(frame.points)
-                latest_ts = max(latest_ts, frame.timestamp)
+                capture_times.append(frame.timestamp)
 
         if not all_points:
             return
@@ -1136,7 +1136,8 @@ class MujocoSimModule(
             pcd = PointCloud2.from_numpy(
                 np.vstack(all_points),
                 frame_id="world",
-                timestamp=latest_ts or time.time(),
+                # Oldest contributing scan: a newer camera must not renew old points.
+                timestamp=min(capture_times),
             )
             pcd = pcd.voxel_downsample(self.config.mujoco_lidar_voxel_size)
             self.pointcloud.publish(pcd)
