@@ -4,11 +4,11 @@ title: "Plan de tesis: asistencia doméstica modular con DimOS, VLM y ACT"
 
 # Plan de trabajo por fases
 
-**Fecha:** 12 de septiembre de 2026. **Estado:** F0 completada; F1–F10 pendientes. Véase el [registro de cierre de F0](/docs/development/asistencia_domestica_modular/fase_0_limpieza.md).
+**Fecha:** 12 de septiembre de 2026. **Estado:** F0 y F1 completadas; F2–F10 pendientes. Véanse el [registro de cierre de F0](/docs/development/asistencia_domestica_modular/fase_0_limpieza.md) y los [contratos, decisiones y cierre de F1](/docs/development/asistencia_domestica_modular/fase_1_definicion.md).
 
 Este plan persigue la propuesta actual: un asistente robótico que permita a una persona con movilidad reducida solicitar, supervisar y completar tareas de acceso a objetos mediante lenguaje natural. Integra DimOS, memoria y navegación semántica, supervisión visual y habilidades de manipulación ACT. El éxito final requiere entregar el objeto correcto en una región accesible acordada.
 
-Se considera un único tesista, tres meses disponibles y la llegada del AlohaMini2 armado, cámaras de muñeca, LiDAR Unitree L2 y RealSense D435i aproximadamente dentro de veinte días. Son referencias relativas de planificación; no se presupone que el robot llegue calibrado ni integrado con DimOS. El equipo de cómputo y la variante exacta del robot deben documentarse antes de fijar modelos y controladores.
+Se considera un único tesista, tres meses disponibles y la llegada del AlohaMini2 armado, cámaras de muñeca, LiDAR Unitree L2 y RealSense D435i aproximadamente dentro de veinte días. Son referencias relativas de planificación; no se presupone que el robot llegue calibrado ni integrado con DimOS. En F1 el usuario confirmó la variante original con dos AM-ARM200 y ambos sensores fijos en la parte superior. El cómputo previsto es Beelink GTi15 Ultra y RTX de 24 GB, cuya llegada puede demorarse; las interfaces y la disponibilidad efectiva se registran en la [ficha de hardware](/docs/development/asistencia_domestica_modular/fase_1_hardware.md).
 
 La fuente es `propuesta_tesis_asistencia_domestica.pdf`, once páginas, proporcionada por el usuario en `/home/luigidu/Downloads/`. SHA-256: `9d6d12973f432c250a37a78bcc2a29f43a00cd25770a74926702163e524fa642`. Se revisaron el código y los documentos presentes en el checkout con HEAD `ea4980756`; esta revisión no incluye ensayos físicos.
 
@@ -40,11 +40,11 @@ La comparación de configuraciones permitirá estudiar el aporte del contexto vi
 
 ### Misión principal y ampliación obligatoria
 
-**Misión A:** recibir una solicitud para traer una botella ligera u otro objeto rígido manejable desde una estación de recogida hasta una mesa de entrega, atravesando dos zonas conectadas. El objeto final se fija tras comprobar alcance, agarre y utilidad. Se usan una planta, superficies conocidas y posiciones de interacción registradas.
+**Misión A, confirmada en F1:** recibir una solicitud para traer una botella de plástico pequeña y cerrada desde una mesa de la sala hasta una mesa auxiliar accesible en el dormitorio. Se usan una planta, superficies conocidas y posiciones de interacción registradas. El ejemplar concreto, las medidas y el dominio de agarre quedan pendientes de comprobación física.
 
-Como primera solución de transporte se propone una bandeja fija al robot. Dos habilidades ACT pueden cubrir las transferencias superficie–bandeja y bandeja–superficie. La descomposición definitiva debe reducir estados intermedios frágiles y permitir comprobación visual. Durante manipulación, la base estará detenida; el ajuste de altura se hará antes de iniciar la política en el primer prototipo.
+El transporte confirmado por el usuario mantiene el objeto en la pinza: recoger → regresar a una postura home con carga (`loaded_home`) → navegar conservando el agarre → colocar y liberar sobre la mesa de entrega. ACT cubrirá las recogidas y la colocación; el ejecutor de retorno a home se decidirá tras comprobar la trayectoria y la retención con carga. No se presupone que el home sin objeto sea válido. Durante manipulación, la base y el elevador estarán detenidos; el ajuste de altura se hará antes de iniciar la política en el primer prototipo.
 
-**Ampliación B:** reservar una nueva habilidad de manipulación, por ejemplo recoger un estuche o control desde una superficie compatible, e integrarla en la misma misión de entrega. Su selección no tiene que quedar fijada antes de probar las pinzas, pero su evaluación sí forma parte de C2. Cambiar el nombre del objeto o registrar de nuevo el mismo checkpoint no constituye por sí solo una habilidad nueva.
+**Ampliación B, confirmada en F1:** recoger un control remoto caído desde el suelo y entregarlo sobre la mesa accesible. Se propone `suelo_sala` como primera zona de recogida y se reutilizará la entrega en el dormitorio. La nueva habilidad cambia el dominio de altura, geometría y postura de recogida; su evaluación forma parte de C2. Alcance al suelo, agarre y compatibilidad de transporte/colocación deben comprobarse físicamente. Si no resulta alcanzable, se documentará la limitación y se revisará la elección con el usuario antes de sustituirla. Cambiar el nombre del objeto o registrar de nuevo el mismo checkpoint no constituye por sí solo una habilidad nueva.
 
 El AlohaMini2 es una plataforma bimanual. La coordinación simultánea de ambos brazos se incorpora solo si las habilidades básicas ya funcionan y aporta una ventaja útil. Si no se evalúa, debe declararse así y ajustar el título y las afirmaciones sobre manipulación bimanual. Esto es una recomendación de alcance, no una afirmación de que esa parte ya esté resuelta.
 
@@ -57,7 +57,7 @@ El AlohaMini2 es una plataforma bimanual. La coordinación simultánea de ambos 
 | Dos zonas, lugares nombrados y memoria de observaciones | Cobertura de una vivienda arbitraria y seguimiento exhaustivo de todos sus objetos. |
 | Identificación actual del objetivo y consulta ante ambigüedad | Manipulación general de cualquier objeto pedido. |
 | Políticas ACT entrenadas para un dominio declarado | Control simultáneo aprendido de base, elevador y ambos brazos. |
-| Una ampliación real del repertorio | Varias tareas bimanuales, abrir cajas y recuperar objetos del suelo. |
+| Ampliación B: recuperar un control remoto del suelo | Varias tareas bimanuales, abrir cajas y recuperar otros objetos. |
 | Estados, cámara, mapa básico, pausa/cancelación y consultas | Favoritos, historial avanzado y solicitudes compuestas. |
 | Verificación y recuperación limitada | Aprendizaje continuo y fine-tuning del VLM. |
 
@@ -85,7 +85,7 @@ El [software de AlohaMini para LeRobot](https://github.com/liyiteng/lerobot_aloh
 
 ## 4. Organización prevista en este repositorio
 
-Las rutas nuevas de esta tabla son **destinos propuestos**, todavía no implementados. Se crearán progresivamente cuando contengan comportamiento verificable, evitando esqueletos vacíos. No habrá imports desde el paquete descartado.
+F1 implementa los contratos, la configuración del piloto y los chequeos de escritorio en `dimos/experimental/household_assistant/`, junto con su documentación. Las demás incorporaciones de esta tabla son **destinos propuestos** y se crearán progresivamente cuando contengan comportamiento verificable, evitando esqueletos vacíos. No habrá imports desde el paquete descartado.
 
 | Ubicación | Responsabilidad |
 | --- | --- |
@@ -127,6 +127,8 @@ Trabajo:
 **Criterio de cierre:** ausencia de imports y entradas de registro hacia el proyecto antiguo; generación del registro consistente y comprobaciones de descubrimiento/blueprints conservados satisfactorias. Si el generador local informa cambios sin commit, revisar el diff y validar la consistencia en modo CI; ese aviso no demuestra por sí solo un fallo de generación. No se requiere publicar ni hacer push para completar la fase.
 
 ### F1. Convertir la propuesta en contratos y criterios observables
+
+**Estado:** completada el 12 de septiembre de 2026. Misiones A/B y transporte en pinza confirmados; contratos, catálogo, evidencia y diez casos de escritorio implementados. Pasaron 30 pruebas del paquete y una comprobación de consistencia del registro de blueprints. [Entregables, reproducción y pendientes físicos](/docs/development/asistencia_domestica_modular/fase_1_definicion.md).
 
 **Objetivo:** que cada parte comparta el significado de tarea, habilidad, estado y éxito. **Depende de:** F0 para iniciar el paquete nuevo. **Aporta a:** O1–O7; C1–C3.
 
@@ -189,7 +191,7 @@ Trabajo:
 3. Comprobar precondiciones inmediatamente antes de ejecutar. Invalidar decisiones si el robot o la escena cambiaron mientras se esperaba una inferencia.
 4. Ejecutar operaciones largas sin bloquear el ciclo que recibe cancelaciones. Distinguir solicitud de parada de parada confirmada; no iniciar otra acción con cancelación incierta.
 5. Definir pausa según la habilidad: alcanzar un estado de retención seguro o cancelar y preparar una nueva ejecución. No prometer reanudar un bloque ACT a mitad de movimiento sin reconciliar el estado.
-6. Verificar con observaciones posteriores: llegada y parada, objeto sostenido, presencia en bandeja, liberación y pertenencia a la región de entrega. Mantener los resultados éxito/fallo/incierto.
+6. Verificar con observaciones posteriores: llegada y parada, objeto sostenido en la pinza seleccionada, postura de transporte con carga, liberación y pertenencia a la región de entrega. Vigilar retención y postura durante el desplazamiento. Mantener los resultados éxito/fallo/incierto.
 7. Crear dobles de prueba de manipulación con fallos controlados. Identificarlos como artificiales y mantenerlos fuera del catálogo físico.
 8. Registrar solicitud, decisiones, acciones, resultados, evidencia, intervenciones y tiempos. No almacenar razonamientos internos del modelo; bastan entradas, salidas estructuradas y razones operativas breves.
 
@@ -209,7 +211,7 @@ Trabajo:
 4. Mantener el plan de alto nivel revisable y ejecutar una etapa comprobable cada vez. No dar al VLM comandos articulares ni permitir que ejecute herramientas físicas fuera del gestor.
 5. Medir tiempos de respuesta, consumo de memoria y errores. Un backend remoto requiere registrar dependencia de red y destino de las imágenes; un backend local requiere medir recursos compartidos con percepción y ACT.
 6. Implementar timeout y descarte de respuestas tardías. Si falla la inferencia, conservar un estado conocido y comunicar la incidencia.
-7. Probar paráfrasis en español, objetivo ya presente en bandeja, dos candidatos, objeto ausente y solicitud fuera del catálogo.
+7. Probar paráfrasis en español, objetivo ya sujeto en la pinza, dos candidatos, objeto ausente y solicitud fuera del catálogo.
 
 **Entregables:** supervisor conectado, configuración versionada de modelo/prompt, informe corto de selección y decisiones reproducibles sobre escenas.
 
@@ -256,7 +258,7 @@ ACT utiliza imágenes y estado articular para generar bloques de acciones; el si
 ### Hito H1. Qué debe estar disponible antes del robot
 
 - [x] Proyecto descartado retirado; registro, descubrimiento y configuración/carga de blueprints conservados comprobados en F0.
-- [ ] Misión, catálogo, lugares y contratos nuevos documentados.
+- [x] Misión, catálogo, lugares y contratos nuevos documentados y comprobados en F1.
 - [ ] Navegación entre estaciones y observaciones accesibles en simulación.
 - [ ] Memoria que distingue información histórica de confirmación actual.
 - [ ] Gestor con éxito, fallo, incertidumbre, consulta y cancelación comprobados.
@@ -280,7 +282,7 @@ Trabajo:
 2. Calibrar cámaras y transformaciones de base, brazos, elevador y L2. Si un sensor se mueve con el elevador, actualizar su transformación; las cámaras de muñeca dependen de la cinemática.
 3. Validar watchdog, parada local y pérdida de comunicación por separado del VLM y del navegador web.
 4. Obtener nube y odometría compatibles del L2; comprobar calidad temporal, frames y conversión a DimOS. Validar que guardar un mapa permita volver a usar sus lugares tras reiniciar/relocalizar.
-5. Medir la huella con bandeja y brazos recogidos, rutas, tolerancia de llegada y ajuste a las estaciones.
+5. Medir la huella con los brazos recogidos y el objeto en la pinza, validar `loaded_home` con carga, rutas, tolerancia de llegada y ajuste a las estaciones. Comprobar alcance y agarre del control desde el suelo antes de capturar B.
 6. Teleoperar transferencias con las mismas cámaras y representación de acción previstas para ACT.
 
 **Entregables:** adaptadores físicos, calibraciones identificadas, blueprint de captura y prueba de recorrido real.
@@ -295,7 +297,7 @@ Trabajo:
 
 1. Recoger demostraciones de transferencias iniciales y entrenar ACT. Separar entrenamiento/validación por sesiones; documentar objetos, alturas, posturas y variaciones cubiertas.
 2. Evaluar cada habilidad aislada antes de integrarla. Añadir demostraciones de las variaciones de llegada que efectivamente produce la navegación.
-3. Implementar evidencia física de recogida, bandeja y entrega a partir de cámaras y señales disponibles de pinzas. No inferir agarre únicamente de la finalización del comando.
+3. Implementar evidencia física de recogida, retención durante el transporte en pinza y entrega a partir de cámaras y señales disponibles de pinzas. No inferir agarre únicamente de la finalización del comando ni de alcanzar home.
 4. Ejecutar la misión desde la interfaz hasta la entrega; verificar presencia del objeto antes y después del transporte, y actualizar memoria después de colocarlo.
 5. Resolver ambigüedad, ausencia, un reintento limitado y destino ocupado. Confirmar que detener una política no ejecuta bloques pendientes.
 6. Congelar el núcleo y las habilidades iniciales; integrar la habilidad B reservada y componerla con navegación/entrega sin reentrenar toda la misión.
@@ -396,9 +398,9 @@ Las configuraciones, metadatos y scripts pertenecen al repositorio. Videos, data
 ### Orden inmediato de ejecución
 
 1. F0 completada: paquete antiguo y blueprint dependiente retirados; registro regenerado y validado.
-2. Crear la definición de misión A, el catálogo mínimo y la ficha de interfaces de F1.
-3. Hacer que una solicitud atraviese un ciclo nuevo del gestor con pruebas de fallo, usando primero un ejecutor artificial explícito.
-4. Conectar ese ciclo con las estaciones y observaciones de DimOS; incorporar memoria y VLM progresivamente.
-5. Probarlo desde la interfaz mientras se deja listo el pipeline ACT para el primer día de captura física.
+2. F1 completada: misiones A/B, catálogo, contratos, casos de escritorio y ficha de interfaces disponibles.
+3. F2: preparar las estaciones de la misión y las observaciones en la simulación conservada.
+4. F3–F5: incorporar memoria, completar el ciclo del gestor con pruebas de fallo y conectar el supervisor VLM con imágenes.
+5. F6–F7: probar el ciclo desde la interfaz mientras se deja listo el pipeline ACT para el primer día de captura física.
 
 Este orden permite avanzar desde ahora hacia las contribuciones del PDF y deja identificada la evidencia que todavía dependerá del robot.

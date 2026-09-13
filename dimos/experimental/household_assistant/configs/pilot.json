@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "mission": {
+    "id": "bring_bottle",
+    "object_category": "small_bottle",
+    "source_id": "mesa_sala",
+    "destination_id": "mesa_dormitorio",
+    "pickup_skill_id": "pick_bottle_from_table",
+    "user_profile": "Persona que utiliza brazos y manos y no puede desplazarse para buscar objetos; entrega sobre una mesa a su alcance."
+  },
+  "expansion": {
+    "id": "recover_remote",
+    "object_category": "remote_control",
+    "source_id": "suelo_sala",
+    "destination_id": "mesa_dormitorio",
+    "pickup_skill_id": "pick_remote_from_floor",
+    "user_profile": "Mismo perfil de asistencia; recuperar un control caído y dejarlo en una superficie accesible."
+  },
+  "transport": {
+    "mode": "held_in_gripper",
+    "posture_id": "loaded_home",
+    "arm": null,
+    "physically_validated": false
+  },
+  "places": [
+    {"id": "mesa_sala", "name": "Mesa de recogida", "room": "sala", "role": "pickup", "geometry": null, "accessibility_confirmed": false},
+    {"id": "mesa_dormitorio", "name": "Región de entrega de la mesa auxiliar", "room": "dormitorio", "role": "delivery", "geometry": null, "accessibility_confirmed": false},
+    {"id": "suelo_sala", "name": "Zona del control caído", "room": "sala", "role": "floor_pickup", "geometry": null, "accessibility_confirmed": false}
+  ],
+  "objects": [
+    {"id": "bottle_01", "category": "small_bottle", "description": "Botella de plástico pequeña y cerrada; masa, forma y volumen por medir."},
+    {"id": "bottle_02", "category": "small_bottle", "description": "Segunda instancia para ensayar ambigüedad; no implica una segunda botella ya registrada físicamente."},
+    {"id": "remote_01", "category": "remote_control", "description": "Control remoto caído; dimensiones, orientación y posibilidad de agarre desde el suelo por validar."}
+  ],
+  "skills": [
+    {
+      "id": "observe_at", "description": "Obtener observaciones actuales del lugar indicado.",
+      "operation": "observe", "executor_id": "perception",
+      "compatible_scene": "Una estación conocida dentro del campo visible de las cámaras.",
+      "required_cameras": ["top_rgb"],
+      "preconditions": ["Cámara disponible y reloj identificado."],
+      "postconditions": ["Observaciones nuevas, con fuente y frame; la ausencia solo se declara en la zona observada."],
+      "timeout_s": 10, "cancellation": "confirm_stop", "pause": "cancel_and_reprepare"
+    },
+    {
+      "id": "navigate_to", "description": "Desplazarse a la pose de observación de una estación conocida.",
+      "operation": "navigate", "executor_id": "navigation",
+      "compatible_scene": "Una planta, ruta accesible y mapa compatible con la localización.",
+      "preconditions": ["Localización actual disponible.", "Si se transporta un objeto: agarre y postura loaded_home confirmados antes de salir; supervisión durante el recorrido."],
+      "postconditions": ["Llegada dentro de tolerancia y base detenida.", "Si se transporta un objeto: sigue sujeto en la misma pinza."],
+      "timeout_s": 120, "cancellation": "confirm_stop", "pause": "cancel_and_reprepare"
+    },
+    {
+      "id": "align_at", "description": "Ajustar base y altura para interactuar con una estación.",
+      "operation": "align", "executor_id": "alignment",
+      "compatible_scene": "Estación con postura de trabajo y alcance comprobados.",
+      "required_cameras": ["top_rgb"],
+      "preconditions": ["Navegación terminada y ajustes compatibles con el objeto sujeto, si lo hay."],
+      "postconditions": ["Base detenida, elevador detenido y postura de inicio de manipulación confirmada."],
+      "timeout_s": 30, "cancellation": "confirm_stop", "pause": "cancel_and_reprepare"
+    },
+    {
+      "id": "pick_bottle_from_table", "description": "Recoger la botella elegida desde la mesa con una política ACT.",
+      "operation": "pick", "executor_id": "act_pick_table", "pickup_role": "pickup",
+      "object_categories": ["small_bottle"],
+      "compatible_scene": "Botella pequeña cerrada sobre mesa, brazo y cámaras coincidentes con el entrenamiento.",
+      "required_cameras": ["top_rgb", "active_wrist_rgb"],
+      "preconditions": ["Objetivo identificado sin ambigüedad y visible en mesa_sala.", "Pinza vacía, base y elevador detenidos, alcance y postura de inicio válidos."],
+      "postconditions": ["La botella correcta está sostenida por la pinza seleccionada; no basta con finalizar el movimiento."],
+      "timeout_s": 30, "cancellation": "cancel_pending_actions_and_confirm_stop", "pause": "cancel_and_reprepare"
+    },
+    {
+      "id": "prepare_transport", "description": "Recoger el brazo a loaded_home conservando el objeto en la pinza.",
+      "operation": "stow", "executor_id": "loaded_posture",
+      "object_categories": ["small_bottle", "remote_control"],
+      "compatible_scene": "Postura y recorrido de retorno validados para el objeto sujeto; loaded_home no equivale automáticamente al home sin carga.",
+      "required_cameras": ["active_wrist_rgb"],
+      "preconditions": ["Objeto confirmado en la pinza, base detenida y trayectoria compatible con su volumen."],
+      "postconditions": ["Objeto todavía sujeto y brazo en postura de transporte verificada; el otro brazo no invade la huella de transporte."],
+      "timeout_s": 20, "cancellation": "cancel_pending_actions_and_confirm_stop", "pause": "cancel_and_reprepare"
+    },
+    {
+      "id": "place_on_table", "description": "Colocar el objeto sujeto dentro de la región de entrega acordada mediante ACT.",
+      "operation": "place", "executor_id": "act_place",
+      "object_categories": ["small_bottle", "remote_control"],
+      "compatible_scene": "Mesa auxiliar accesible, libre y dentro del dominio de la política. La compatibilidad con ambos objetos está planificada, no entrenada.",
+      "required_cameras": ["top_rgb", "active_wrist_rgb"],
+      "preconditions": ["Base y elevador detenidos, postura de colocación válida y objeto correcto aún sujeto.", "Región de entrega medida, accesible y desocupada antes de habilitar hardware."],
+      "postconditions": ["Objeto correcto dentro de la región mesa_dormitorio, liberado de la pinza, estable y base detenida."],
+      "timeout_s": 30, "cancellation": "cancel_pending_actions_and_confirm_stop", "pause": "cancel_and_reprepare"
+    },
+    {
+      "id": "pick_remote_from_floor", "description": "Recuperar el control caído desde el suelo mediante una habilidad ACT adicional.",
+      "operation": "pick", "executor_id": "act_pick_floor", "pickup_role": "floor_pickup",
+      "object_categories": ["remote_control"],
+      "compatible_scene": "Zona accesible de suelo y control con orientación y grosor compatibles; alcance y contacto de pinza pendientes de ensayo físico.",
+      "required_cameras": ["top_rgb", "active_wrist_rgb"],
+      "preconditions": ["Control localizado sin ambigüedad en suelo_sala.", "Pinza vacía, base y elevador detenidos y alcance hasta el suelo comprobado."],
+      "postconditions": ["Control correcto sostenido por la pinza seleccionada; preparado para la habilidad de retorno con carga."],
+      "timeout_s": 30, "cancellation": "cancel_pending_actions_and_confirm_stop", "pause": "cancel_and_reprepare"
+    }
+  ]
+}
