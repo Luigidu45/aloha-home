@@ -53,3 +53,6 @@ ALOHA_MINI2_NAV_HEIGHT_M = 1.2
 ALOHA_MINI2_NAV_SAFE_RADIUS_M = 0.55
 ALOHA_MINI2_NAV_VOXEL_SIZE_M = 0.05
 ALOHA_MINI2_NAV_MAX_STEP_HEIGHT_M = 0.10
+
+# Original AlohaMini2 with two six-axis AM-ARM200 arms and separate grippers.
+ALOHA_MINI2_AM_ARM200_MJCF = ALOHA_MINI2_NAV_MJCF.parent / "am_arm200" / "robot.xml"

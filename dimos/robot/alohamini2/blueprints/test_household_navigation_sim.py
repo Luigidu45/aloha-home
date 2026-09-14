@@ -19,7 +19,7 @@ from dimos.experimental.household_assistant.spatial import load_spatial
 from dimos.experimental.household_assistant.spatial_module import HouseholdSpatialModule
 from dimos.navigation.replanning_a_star.module import ReplanningAStarPlanner
 from dimos.robot.alohamini2.blueprints.household_navigation_sim import household_navigation_sim
-from dimos.robot.alohamini2.config import ALOHA_MINI2_NAV_MJCF
+from dimos.robot.alohamini2.config import ALOHA_MINI2_AM_ARM200_MJCF, ALOHA_MINI2_NAV_MJCF
 from dimos.robot.alohamini2.sim_module import AlohaMini2SimModule
 
 
@@ -29,6 +29,9 @@ def test_household_blueprint_uses_registered_stations_and_existing_navigation():
     assert ReplanningAStarPlanner in atoms
     sim = atoms[AlohaMini2SimModule].kwargs
     assert sim["scene_xml"].name == "household_navigation.xml"
+    assert sim["robot_mjcf"] == ALOHA_MINI2_AM_ARM200_MJCF
+    assert sim["arm_model"] == "am_arm200"
+    assert sim["dof"] == 15
     assert sim["spawn_xy"] == (-2.5, -1.0)
     assert {station.place_id for station in load_spatial().stations} == {
         "mesa_sala",
@@ -42,7 +45,7 @@ def test_household_blueprint_uses_registered_stations_and_existing_navigation():
 def test_household_scene_compiles_with_passage_and_task_surfaces(blocked):
     name = "household_navigation_blocked.xml" if blocked else "household_navigation.xml"
     scene = mujoco.MjSpec.from_file(str(ALOHA_MINI2_NAV_MJCF.parent / name))
-    robot = mujoco.MjSpec.from_file(str(ALOHA_MINI2_NAV_MJCF))
+    robot = mujoco.MjSpec.from_file(str(ALOHA_MINI2_AM_ARM200_MJCF))
     scene.attach(robot, frame=scene.worldbody.add_frame(pos=[-2.5, -1.0, 0.0]))
     model = scene.compile()
     data = mujoco.MjData(model)

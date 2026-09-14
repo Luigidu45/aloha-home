@@ -1,0 +1,614 @@
+{
+  "schema_version": 1,
+  "source": "adaptation requested after F3",
+  "physical_validated": false,
+  "model_path": "dimos/robot/alohamini2/assets/am_arm200/robot.xml",
+  "checks": {
+    "fast_pytest": {
+      "passed": 99,
+      "deselected": 16,
+      "log": "/tmp/am_arm200_tests.log"
+    },
+    "household_mujoco_scenes": {
+      "passed": 2,
+      "log": "/tmp/am_arm200_scene_tests.log"
+    },
+    "blueprint_registry": {
+      "passed": 1,
+      "log": "/tmp/am_arm200_registry.log"
+    },
+    "mypy_source_files": 6
+  },
+  "artifacts": {
+    "articulation_final": {
+      "path": ".ignore.am_arm200/articulation_final/report.json",
+      "sha256": "b2b1dfd66e143f8ad6a2209799b8910343c1c5e5166b0e622b9ad8da0efab477",
+      "report": {
+        "origin": "simulation",
+        "robot": "alohamini2_original_am_arm200",
+        "mjcf_sha256": "5fe55f8fd5a1490df5737f45adceb253a871f8cd4e8c99f04bec378e5a84fedd",
+        "zero_pose_bounds_m": [
+          [
+            -0.2274956125601153,
+            -0.27517607233850594,
+            0.00032251992012917886
+          ],
+          [
+            0.38093156577042997,
+            0.2565560040174595,
+            1.1260717088838101
+          ]
+        ],
+        "zero_pose_radius_m": 0.45113955180731763,
+        "images": [
+          {
+            "file": "robot_reference.png",
+            "sha256": "db41fbe16bfa3839cb488a0a6f665ef2baf59a77964f8a9f451f47aea3fed517"
+          },
+          {
+            "file": "front_camera.png",
+            "sha256": "4f32b0c64744129e325790a0fd426ba413c3ee1fcd2da2ea20746c761791c67b"
+          },
+          {
+            "file": "back_camera.png",
+            "sha256": "947f47e860ad7cc814b8a13f37570841068d6d7e59c6f0ba0d6e9a306eba8c09"
+          },
+          {
+            "file": "chest_camera.png",
+            "sha256": "09eb5bbcb00f197ddd01d849c66372c36cdbfa64a4f95b986b55d5bf2fb7377a"
+          },
+          {
+            "file": "left_camera.png",
+            "sha256": "e98e5311a14c1fa32ae0f7e089cc2d8c6b81f90d06374335446bcfc39869f8db"
+          },
+          {
+            "file": "right_camera.png",
+            "sha256": "6ed6ddc691276b4c21d7ccb56cbe6c54e271f023d381e9f8ed6ad5360257eceb"
+          }
+        ],
+        "joint_targets": {
+          "/vertical_move": 0.05,
+          "/left_shoulder_pan": 0.0,
+          "/left_shoulder_lift": 0.0,
+          "/left_elbow_flex": 0.0,
+          "/left_wrist_flex": 0.0,
+          "/left_wrist_yaw_joint": 0.0,
+          "/left_wrist_roll": 0.15,
+          "/left_gripper": 0.15,
+          "/right_shoulder_pan": 0.0,
+          "/right_shoulder_lift": 0.0,
+          "/right_elbow_flex": 0.0,
+          "/right_wrist_flex": 0.0,
+          "/right_wrist_yaw_joint": 0.0,
+          "/right_wrist_roll": -0.15,
+          "/right_gripper": 0.15
+        },
+        "joint_positions": {
+          "/vertical_move": 0.05603022924631155,
+          "/left_shoulder_pan": 5.805919440455401e-05,
+          "/left_shoulder_lift": -0.0003373330414316839,
+          "/left_elbow_flex": 0.002189078800099332,
+          "/left_wrist_flex": 0.0010144482260453097,
+          "/left_wrist_yaw_joint": 0.000313408739204139,
+          "/left_wrist_roll": 0.1330594072320604,
+          "/left_gripper": 0.13265875030478766,
+          "/right_shoulder_pan": -7.79566055240021e-05,
+          "/right_shoulder_lift": -0.0003104570468019538,
+          "/right_elbow_flex": 0.0021952723110619673,
+          "/right_wrist_flex": 0.0009769553585961318,
+          "/right_wrist_yaw_joint": -0.0003229553888234279,
+          "/right_wrist_roll": -0.13301281776882734,
+          "/right_gripper": 0.1326565619341621
+        },
+        "target_latency_s": 0.15514923399996405,
+        "reset_positions": {
+          "/vertical_move": 8.881784197001253e-20,
+          "/left_shoulder_pan": 1.0408340855860842e-21,
+          "/left_shoulder_lift": 1.5543122344752194e-19,
+          "/left_elbow_flex": 0.0,
+          "/left_wrist_flex": 8.881784197001253e-20,
+          "/left_wrist_yaw_joint": 6.245004513516505e-21,
+          "/left_wrist_roll": -6.938893903907229e-20,
+          "/left_gripper": -2.873823971356231e-23,
+          "/right_shoulder_pan": -2.6020852139652104e-22,
+          "/right_shoulder_lift": 1.1102230246251566e-19,
+          "/right_elbow_flex": 0.0,
+          "/right_wrist_flex": 8.881784197001253e-20,
+          "/right_wrist_yaw_joint": -1.1622647289044608e-20,
+          "/right_wrist_roll": 1.0685896612017132e-19,
+          "/right_gripper": -7.239749418860115e-23
+        },
+        "passed": true
+      }
+    },
+    "route_final": {
+      "path": ".ignore.am_arm200/route_final/report.json",
+      "sha256": "f11ab73f03f9c5ab9287ef739a0d5280e873df9deb92a50a99c6fe4eeaf5d757",
+      "report": {
+        "robot_model": "alohamini2_original_am_arm200",
+        "origin": "simulation",
+        "localization": "mujoco_ground_truth",
+        "clock_id": "unix",
+        "blocked": false,
+        "snapshots": [
+          {
+            "status": {
+              "request_id": "81edff0e19f84ecbb9fd1bd1263ea477",
+              "place_id": "mesa_sala",
+              "purpose": "observe",
+              "state": "arrived",
+              "reason": "arrival_and_stop_confirmed",
+              "ts": 1789354698.930133,
+              "started_at": 1789354690.8096216,
+              "origin": "simulation",
+              "localization": "mujoco_ground_truth",
+              "clock_id": "unix",
+              "pose": {
+                "ts": 1789354698.927528,
+                "x": -2.5154783554872338,
+                "y": 0.3073301055520216,
+                "yaw": 1.7353140135181837,
+                "frame_id": "world"
+              }
+            },
+            "evidence": [
+              {
+                "origin": "simulation",
+                "source": "mujoco_ground_truth_localization",
+                "reference": "mujoco_ground_truth_localization@1789354698.927527905",
+                "captured_at": 1789354698.927528,
+                "clock_id": "unix",
+                "frame_id": "world"
+              },
+              {
+                "origin": "simulation",
+                "source": "front_camera_image",
+                "reference": "front_camera_image@1789354698.700841665",
+                "captured_at": 1789354698.7008417,
+                "clock_id": "unix",
+                "frame_id": "front_camera_color_optical_frame"
+              },
+              {
+                "origin": "simulation",
+                "source": "raycast_pointcloud",
+                "reference": "raycast_pointcloud@1789354698.599205971",
+                "captured_at": 1789354698.599206,
+                "clock_id": "unix",
+                "frame_id": "world"
+              }
+            ],
+            "arrays": "mesa_sala.npz",
+            "image": "mesa_sala.png",
+            "sha256": "84871bb22c75a9811054fbf7c73e3002666b8425cf762aa1234d7b01f87acbb4",
+            "point_count": 1439
+          },
+          {
+            "status": {
+              "request_id": "728aff676bce4260ad9c5cad9149dfc3",
+              "place_id": "mesa_dormitorio",
+              "purpose": "observe",
+              "state": "arrived",
+              "reason": "arrival_and_stop_confirmed",
+              "ts": 1789354729.1609209,
+              "started_at": 1789354698.9357138,
+              "origin": "simulation",
+              "localization": "mujoco_ground_truth",
+              "clock_id": "unix",
+              "pose": {
+                "ts": 1789354729.1577005,
+                "x": 2.445855996357035,
+                "y": 0.29177860762613184,
+                "yaw": 1.2565866794591873,
+                "frame_id": "world"
+              }
+            },
+            "evidence": [
+              {
+                "origin": "simulation",
+                "source": "mujoco_ground_truth_localization",
+                "reference": "mujoco_ground_truth_localization@1789354729.157700539",
+                "captured_at": 1789354729.1577005,
+                "clock_id": "unix",
+                "frame_id": "world"
+              },
+              {
+                "origin": "simulation",
+                "source": "front_camera_image",
+                "reference": "front_camera_image@1789354728.860355854",
+                "captured_at": 1789354728.8603559,
+                "clock_id": "unix",
+                "frame_id": "front_camera_color_optical_frame"
+              },
+              {
+                "origin": "simulation",
+                "source": "raycast_pointcloud",
+                "reference": "raycast_pointcloud@1789354728.840125799",
+                "captured_at": 1789354728.8401258,
+                "clock_id": "unix",
+                "frame_id": "world"
+              }
+            ],
+            "arrays": "mesa_dormitorio.npz",
+            "image": "mesa_dormitorio.png",
+            "sha256": "3f42d497ebad6662a029c35a68fe61112fdc778da7147d877abebac428b13a19",
+            "point_count": 1416
+          }
+        ],
+        "results": [
+          {
+            "request_id": "81edff0e19f84ecbb9fd1bd1263ea477",
+            "place_id": "mesa_sala",
+            "purpose": "observe",
+            "state": "arrived",
+            "reason": "arrival_and_stop_confirmed",
+            "ts": 1789354698.3175468,
+            "started_at": 1789354690.8096216,
+            "origin": "simulation",
+            "localization": "mujoco_ground_truth",
+            "clock_id": "unix",
+            "pose": {
+              "ts": 1789354698.293192,
+              "x": -2.5154783554840074,
+              "y": 0.3073301055321726,
+              "yaw": 1.735314013514965,
+              "frame_id": "world"
+            }
+          },
+          {
+            "request_id": "728aff676bce4260ad9c5cad9149dfc3",
+            "place_id": "mesa_dormitorio",
+            "purpose": "observe",
+            "state": "arrived",
+            "reason": "arrival_and_stop_confirmed",
+            "ts": 1789354728.6523037,
+            "started_at": 1789354698.9357138,
+            "origin": "simulation",
+            "localization": "mujoco_ground_truth",
+            "clock_id": "unix",
+            "pose": {
+              "ts": 1789354728.6509671,
+              "x": 2.445855996458387,
+              "y": 0.29177860792690186,
+              "yaw": 1.2565866794458034,
+              "frame_id": "world"
+            }
+          },
+          {
+            "request_id": "200657e224764f0495e81ed750e5d2e2",
+            "place_id": "mesa_sala",
+            "purpose": "observe",
+            "state": "cancelled",
+            "reason": "cancel_requested",
+            "ts": 1789354734.8260238,
+            "started_at": 1789354729.1765585,
+            "origin": "simulation",
+            "localization": "mujoco_ground_truth",
+            "clock_id": "unix",
+            "pose": {
+              "ts": 1789354734.8252656,
+              "x": 2.26354104501677,
+              "y": 0.20383776419424293,
+              "yaw": -2.7155987744884538,
+              "frame_id": "world"
+            }
+          }
+        ],
+        "inputs": {
+          "dimos/experimental/household_assistant/configs/spatial_sim.json": "95038d059abf08c0e0ca7f42b8ea477a4a3ae8ea8ab79ec18cb69795c1a04a9b",
+          "dimos/experimental/household_assistant/configs/pilot.json": "4ae8bb3b3d4cf17b7f172ddd6be8200ce2874465fc028934693b4b4ad7d1a789",
+          "dimos/robot/alohamini2/assets/am_arm200/robot.xml": "5fe55f8fd5a1490df5737f45adceb253a871f8cd4e8c99f04bec378e5a84fedd",
+          "dimos/robot/alohamini2/assets/am_arm200/manifest.json": "61fcf0f3c50b8b7b1f96b7bb4be5ac0dc340c9db901c79cbfcf28d22075f1873",
+          "dimos/robot/alohamini2/assets/household_navigation.xml": "c150fe2ed365b738ee71aff0a4d6d78bf59727c86f86b75511b9a33299cd3b5a",
+          "dimos/experimental/household_assistant/demo_spatial.py": "796c0a2e09503e49f0f12e9abaffe26344e695d0b300f63e70ac7b4f87b9c7f3",
+          "dimos/experimental/household_assistant/spatial.py": "51b35db30fafd1449f5cdf85b8af2d1752c66ef305d60a9cb9adf6d5022a92a9",
+          "dimos/experimental/household_assistant/spatial_module.py": "dabc631ed1f5f4f53ec36aed8191f8f74dbf166399cf7c49b04829e9d69bc815"
+        },
+        "git_head": "e20897afdf348066c61ce66cadd8ffb7fbc76658",
+        "versions": {
+          "mujoco": "3.5.0",
+          "numpy": "2.3.5"
+        },
+        "transport": "zenoh",
+        "initial_costmap_cells": 25280,
+        "cancel_requested_at": 1789354734.3004708,
+        "cancel_initial": {
+          "request_id": "200657e224764f0495e81ed750e5d2e2",
+          "place_id": "mesa_sala",
+          "purpose": "observe",
+          "state": "stopping",
+          "reason": "cancel_requested",
+          "ts": 1789354734.3008785,
+          "started_at": 1789354729.1765585,
+          "origin": "simulation",
+          "localization": "mujoco_ground_truth",
+          "clock_id": "unix",
+          "pose": {
+            "ts": 1789354734.2216012,
+            "x": 2.2975639382364146,
+            "y": 0.2196061322528956,
+            "yaw": -2.7005987743328683,
+            "frame_id": "world"
+          }
+        },
+        "cancel_latency_s": 0.5255529880523682,
+        "post_cancel_drift_m": 1.473606582548619e-10,
+        "passed": true,
+        "samples": 449
+      }
+    },
+    "blocked_final": {
+      "path": ".ignore.am_arm200/blocked_final/report.json",
+      "sha256": "17787cb4a5e33a3a4991da74d08f86dfc1762e25f16d0cf23c88ba1df3f97a70",
+      "report": {
+        "robot_model": "alohamini2_original_am_arm200",
+        "origin": "simulation",
+        "localization": "mujoco_ground_truth",
+        "clock_id": "unix",
+        "blocked": true,
+        "snapshots": [],
+        "results": [
+          {
+            "request_id": "ba866294f5e243d9bec319d75ef71125",
+            "place_id": "mesa_dormitorio",
+            "purpose": "observe",
+            "state": "failed",
+            "reason": "navigation_timeout_or_blocked",
+            "ts": 1789354807.2524173,
+            "started_at": 1789354791.608785,
+            "origin": "simulation",
+            "localization": "mujoco_ground_truth",
+            "clock_id": "unix",
+            "pose": {
+              "ts": 1789354807.2483618,
+              "x": -2.5,
+              "y": -1.0,
+              "yaw": 0.0,
+              "frame_id": "world"
+            }
+          }
+        ],
+        "inputs": {
+          "dimos/experimental/household_assistant/configs/spatial_sim.json": "95038d059abf08c0e0ca7f42b8ea477a4a3ae8ea8ab79ec18cb69795c1a04a9b",
+          "dimos/experimental/household_assistant/configs/pilot.json": "4ae8bb3b3d4cf17b7f172ddd6be8200ce2874465fc028934693b4b4ad7d1a789",
+          "dimos/robot/alohamini2/assets/am_arm200/robot.xml": "5fe55f8fd5a1490df5737f45adceb253a871f8cd4e8c99f04bec378e5a84fedd",
+          "dimos/robot/alohamini2/assets/am_arm200/manifest.json": "61fcf0f3c50b8b7b1f96b7bb4be5ac0dc340c9db901c79cbfcf28d22075f1873",
+          "dimos/robot/alohamini2/assets/household_navigation_blocked.xml": "be2020f55bfce044febab375c6635517daaeb688967359d7155a0c7ce994ace5",
+          "dimos/robot/alohamini2/assets/household_navigation.xml": "c150fe2ed365b738ee71aff0a4d6d78bf59727c86f86b75511b9a33299cd3b5a",
+          "dimos/experimental/household_assistant/demo_spatial.py": "796c0a2e09503e49f0f12e9abaffe26344e695d0b300f63e70ac7b4f87b9c7f3",
+          "dimos/experimental/household_assistant/spatial.py": "51b35db30fafd1449f5cdf85b8af2d1752c66ef305d60a9cb9adf6d5022a92a9",
+          "dimos/experimental/household_assistant/spatial_module.py": "dabc631ed1f5f4f53ec36aed8191f8f74dbf166399cf7c49b04829e9d69bc815"
+        },
+        "git_head": "e20897afdf348066c61ce66cadd8ffb7fbc76658",
+        "versions": {
+          "mujoco": "3.5.0",
+          "numpy": "2.3.5"
+        },
+        "transport": "zenoh",
+        "initial_costmap_cells": 18486,
+        "passed": true,
+        "samples": 165
+      }
+    }
+  },
+  "model_sha256": "5fe55f8fd5a1490df5737f45adceb253a871f8cd4e8c99f04bec378e5a84fedd",
+  "urdf_packaged_sha256": "bce855ec3de0c8ad834e78c9436a18b82ea209ee322c80bb0bb130e8797ffba1",
+  "mesh_manifest": {
+    "source_sha256": "d8727a9c1f10d5d3b93cceeb20a42a51ec9bc15326e85a84ee1ee53a3e78aaf8",
+    "robot": "alohamini2_urdf",
+    "mesh_conversion": [
+      {
+        "file": "base_link.STL",
+        "source_sha256": "3fd5f037e721b8cdfaf489e6280dcbb9b9cf5c96f7d6304f7bd3aa8bdace7f62",
+        "output_sha256": "7792832a72c25209a3c056f80b7bce9e4da7a648f0795a6a7b7e85f27caafe46",
+        "input_triangles": 80699,
+        "output_triangles": 4999
+      },
+      {
+        "file": "vertical_link.STL",
+        "source_sha256": "ca0df2d2b789b805c808a7550d2974bf005571db91b2ac3bb929df770011da66",
+        "output_sha256": "1c8c5b30d7c6d627e2d7b2879e3e24f6c54f081905ef8f2afb10f1c5c9bc1618",
+        "input_triangles": 57479,
+        "output_triangles": 5000
+      },
+      {
+        "file": "chest_camera.STL",
+        "source_sha256": "1d669640257cd80d35a8f4bb8b8a8f3faf7361d72740445890aaf9d2932ed3e3",
+        "output_sha256": "1214ac1843aa938ac763742f6cc50a52da33803d40edeea1f6d66aad6f8709ba",
+        "input_triangles": 3342,
+        "output_triangles": 3342
+      },
+      {
+        "file": "Link2_dp.STL",
+        "source_sha256": "1f89a81a2056a5e5b08e281d4aa0467b8652cbc646a1c7be8febb9d60fbcea03",
+        "output_sha256": "e6512af4f8e1bf355aa76e58de82fd75fead715edb469702fbbe5fa6486f7f8d",
+        "input_triangles": 240136,
+        "output_triangles": 5000
+      },
+      {
+        "file": "Link3_dp.STL",
+        "source_sha256": "501190ed631c9f359ffc511ff1100ba1e22c91cbf386c673de14b40a8bf6b947",
+        "output_sha256": "66630997536e8c5656b873dcaad643c2612e1c9261a82aaf74da6eb7ccf152b2",
+        "input_triangles": 240136,
+        "output_triangles": 5000
+      },
+      {
+        "file": "Link4_dp.STL",
+        "source_sha256": "2da7cf01ebd33da112eec412f923ee4280ae0a93c62efbf9d83e1213abfde799",
+        "output_sha256": "03239b3b57d5836a3aa882b639152cdee496559e71073e8f471aed5414935ab2",
+        "input_triangles": 240136,
+        "output_triangles": 5000
+      },
+      {
+        "file": "back_camera.STL",
+        "source_sha256": "2c2baefbd92ef9ba8daf9f46b5a2757b1b101cf6cf53b2e41210ed7f8d35a7d1",
+        "output_sha256": "718231b569559fb5c909955785f92f3ebc4ba0e914384cf9ae48792c2b2b0eee",
+        "input_triangles": 3342,
+        "output_triangles": 3342
+      },
+      {
+        "file": "front_camera.STL",
+        "source_sha256": "f84933fa72c1a17f0160eb39e003fa5f7e7f88d978524a2100bfd91eec725cee",
+        "output_sha256": "7b2db59dd1e496ac01c0ac8916cda062cf3e986729fe97fa08168ea9deff9478",
+        "input_triangles": 3342,
+        "output_triangles": 3342
+      },
+      {
+        "file": "left_Base.STL",
+        "source_sha256": "1e8625141f5a99fa16169517b74e7981f2dc3f90007b8034f176c69370424ce3",
+        "output_sha256": "b7aefae0dab2cc36cb11cb7a42a135fe7fb649a16b3615c9d4e0859b5c60030c",
+        "input_triangles": 128157,
+        "output_triangles": 4999
+      },
+      {
+        "file": "left_Rotation_Pitch.STL",
+        "source_sha256": "daec5914b072dbf355cfc45a48a305927dd8cbcef4d0d014f40ca2393f3a7a0d",
+        "output_sha256": "8c5c2ed0a3e5d87610d454068f66229b4ee020311adfebf5a0176ad5b017d137",
+        "input_triangles": 158817,
+        "output_triangles": 4999
+      },
+      {
+        "file": "left_Upper_Arm.STL",
+        "source_sha256": "054d2b3e330c1ece450a99ac022a1364dbe4439bb5c42420d6adce5c0b6b353a",
+        "output_sha256": "52e04dd298617c19d97d2e47dce943587a60c134af2132a327ab89cb9f123ea2",
+        "input_triangles": 161251,
+        "output_triangles": 5000
+      },
+      {
+        "file": "left_Lower_Arm.STL",
+        "source_sha256": "73ba590f0878faece1145ab3c6b6485469d155e79d46358f1217ccf26cfe0254",
+        "output_sha256": "56bde2533b40458004cb6a775bd37503a60e053c7e395969cb03418fa70c707a",
+        "input_triangles": 119954,
+        "output_triangles": 14356
+      },
+      {
+        "file": "left_Wrist_Pitch_Roll.STL",
+        "source_sha256": "23502ca7a7625455e2a2d82926af1799f7bb7dac3e2b3cec48a3b83145e95f00",
+        "output_sha256": "312ce6fd0b82523fc72c236090111dd62c3ccf1366b7d905d77d5eacd4b8df6e",
+        "input_triangles": 3176,
+        "output_triangles": 3176
+      },
+      {
+        "file": "left_wrist_yaw.STL",
+        "source_sha256": "62e0acaaa8f0d2bd470da7ea406f079a410d55e39121c61c501ae253c69c333e",
+        "output_sha256": "30d066c92ddcebd10a38e2fe1b504cb318ca0bb6bb7a727f7db311c2e7551d41",
+        "input_triangles": 252292,
+        "output_triangles": 33737
+      },
+      {
+        "file": "left_Fixed_Jaw.STL",
+        "source_sha256": "f9d3f66ae9b9cc8a7cc1aa176a4e66f2e0fc999ff3ba5fea4d3d8b4a0eceb312",
+        "output_sha256": "885c812fcf3748ae0c1c0c3e1552872dd50dbc5d6b4966654de9baa920416fd0",
+        "input_triangles": 4020,
+        "output_triangles": 4020
+      },
+      {
+        "file": "left_Moving_Jaw.STL",
+        "source_sha256": "09ce195eaf5771df92eb40c6a1a714e91e0afccb6be3526488095e881ef76c3b",
+        "output_sha256": "af220faae32325975dd0eefd07f2a9751d7265df63b5188994cdaf54084b5905",
+        "input_triangles": 1522,
+        "output_triangles": 1522
+      },
+      {
+        "file": "left_camera.STL",
+        "source_sha256": "bba9e1f73a3e78e767187da663f79e61770397d6f7676f77e83647bf8c1ffc97",
+        "output_sha256": "b922ed84b282ab24845d1db6de0dbdd99cc19f752748f65f0824373bdf18a43b",
+        "input_triangles": 3141,
+        "output_triangles": 3141
+      },
+      {
+        "file": "right_Base.STL",
+        "source_sha256": "1e8625141f5a99fa16169517b74e7981f2dc3f90007b8034f176c69370424ce3",
+        "output_sha256": "b7aefae0dab2cc36cb11cb7a42a135fe7fb649a16b3615c9d4e0859b5c60030c",
+        "input_triangles": 128157,
+        "output_triangles": 4999
+      },
+      {
+        "file": "right_Rotation_Pitch.STL",
+        "source_sha256": "daec5914b072dbf355cfc45a48a305927dd8cbcef4d0d014f40ca2393f3a7a0d",
+        "output_sha256": "8c5c2ed0a3e5d87610d454068f66229b4ee020311adfebf5a0176ad5b017d137",
+        "input_triangles": 158817,
+        "output_triangles": 4999
+      },
+      {
+        "file": "right_Upper_Arm.STL",
+        "source_sha256": "054d2b3e330c1ece450a99ac022a1364dbe4439bb5c42420d6adce5c0b6b353a",
+        "output_sha256": "52e04dd298617c19d97d2e47dce943587a60c134af2132a327ab89cb9f123ea2",
+        "input_triangles": 161251,
+        "output_triangles": 5000
+      },
+      {
+        "file": "right_Lower_Arm.STL",
+        "source_sha256": "73ba590f0878faece1145ab3c6b6485469d155e79d46358f1217ccf26cfe0254",
+        "output_sha256": "56bde2533b40458004cb6a775bd37503a60e053c7e395969cb03418fa70c707a",
+        "input_triangles": 119954,
+        "output_triangles": 14356
+      },
+      {
+        "file": "right_Wrist_Pitch_Roll.STL",
+        "source_sha256": "23502ca7a7625455e2a2d82926af1799f7bb7dac3e2b3cec48a3b83145e95f00",
+        "output_sha256": "312ce6fd0b82523fc72c236090111dd62c3ccf1366b7d905d77d5eacd4b8df6e",
+        "input_triangles": 3176,
+        "output_triangles": 3176
+      },
+      {
+        "file": "right_wrist_yaw.STL",
+        "source_sha256": "62e0acaaa8f0d2bd470da7ea406f079a410d55e39121c61c501ae253c69c333e",
+        "output_sha256": "30d066c92ddcebd10a38e2fe1b504cb318ca0bb6bb7a727f7db311c2e7551d41",
+        "input_triangles": 252292,
+        "output_triangles": 33737
+      },
+      {
+        "file": "right_Fixed_Jaw.STL",
+        "source_sha256": "f9d3f66ae9b9cc8a7cc1aa176a4e66f2e0fc999ff3ba5fea4d3d8b4a0eceb312",
+        "output_sha256": "885c812fcf3748ae0c1c0c3e1552872dd50dbc5d6b4966654de9baa920416fd0",
+        "input_triangles": 4020,
+        "output_triangles": 4020
+      },
+      {
+        "file": "right_Moving_Jaw.STL",
+        "source_sha256": "09ce195eaf5771df92eb40c6a1a714e91e0afccb6be3526488095e881ef76c3b",
+        "output_sha256": "af220faae32325975dd0eefd07f2a9751d7265df63b5188994cdaf54084b5905",
+        "input_triangles": 1522,
+        "output_triangles": 1522
+      },
+      {
+        "file": "right_camera.STL",
+        "source_sha256": "bba9e1f73a3e78e767187da663f79e61770397d6f7676f77e83647bf8c1ffc97",
+        "output_sha256": "b922ed84b282ab24845d1db6de0dbdd99cc19f752748f65f0824373bdf18a43b",
+        "input_triangles": 3141,
+        "output_triangles": 3141
+      }
+    ],
+    "joint_order": [
+      "vertical_move",
+      "left_shoulder_pan",
+      "left_shoulder_lift",
+      "left_elbow_flex",
+      "left_wrist_flex",
+      "left_wrist_yaw_joint",
+      "left_wrist_roll",
+      "left_gripper",
+      "right_shoulder_pan",
+      "right_shoulder_lift",
+      "right_elbow_flex",
+      "right_wrist_flex",
+      "right_wrist_yaw_joint",
+      "right_wrist_roll",
+      "right_gripper"
+    ],
+    "physical_validated": false,
+    "assumptions": [
+      "CAD +X lateral/-Y forward rotated +90 deg about Z into DimOS frame",
+      "free root constrained by existing holonomic driver; wheels fixed as in URDF",
+      "joint zero is simulation reference, not hardware home or loaded_home",
+      "servo gains/forces/damping are simulation parameters, not URDF actuator limits",
+      "convex arm collisions; base envelope/skid approximate",
+      "camera optical orientations follow existing CAD camera convention; mounting/intrinsics not calibrated",
+      "nav ray cameras approximate coverage, not a Unitree L2 sensor model"
+    ],
+    "collision_exclusions": [
+      "left_wrist_yaw / left_Moving_Jaw: convex housing overlaps its own jaw at CAD zero",
+      "right_wrist_yaw / right_Moving_Jaw: convex housing overlaps its own jaw at CAD zero"
+    ]
+  }
+}

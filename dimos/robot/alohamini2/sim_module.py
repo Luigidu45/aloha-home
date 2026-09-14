@@ -21,7 +21,7 @@ import math
 from pathlib import Path
 import threading
 import time
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import Field
 from reactivex.disposable import Disposable
@@ -30,6 +30,7 @@ from dimos.core.core import rpc
 from dimos.core.stream import In, Out
 from dimos.msgs.geometry_msgs.Twist import Twist
 from dimos.msgs.sensor_msgs.Image import Image, ImageFormat
+from dimos.msgs.sensor_msgs.JointState import JointState
 from dimos.robot.alohamini2.config import ALOHA_MINI2_SO101_HOME
 from dimos.robot.alohamini2.so101_home import (
     apply_so101_home_pose,
@@ -177,6 +178,7 @@ class AlohaMini2SimConfig(MujocoSimModuleConfig):
     planar_base_height: float = Field(default=DEFAULT_PLANAR_BASE_HEIGHT_M, gt=0)
     so101_home_pose: Path = ALOHA_MINI2_SO101_HOME
     articulated_so101: bool = False
+    arm_model: Literal["so101", "am_arm200"] = "so101"
 
 
 class AlohaMini2SimModule(MujocoSimModule):
@@ -199,6 +201,15 @@ class AlohaMini2SimModule(MujocoSimModule):
         )
 
     def _configure_robot_spec(self, spec_robot: Any) -> None:
+        if self.config.arm_model == "am_arm200":
+            if self.config.articulated_so101 or self.config.dof != 15:
+                raise ValueError(
+                    "AM-ARM200 requires 15 actuators: elevator and two six-axis arms with grippers"
+                )
+            for name in ("vertical_move", "left_wrist_yaw_joint", "right_wrist_yaw_joint"):
+                if spec_robot.joint(name) is None:
+                    raise ValueError(f"Missing original AlohaMini2 joint: {name}")
+            return
         if self.config.articulated_so101:
             configure_articulated_so101(spec_robot)
             return
@@ -226,6 +237,35 @@ class AlohaMini2SimModule(MujocoSimModule):
     def stop(self) -> None:
         self._commands.stop()
         super().stop()
+
+    @rpc
+    def get_sim_joint_state(self) -> dict[str, float]:
+        """Read simulated articulation positions in radians (elevator in metres)."""
+        engine = self._engine
+        if engine is None:
+            raise RuntimeError("simulation is not running")
+        return dict(zip(engine.joint_names, engine.joint_positions, strict=True))
+
+    @rpc
+    def set_sim_joint_positions(self, positions: dict[str, float]) -> bool:
+        """Debug position control for AM-ARM200 simulation only; not a grasp skill.
+
+        Supply all 15 joints explicitly to avoid stale partial-command merges.
+        This checks model limits, not collision-free trajectories or hardware safety.
+        """
+        engine = self._engine
+        if engine is None or self.config.arm_model != "am_arm200":
+            raise RuntimeError("AM-ARM200 simulation is not running")
+        names = engine.joint_names
+        if set(positions) != set(names):
+            raise ValueError("provide every simulated joint exactly once")
+        values = [float(positions[name]) for name in names]
+        for i, value in enumerate(values):
+            limits = engine.get_joint_range(i)
+            if not math.isfinite(value) or limits is None or not limits[0] <= value <= limits[1]:
+                raise ValueError(f"invalid simulated joint target: {names[i]}")
+        engine.write_joint_command(JointState(position=values))
+        return True
 
     @rpc
     def move(self, twist: Twist, duration: float = 0.0) -> bool:

@@ -1,0 +1,1263 @@
+{
+  "schema_version": 1,
+  "origin": "simulation",
+  "implementation_revision": "working_tree_f3",
+  "device": "cpu",
+  "detector": "dimos_yolo:0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1:device=cpu:conf=0.5:tracking=false",
+  "embedding": "dimos_clip:8660b6762709b1cef6e0bca2a658bbdbf3d72e6943c605bf17f07471cdcc373d",
+  "embedding_files": {
+    "config.json": "eaf1c9089a8553c913d27ea66407f8bfc2be9989c80c9f331ddb3d63d4c5e8ad",
+    "merges.txt": "9fd691f7c8039210e0fced15865466c65820d09b63988b0174bfe25de299051a",
+    "model.safetensors": "846bf12e84b91c2a65b44833a915241443b39356f1000ac1345c61d7bf8a209e",
+    "preprocessor_config.json": "910e70b3956ac9879ebc90b22fb3bc8a75b6a0677814500101a4c072bd7857bd",
+    "special_tokens_map.json": "f8c0d6c39aee3f8431078ef6646567b0aba7f2246e9c54b8b99d55c22b707cbf",
+    "tokenizer.json": "a83e0809aa4c3af7208b2df632a7a69668c6d48775b3c3fe4e1b1199d1f8b8f4",
+    "tokenizer_config.json": "3f74b6a4d97fee70b3b96921a687fc5e3f2fb583f5f81e7c178c0c22281beade",
+    "vocab.json": "3f0c4f7d2086b61b38487075278ea9ed04edb53a03cbb045b86c27190fa8fb69"
+  },
+  "clip_weights_sha256": "846bf12e84b91c2a65b44833a915241443b39356f1000ac1345c61d7bf8a209e",
+  "corpus_manifest_sha256": "0399cb977c21ec4244a60cc9c4e1c93f02c71ee9810207ebc51ff55c4393c688",
+  "versions": {
+    "torch": "2.10.0",
+    "transformers": "4.53.3",
+    "ultralytics": "8.4.14",
+    "chromadb": "1.5.9",
+    "mujoco": "3.5.0"
+  },
+  "cases": [
+    {
+      "id": "one_bottle",
+      "split": "development",
+      "category": "small_bottle",
+      "annotation": {
+        "category": "small_bottle",
+        "visible_boxes": [
+          [
+            300,
+            177,
+            340,
+            298
+          ]
+        ],
+        "occluded": false,
+        "physical_count": 1,
+        "split": "development"
+      },
+      "result": {
+        "view": {
+          "id": "one_bottle",
+          "evidence": {
+            "origin": "simulation",
+            "source": "mujoco_rgb_render",
+            "reference": "/home/luigidu/dimos/.ignore.f3/corpus_01/one_bottle.png",
+            "captured_at": 1789321223.9563818,
+            "clock_id": "unix",
+            "frame_id": "evaluation_camera"
+          },
+          "rgb_sha256": "f509b281d4b222652dede76f6151834044f1c09358926e1d0bff6ea2ab13b464",
+          "observer_pose": {
+            "ts": 1789321223.9563818,
+            "x": -2.5,
+            "y": 0.55,
+            "yaw": 1.5707963267948966,
+            "frame_id": "world"
+          },
+          "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+          "map_id": "household_f3",
+          "place_id": "mesa_sala"
+        },
+        "category": "small_bottle",
+        "model": "dimos_yolo:0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1:device=cpu:conf=0.5:tracking=false",
+        "candidates": [
+          {
+            "id": "one_bottle_candidate_0",
+            "category": "small_bottle",
+            "bbox_xyxy": [
+              298.901611328125,
+              176.4840087890625,
+              341.2110595703125,
+              298.5361328125
+            ],
+            "score": 0.6506405472755432
+          }
+        ],
+        "status": "candidate",
+        "reason": "category_candidate_not_instance_identity"
+      },
+      "inference_s": 0.06737034099933226,
+      "metrics_iou_0_5": {
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0
+      }
+    },
+    {
+      "id": "two_bottles",
+      "split": "development",
+      "category": "small_bottle",
+      "annotation": {
+        "category": "small_bottle",
+        "visible_boxes": [
+          [
+            217,
+            177,
+            262,
+            298
+          ],
+          [
+            378,
+            177,
+            423,
+            298
+          ]
+        ],
+        "occluded": false,
+        "physical_count": 2,
+        "split": "development"
+      },
+      "result": {
+        "view": {
+          "id": "two_bottles",
+          "evidence": {
+            "origin": "simulation",
+            "source": "mujoco_rgb_render",
+            "reference": "/home/luigidu/dimos/.ignore.f3/corpus_01/two_bottles.png",
+            "captured_at": 1789321224.0759883,
+            "clock_id": "unix",
+            "frame_id": "evaluation_camera"
+          },
+          "rgb_sha256": "6ad73a95283e494730651632f9616e1af00dc41b6d00d528fd5013f1535e25ea",
+          "observer_pose": {
+            "ts": 1789321224.0759883,
+            "x": -2.5,
+            "y": 0.55,
+            "yaw": 1.5707963267948966,
+            "frame_id": "world"
+          },
+          "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+          "map_id": "household_f3",
+          "place_id": "mesa_sala"
+        },
+        "category": "small_bottle",
+        "model": "dimos_yolo:0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1:device=cpu:conf=0.5:tracking=false",
+        "candidates": [
+          {
+            "id": "two_bottles_candidate_0",
+            "category": "small_bottle",
+            "bbox_xyxy": [
+              217.01251220703125,
+              176.78265380859375,
+              262.1866455078125,
+              298.49053955078125
+            ],
+            "score": 0.7196166515350342
+          },
+          {
+            "id": "two_bottles_candidate_1",
+            "category": "small_bottle",
+            "bbox_xyxy": [
+              378.42828369140625,
+              176.88809204101562,
+              422.98333740234375,
+              299.2423095703125
+            ],
+            "score": 0.5823303461074829
+          }
+        ],
+        "status": "ambiguous",
+        "reason": "multiple_compatible_objects"
+      },
+      "inference_s": 0.027638457000648486,
+      "metrics_iou_0_5": {
+        "true_positive": 2,
+        "false_positive": 0,
+        "false_negative": 0
+      }
+    },
+    {
+      "id": "bottle_and_cup",
+      "split": "development",
+      "category": "small_bottle",
+      "annotation": {
+        "category": "small_bottle",
+        "visible_boxes": [
+          [
+            300,
+            177,
+            340,
+            298
+          ]
+        ],
+        "occluded": false,
+        "physical_count": 1,
+        "split": "development"
+      },
+      "result": {
+        "view": {
+          "id": "bottle_and_cup",
+          "evidence": {
+            "origin": "simulation",
+            "source": "mujoco_rgb_render",
+            "reference": "/home/luigidu/dimos/.ignore.f3/corpus_01/bottle_and_cup.png",
+            "captured_at": 1789321224.1862915,
+            "clock_id": "unix",
+            "frame_id": "evaluation_camera"
+          },
+          "rgb_sha256": "4a6a5b235852462f53c1834985b48e7198be5347bec2bacf87af933f9646e9ad",
+          "observer_pose": {
+            "ts": 1789321224.1862915,
+            "x": -2.5,
+            "y": 0.55,
+            "yaw": 1.5707963267948966,
+            "frame_id": "world"
+          },
+          "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+          "map_id": "household_f3",
+          "place_id": "mesa_sala"
+        },
+        "category": "small_bottle",
+        "model": "dimos_yolo:0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1:device=cpu:conf=0.5:tracking=false",
+        "candidates": [
+          {
+            "id": "bottle_and_cup_candidate_0",
+            "category": "small_bottle",
+            "bbox_xyxy": [
+              299.0174865722656,
+              176.44924926757812,
+              341.2158508300781,
+              298.4906005859375
+            ],
+            "score": 0.7559772729873657
+          }
+        ],
+        "status": "candidate",
+        "reason": "category_candidate_not_instance_identity"
+      },
+      "inference_s": 0.024888609999834443,
+      "metrics_iou_0_5": {
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0
+      }
+    },
+    {
+      "id": "empty_table",
+      "split": "development",
+      "category": "small_bottle",
+      "annotation": {
+        "category": "small_bottle",
+        "visible_boxes": [],
+        "occluded": false,
+        "physical_count": 0,
+        "split": "development"
+      },
+      "result": {
+        "view": {
+          "id": "empty_table",
+          "evidence": {
+            "origin": "simulation",
+            "source": "mujoco_rgb_render",
+            "reference": "/home/luigidu/dimos/.ignore.f3/corpus_01/empty_table.png",
+            "captured_at": 1789321224.2909396,
+            "clock_id": "unix",
+            "frame_id": "evaluation_camera"
+          },
+          "rgb_sha256": "fa5c56c8bb0a010bf71fba2362cc7236c8ac043837d53696590b5353145d7171",
+          "observer_pose": {
+            "ts": 1789321224.2909396,
+            "x": -2.5,
+            "y": 0.55,
+            "yaw": 1.5707963267948966,
+            "frame_id": "world"
+          },
+          "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+          "map_id": "household_f3",
+          "place_id": "mesa_sala"
+        },
+        "category": "small_bottle",
+        "model": "dimos_yolo:0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1:device=cpu:conf=0.5:tracking=false",
+        "candidates": [],
+        "status": "unknown",
+        "reason": "no_detection_does_not_prove_absence"
+      },
+      "inference_s": 0.027381021000110195,
+      "metrics_iou_0_5": {
+        "true_positive": 0,
+        "false_positive": 0,
+        "false_negative": 0
+      }
+    },
+    {
+      "id": "cup_only",
+      "split": "development",
+      "category": "small_bottle",
+      "annotation": {
+        "category": "small_bottle",
+        "visible_boxes": [],
+        "occluded": false,
+        "physical_count": 0,
+        "split": "development"
+      },
+      "result": {
+        "view": {
+          "id": "cup_only",
+          "evidence": {
+            "origin": "simulation",
+            "source": "mujoco_rgb_render",
+            "reference": "/home/luigidu/dimos/.ignore.f3/corpus_01/cup_only.png",
+            "captured_at": 1789321224.3946295,
+            "clock_id": "unix",
+            "frame_id": "evaluation_camera"
+          },
+          "rgb_sha256": "fd5ca42b0b8f5c46f08a10bb2e92248e85b7f0b0037e595a024fcde663f3adc6",
+          "observer_pose": {
+            "ts": 1789321224.3946295,
+            "x": -2.5,
+            "y": 0.55,
+            "yaw": 1.5707963267948966,
+            "frame_id": "world"
+          },
+          "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+          "map_id": "household_f3",
+          "place_id": "mesa_sala"
+        },
+        "category": "small_bottle",
+        "model": "dimos_yolo:0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1:device=cpu:conf=0.5:tracking=false",
+        "candidates": [],
+        "status": "unknown",
+        "reason": "no_detection_does_not_prove_absence"
+      },
+      "inference_s": 0.01946049700018193,
+      "metrics_iou_0_5": {
+        "true_positive": 0,
+        "false_positive": 0,
+        "false_negative": 0
+      }
+    },
+    {
+      "id": "occluded_bottle",
+      "split": "development",
+      "category": "small_bottle",
+      "annotation": {
+        "category": "small_bottle",
+        "visible_boxes": [
+          [
+            310,
+            177,
+            330,
+            179
+          ]
+        ],
+        "occluded": true,
+        "physical_count": 1,
+        "split": "development"
+      },
+      "result": {
+        "view": {
+          "id": "occluded_bottle",
+          "evidence": {
+            "origin": "simulation",
+            "source": "mujoco_rgb_render",
+            "reference": "/home/luigidu/dimos/.ignore.f3/corpus_01/occluded_bottle.png",
+            "captured_at": 1789321224.4976523,
+            "clock_id": "unix",
+            "frame_id": "evaluation_camera"
+          },
+          "rgb_sha256": "fd7585ec266c4378581392b1ce8fb858dbbf25c86dc558da423cd921f7b50f52",
+          "observer_pose": {
+            "ts": 1789321224.4976523,
+            "x": -2.5,
+            "y": 0.55,
+            "yaw": 1.5707963267948966,
+            "frame_id": "world"
+          },
+          "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+          "map_id": "household_f3",
+          "place_id": "mesa_sala"
+        },
+        "category": "small_bottle",
+        "model": "dimos_yolo:0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1:device=cpu:conf=0.5:tracking=false",
+        "candidates": [],
+        "status": "unknown",
+        "reason": "no_detection_does_not_prove_absence"
+      },
+      "inference_s": 0.01954245799970522,
+      "metrics_iou_0_5": {
+        "true_positive": 0,
+        "false_positive": 0,
+        "false_negative": 1
+      }
+    },
+    {
+      "id": "remote_floor",
+      "split": "development",
+      "category": "remote_control",
+      "annotation": {
+        "category": "remote_control",
+        "visible_boxes": [
+          [
+            306,
+            203,
+            334,
+            283
+          ]
+        ],
+        "occluded": false,
+        "physical_count": 1,
+        "split": "development"
+      },
+      "result": {
+        "view": {
+          "id": "remote_floor",
+          "evidence": {
+            "origin": "simulation",
+            "source": "mujoco_rgb_render",
+            "reference": "/home/luigidu/dimos/.ignore.f3/corpus_01/remote_floor.png",
+            "captured_at": 1789321224.5969815,
+            "clock_id": "unix",
+            "frame_id": "evaluation_camera"
+          },
+          "rgb_sha256": "ba47c1906983b1442b950475519526e1d91249b7e7e8b7bb570fb3785b1d5938",
+          "observer_pose": {
+            "ts": 1789321224.5969815,
+            "x": -3.2,
+            "y": -0.8,
+            "yaw": 1.5707963267948966,
+            "frame_id": "world"
+          },
+          "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+          "map_id": "household_f3",
+          "place_id": "suelo_sala"
+        },
+        "category": "remote_control",
+        "model": "dimos_yolo:0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1:device=cpu:conf=0.5:tracking=false",
+        "candidates": [],
+        "status": "unknown",
+        "reason": "no_detection_does_not_prove_absence"
+      },
+      "inference_s": 0.025943119999283226,
+      "metrics_iou_0_5": {
+        "true_positive": 0,
+        "false_positive": 0,
+        "false_negative": 1
+      }
+    },
+    {
+      "id": "empty_floor",
+      "split": "held_out",
+      "category": "remote_control",
+      "annotation": {
+        "category": "remote_control",
+        "visible_boxes": [],
+        "occluded": false,
+        "physical_count": 0,
+        "split": "held_out"
+      },
+      "result": {
+        "view": {
+          "id": "empty_floor",
+          "evidence": {
+            "origin": "simulation",
+            "source": "mujoco_rgb_render",
+            "reference": "/home/luigidu/dimos/.ignore.f3/corpus_01/empty_floor.png",
+            "captured_at": 1789321224.694122,
+            "clock_id": "unix",
+            "frame_id": "evaluation_camera"
+          },
+          "rgb_sha256": "b522e503a742d44cce4356b2b07dc62633c1b350db1c9c9d4849794fa725e91b",
+          "observer_pose": {
+            "ts": 1789321224.694122,
+            "x": -3.0500000000000003,
+            "y": -0.8,
+            "yaw": 1.7975951748487824,
+            "frame_id": "world"
+          },
+          "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+          "map_id": "household_f3",
+          "place_id": "suelo_sala"
+        },
+        "category": "remote_control",
+        "model": "dimos_yolo:0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1:device=cpu:conf=0.5:tracking=false",
+        "candidates": [],
+        "status": "unknown",
+        "reason": "no_detection_does_not_prove_absence"
+      },
+      "inference_s": 0.02067231900036859,
+      "metrics_iou_0_5": {
+        "true_positive": 0,
+        "false_positive": 0,
+        "false_negative": 0
+      }
+    },
+    {
+      "id": "two_bottles_side",
+      "split": "held_out",
+      "category": "small_bottle",
+      "annotation": {
+        "category": "small_bottle",
+        "visible_boxes": [
+          [
+            226,
+            173,
+            268,
+            288
+          ],
+          [
+            376,
+            184,
+            421,
+            306
+          ]
+        ],
+        "occluded": false,
+        "physical_count": 2,
+        "split": "held_out"
+      },
+      "result": {
+        "view": {
+          "id": "two_bottles_side",
+          "evidence": {
+            "origin": "simulation",
+            "source": "mujoco_rgb_render",
+            "reference": "/home/luigidu/dimos/.ignore.f3/corpus_01/two_bottles_side.png",
+            "captured_at": 1789321224.8008325,
+            "clock_id": "unix",
+            "frame_id": "evaluation_camera"
+          },
+          "rgb_sha256": "7c52d28f3e9d13aa952e43d3d998bb49c42d7b2a1e38432e52c0272dd6b8e9fa",
+          "observer_pose": {
+            "ts": 1789321224.8008325,
+            "x": -2.25,
+            "y": 0.55,
+            "yaw": 1.8281200417659853,
+            "frame_id": "world"
+          },
+          "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+          "map_id": "household_f3",
+          "place_id": "mesa_sala"
+        },
+        "category": "small_bottle",
+        "model": "dimos_yolo:0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1:device=cpu:conf=0.5:tracking=false",
+        "candidates": [
+          {
+            "id": "two_bottles_side_candidate_0",
+            "category": "small_bottle",
+            "bbox_xyxy": [
+              225.79721069335938,
+              173.99884033203125,
+              268.6673889160156,
+              289.05377197265625
+            ],
+            "score": 0.8700616359710693
+          },
+          {
+            "id": "two_bottles_side_candidate_1",
+            "category": "small_bottle",
+            "bbox_xyxy": [
+              375.95611572265625,
+              184.62704467773438,
+              420.5054931640625,
+              308.3865051269531
+            ],
+            "score": 0.6023103594779968
+          }
+        ],
+        "status": "ambiguous",
+        "reason": "multiple_compatible_objects"
+      },
+      "inference_s": 0.02673458499884873,
+      "metrics_iou_0_5": {
+        "true_positive": 2,
+        "false_positive": 0,
+        "false_negative": 0
+      }
+    },
+    {
+      "id": "one_bottle_side",
+      "split": "held_out",
+      "category": "small_bottle",
+      "annotation": {
+        "category": "small_bottle",
+        "visible_boxes": [
+          [
+            300,
+            178,
+            340,
+            297
+          ]
+        ],
+        "occluded": false,
+        "physical_count": 1,
+        "split": "held_out"
+      },
+      "result": {
+        "view": {
+          "id": "one_bottle_side",
+          "evidence": {
+            "origin": "simulation",
+            "source": "mujoco_rgb_render",
+            "reference": "/home/luigidu/dimos/.ignore.f3/corpus_01/one_bottle_side.png",
+            "captured_at": 1789321224.9100745,
+            "clock_id": "unix",
+            "frame_id": "evaluation_camera"
+          },
+          "rgb_sha256": "65b6c7c97458fca7dfae94b84a3f896bdca34bb6013caebd0a378fb4926f76f0",
+          "observer_pose": {
+            "ts": 1789321224.9100745,
+            "x": -2.75,
+            "y": 0.55,
+            "yaw": 1.313472611823808,
+            "frame_id": "world"
+          },
+          "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+          "map_id": "household_f3",
+          "place_id": "mesa_sala"
+        },
+        "category": "small_bottle",
+        "model": "dimos_yolo:0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1:device=cpu:conf=0.5:tracking=false",
+        "candidates": [
+          {
+            "id": "one_bottle_side_candidate_0",
+            "category": "small_bottle",
+            "bbox_xyxy": [
+              299.33465576171875,
+              178.41036987304688,
+              340.51312255859375,
+              297.6389465332031
+            ],
+            "score": 0.6665815114974976
+          }
+        ],
+        "status": "candidate",
+        "reason": "category_candidate_not_instance_identity"
+      },
+      "inference_s": 0.02546226099912019,
+      "metrics_iou_0_5": {
+        "true_positive": 1,
+        "false_positive": 0,
+        "false_negative": 0
+      }
+    }
+  ],
+  "totals_iou_0_5": {
+    "true_positive": 7,
+    "false_positive": 0,
+    "false_negative": 2
+  },
+  "retrieval_before_reviews": [
+    {
+      "view": {
+        "id": "one_bottle_side",
+        "evidence": {
+          "origin": "simulation",
+          "source": "mujoco_rgb_render",
+          "reference": "/home/luigidu/dimos/.ignore.f3/corpus_01/one_bottle_side.png",
+          "captured_at": 1789321224.9100745,
+          "clock_id": "unix",
+          "frame_id": "evaluation_camera"
+        },
+        "rgb_sha256": "65b6c7c97458fca7dfae94b84a3f896bdca34bb6013caebd0a378fb4926f76f0",
+        "observer_pose": {
+          "ts": 1789321224.9100745,
+          "x": -2.75,
+          "y": 0.55,
+          "yaw": 1.313472611823808,
+          "frame_id": "world"
+        },
+        "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+        "map_id": "household_f3",
+        "place_id": "mesa_sala"
+      },
+      "cosine_distance": 0.6992700099945068,
+      "source": "dimos_spatial_vector_db"
+    },
+    {
+      "view": {
+        "id": "one_bottle",
+        "evidence": {
+          "origin": "simulation",
+          "source": "mujoco_rgb_render",
+          "reference": "/home/luigidu/dimos/.ignore.f3/corpus_01/one_bottle.png",
+          "captured_at": 1789321223.9563818,
+          "clock_id": "unix",
+          "frame_id": "evaluation_camera"
+        },
+        "rgb_sha256": "f509b281d4b222652dede76f6151834044f1c09358926e1d0bff6ea2ab13b464",
+        "observer_pose": {
+          "ts": 1789321223.9563818,
+          "x": -2.5,
+          "y": 0.55,
+          "yaw": 1.5707963267948966,
+          "frame_id": "world"
+        },
+        "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+        "map_id": "household_f3",
+        "place_id": "mesa_sala"
+      },
+      "cosine_distance": 0.7062979340553284,
+      "source": "dimos_spatial_vector_db"
+    },
+    {
+      "view": {
+        "id": "bottle_and_cup",
+        "evidence": {
+          "origin": "simulation",
+          "source": "mujoco_rgb_render",
+          "reference": "/home/luigidu/dimos/.ignore.f3/corpus_01/bottle_and_cup.png",
+          "captured_at": 1789321224.1862915,
+          "clock_id": "unix",
+          "frame_id": "evaluation_camera"
+        },
+        "rgb_sha256": "4a6a5b235852462f53c1834985b48e7198be5347bec2bacf87af933f9646e9ad",
+        "observer_pose": {
+          "ts": 1789321224.1862915,
+          "x": -2.5,
+          "y": 0.55,
+          "yaw": 1.5707963267948966,
+          "frame_id": "world"
+        },
+        "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+        "map_id": "household_f3",
+        "place_id": "mesa_sala"
+      },
+      "cosine_distance": 0.7117136120796204,
+      "source": "dimos_spatial_vector_db"
+    },
+    {
+      "view": {
+        "id": "cup_only",
+        "evidence": {
+          "origin": "simulation",
+          "source": "mujoco_rgb_render",
+          "reference": "/home/luigidu/dimos/.ignore.f3/corpus_01/cup_only.png",
+          "captured_at": 1789321224.3946295,
+          "clock_id": "unix",
+          "frame_id": "evaluation_camera"
+        },
+        "rgb_sha256": "fd5ca42b0b8f5c46f08a10bb2e92248e85b7f0b0037e595a024fcde663f3adc6",
+        "observer_pose": {
+          "ts": 1789321224.3946295,
+          "x": -2.5,
+          "y": 0.55,
+          "yaw": 1.5707963267948966,
+          "frame_id": "world"
+        },
+        "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+        "map_id": "household_f3",
+        "place_id": "mesa_sala"
+      },
+      "cosine_distance": 0.7275446653366089,
+      "source": "dimos_spatial_vector_db"
+    },
+    {
+      "view": {
+        "id": "occluded_bottle",
+        "evidence": {
+          "origin": "simulation",
+          "source": "mujoco_rgb_render",
+          "reference": "/home/luigidu/dimos/.ignore.f3/corpus_01/occluded_bottle.png",
+          "captured_at": 1789321224.4976523,
+          "clock_id": "unix",
+          "frame_id": "evaluation_camera"
+        },
+        "rgb_sha256": "fd7585ec266c4378581392b1ce8fb858dbbf25c86dc558da423cd921f7b50f52",
+        "observer_pose": {
+          "ts": 1789321224.4976523,
+          "x": -2.5,
+          "y": 0.55,
+          "yaw": 1.5707963267948966,
+          "frame_id": "world"
+        },
+        "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+        "map_id": "household_f3",
+        "place_id": "mesa_sala"
+      },
+      "cosine_distance": 0.7281614542007446,
+      "source": "dimos_spatial_vector_db"
+    },
+    {
+      "view": {
+        "id": "two_bottles_side",
+        "evidence": {
+          "origin": "simulation",
+          "source": "mujoco_rgb_render",
+          "reference": "/home/luigidu/dimos/.ignore.f3/corpus_01/two_bottles_side.png",
+          "captured_at": 1789321224.8008325,
+          "clock_id": "unix",
+          "frame_id": "evaluation_camera"
+        },
+        "rgb_sha256": "7c52d28f3e9d13aa952e43d3d998bb49c42d7b2a1e38432e52c0272dd6b8e9fa",
+        "observer_pose": {
+          "ts": 1789321224.8008325,
+          "x": -2.25,
+          "y": 0.55,
+          "yaw": 1.8281200417659853,
+          "frame_id": "world"
+        },
+        "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+        "map_id": "household_f3",
+        "place_id": "mesa_sala"
+      },
+      "cosine_distance": 0.7284613847732544,
+      "source": "dimos_spatial_vector_db"
+    },
+    {
+      "view": {
+        "id": "two_bottles",
+        "evidence": {
+          "origin": "simulation",
+          "source": "mujoco_rgb_render",
+          "reference": "/home/luigidu/dimos/.ignore.f3/corpus_01/two_bottles.png",
+          "captured_at": 1789321224.0759883,
+          "clock_id": "unix",
+          "frame_id": "evaluation_camera"
+        },
+        "rgb_sha256": "6ad73a95283e494730651632f9616e1af00dc41b6d00d528fd5013f1535e25ea",
+        "observer_pose": {
+          "ts": 1789321224.0759883,
+          "x": -2.5,
+          "y": 0.55,
+          "yaw": 1.5707963267948966,
+          "frame_id": "world"
+        },
+        "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+        "map_id": "household_f3",
+        "place_id": "mesa_sala"
+      },
+      "cosine_distance": 0.7286772131919861,
+      "source": "dimos_spatial_vector_db"
+    },
+    {
+      "view": {
+        "id": "empty_table",
+        "evidence": {
+          "origin": "simulation",
+          "source": "mujoco_rgb_render",
+          "reference": "/home/luigidu/dimos/.ignore.f3/corpus_01/empty_table.png",
+          "captured_at": 1789321224.2909396,
+          "clock_id": "unix",
+          "frame_id": "evaluation_camera"
+        },
+        "rgb_sha256": "fa5c56c8bb0a010bf71fba2362cc7236c8ac043837d53696590b5353145d7171",
+        "observer_pose": {
+          "ts": 1789321224.2909396,
+          "x": -2.5,
+          "y": 0.55,
+          "yaw": 1.5707963267948966,
+          "frame_id": "world"
+        },
+        "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+        "map_id": "household_f3",
+        "place_id": "mesa_sala"
+      },
+      "cosine_distance": 0.7430590391159058,
+      "source": "dimos_spatial_vector_db"
+    },
+    {
+      "view": {
+        "id": "remote_floor",
+        "evidence": {
+          "origin": "simulation",
+          "source": "mujoco_rgb_render",
+          "reference": "/home/luigidu/dimos/.ignore.f3/corpus_01/remote_floor.png",
+          "captured_at": 1789321224.5969815,
+          "clock_id": "unix",
+          "frame_id": "evaluation_camera"
+        },
+        "rgb_sha256": "ba47c1906983b1442b950475519526e1d91249b7e7e8b7bb570fb3785b1d5938",
+        "observer_pose": {
+          "ts": 1789321224.5969815,
+          "x": -3.2,
+          "y": -0.8,
+          "yaw": 1.5707963267948966,
+          "frame_id": "world"
+        },
+        "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+        "map_id": "household_f3",
+        "place_id": "suelo_sala"
+      },
+      "cosine_distance": 0.7712165713310242,
+      "source": "dimos_spatial_vector_db"
+    },
+    {
+      "view": {
+        "id": "empty_floor",
+        "evidence": {
+          "origin": "simulation",
+          "source": "mujoco_rgb_render",
+          "reference": "/home/luigidu/dimos/.ignore.f3/corpus_01/empty_floor.png",
+          "captured_at": 1789321224.694122,
+          "clock_id": "unix",
+          "frame_id": "evaluation_camera"
+        },
+        "rgb_sha256": "b522e503a742d44cce4356b2b07dc62633c1b350db1c9c9d4849794fa725e91b",
+        "observer_pose": {
+          "ts": 1789321224.694122,
+          "x": -3.0500000000000003,
+          "y": -0.8,
+          "yaw": 1.7975951748487824,
+          "frame_id": "world"
+        },
+        "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+        "map_id": "household_f3",
+        "place_id": "suelo_sala"
+      },
+      "cosine_distance": 0.7809848189353943,
+      "source": "dimos_spatial_vector_db"
+    }
+  ],
+  "retrieval_after_reviews": [
+    {
+      "view": {
+        "id": "one_bottle_side",
+        "evidence": {
+          "origin": "simulation",
+          "source": "mujoco_rgb_render",
+          "reference": "/home/luigidu/dimos/.ignore.f3/corpus_01/one_bottle_side.png",
+          "captured_at": 1789321224.9100745,
+          "clock_id": "unix",
+          "frame_id": "evaluation_camera"
+        },
+        "rgb_sha256": "65b6c7c97458fca7dfae94b84a3f896bdca34bb6013caebd0a378fb4926f76f0",
+        "observer_pose": {
+          "ts": 1789321224.9100745,
+          "x": -2.75,
+          "y": 0.55,
+          "yaw": 1.313472611823808,
+          "frame_id": "world"
+        },
+        "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+        "map_id": "household_f3",
+        "place_id": "mesa_sala"
+      },
+      "cosine_distance": 0.6992700099945068,
+      "source": "dimos_spatial_vector_db"
+    },
+    {
+      "view": {
+        "id": "cup_only",
+        "evidence": {
+          "origin": "simulation",
+          "source": "mujoco_rgb_render",
+          "reference": "/home/luigidu/dimos/.ignore.f3/corpus_01/cup_only.png",
+          "captured_at": 1789321224.3946295,
+          "clock_id": "unix",
+          "frame_id": "evaluation_camera"
+        },
+        "rgb_sha256": "fd5ca42b0b8f5c46f08a10bb2e92248e85b7f0b0037e595a024fcde663f3adc6",
+        "observer_pose": {
+          "ts": 1789321224.3946295,
+          "x": -2.5,
+          "y": 0.55,
+          "yaw": 1.5707963267948966,
+          "frame_id": "world"
+        },
+        "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+        "map_id": "household_f3",
+        "place_id": "mesa_sala"
+      },
+      "cosine_distance": 0.7275446653366089,
+      "source": "dimos_spatial_vector_db"
+    },
+    {
+      "view": {
+        "id": "occluded_bottle",
+        "evidence": {
+          "origin": "simulation",
+          "source": "mujoco_rgb_render",
+          "reference": "/home/luigidu/dimos/.ignore.f3/corpus_01/occluded_bottle.png",
+          "captured_at": 1789321224.4976523,
+          "clock_id": "unix",
+          "frame_id": "evaluation_camera"
+        },
+        "rgb_sha256": "fd7585ec266c4378581392b1ce8fb858dbbf25c86dc558da423cd921f7b50f52",
+        "observer_pose": {
+          "ts": 1789321224.4976523,
+          "x": -2.5,
+          "y": 0.55,
+          "yaw": 1.5707963267948966,
+          "frame_id": "world"
+        },
+        "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+        "map_id": "household_f3",
+        "place_id": "mesa_sala"
+      },
+      "cosine_distance": 0.7281614542007446,
+      "source": "dimos_spatial_vector_db"
+    },
+    {
+      "view": {
+        "id": "two_bottles_side",
+        "evidence": {
+          "origin": "simulation",
+          "source": "mujoco_rgb_render",
+          "reference": "/home/luigidu/dimos/.ignore.f3/corpus_01/two_bottles_side.png",
+          "captured_at": 1789321224.8008325,
+          "clock_id": "unix",
+          "frame_id": "evaluation_camera"
+        },
+        "rgb_sha256": "7c52d28f3e9d13aa952e43d3d998bb49c42d7b2a1e38432e52c0272dd6b8e9fa",
+        "observer_pose": {
+          "ts": 1789321224.8008325,
+          "x": -2.25,
+          "y": 0.55,
+          "yaw": 1.8281200417659853,
+          "frame_id": "world"
+        },
+        "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+        "map_id": "household_f3",
+        "place_id": "mesa_sala"
+      },
+      "cosine_distance": 0.7284613847732544,
+      "source": "dimos_spatial_vector_db"
+    },
+    {
+      "view": {
+        "id": "remote_floor",
+        "evidence": {
+          "origin": "simulation",
+          "source": "mujoco_rgb_render",
+          "reference": "/home/luigidu/dimos/.ignore.f3/corpus_01/remote_floor.png",
+          "captured_at": 1789321224.5969815,
+          "clock_id": "unix",
+          "frame_id": "evaluation_camera"
+        },
+        "rgb_sha256": "ba47c1906983b1442b950475519526e1d91249b7e7e8b7bb570fb3785b1d5938",
+        "observer_pose": {
+          "ts": 1789321224.5969815,
+          "x": -3.2,
+          "y": -0.8,
+          "yaw": 1.5707963267948966,
+          "frame_id": "world"
+        },
+        "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+        "map_id": "household_f3",
+        "place_id": "suelo_sala"
+      },
+      "cosine_distance": 0.7712165713310242,
+      "source": "dimos_spatial_vector_db"
+    },
+    {
+      "view": {
+        "id": "empty_floor",
+        "evidence": {
+          "origin": "simulation",
+          "source": "mujoco_rgb_render",
+          "reference": "/home/luigidu/dimos/.ignore.f3/corpus_01/empty_floor.png",
+          "captured_at": 1789321224.694122,
+          "clock_id": "unix",
+          "frame_id": "evaluation_camera"
+        },
+        "rgb_sha256": "b522e503a742d44cce4356b2b07dc62633c1b350db1c9c9d4849794fa725e91b",
+        "observer_pose": {
+          "ts": 1789321224.694122,
+          "x": -3.0500000000000003,
+          "y": -0.8,
+          "yaw": 1.7975951748487824,
+          "frame_id": "world"
+        },
+        "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+        "map_id": "household_f3",
+        "place_id": "suelo_sala"
+      },
+      "cosine_distance": 0.7809848189353943,
+      "source": "dimos_spatial_vector_db"
+    }
+  ],
+  "absence_reviews": [
+    {
+      "view": {
+        "id": "empty_table",
+        "evidence": {
+          "origin": "simulation",
+          "source": "mujoco_rgb_render",
+          "reference": "/home/luigidu/dimos/.ignore.f3/corpus_01/empty_table.png",
+          "captured_at": 1789321224.2909396,
+          "clock_id": "unix",
+          "frame_id": "evaluation_camera"
+        },
+        "rgb_sha256": "fa5c56c8bb0a010bf71fba2362cc7236c8ac043837d53696590b5353145d7171",
+        "observer_pose": {
+          "ts": 1789321224.2909396,
+          "x": -2.5,
+          "y": 0.55,
+          "yaw": 1.5707963267948966,
+          "frame_id": "world"
+        },
+        "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+        "map_id": "household_f3",
+        "place_id": "mesa_sala"
+      },
+      "category": "small_bottle",
+      "reviewer": "codex_visual_inspection",
+      "region_fully_visible": true,
+      "target_absent": true,
+      "reviewed_at": 1789321604.3543212,
+      "note": "Inspecci\u00f3n visual expl\u00edcita del PNG: superficie de la mesa completa y despejada. No se usaron anotaciones de simulador para esta conclusi\u00f3n; alcance limitado a esta superficie en esta imagen."
+    }
+  ],
+  "f2_perception_unannotated": [
+    {
+      "view": {
+        "id": "f2_view_0",
+        "evidence": {
+          "origin": "simulation",
+          "source": "front_camera_image",
+          "reference": "front_camera_image@1789301159.852478504",
+          "captured_at": 1789301159.8524785,
+          "clock_id": "unix",
+          "frame_id": "front_camera_color_optical_frame"
+        },
+        "rgb_sha256": "5a0c3331d1dbf4fb5bbe26188548ee86e4e57b0d33fd5157cf1dd48b2f62d060",
+        "observer_pose": {
+          "ts": 1789301159.9994256,
+          "x": -2.3308312164806253,
+          "y": 0.520314652854076,
+          "yaw": 1.896875056391201,
+          "frame_id": "world"
+        },
+        "pose_source": "mujoco_ground_truth",
+        "map_id": "household_f2",
+        "place_id": null
+      },
+      "category": "small_bottle",
+      "model": "dimos_yolo:0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1:device=cpu:conf=0.5:tracking=false",
+      "candidates": [],
+      "status": "unknown",
+      "reason": "no_detection_does_not_prove_absence"
+    },
+    {
+      "view": {
+        "id": "f2_view_1",
+        "evidence": {
+          "origin": "simulation",
+          "source": "front_camera_image",
+          "reference": "front_camera_image@1789301188.493257523",
+          "captured_at": 1789301188.4932575,
+          "clock_id": "unix",
+          "frame_id": "front_camera_color_optical_frame"
+        },
+        "rgb_sha256": "0e61de678946058c1b7d94ed816c91271faea1210ebf127fcb36ed3b35893611",
+        "observer_pose": {
+          "ts": 1789301188.9226649,
+          "x": 2.6632354073863476,
+          "y": 0.4111953672429525,
+          "yaw": 1.39529071154204,
+          "frame_id": "world"
+        },
+        "pose_source": "mujoco_ground_truth",
+        "map_id": "household_f2",
+        "place_id": null
+      },
+      "category": "small_bottle",
+      "model": "dimos_yolo:0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1:device=cpu:conf=0.5:tracking=false",
+      "candidates": [],
+      "status": "unknown",
+      "reason": "no_detection_does_not_prove_absence"
+    }
+  ],
+  "f2_retrieval_without_registered_place": [
+    {
+      "view": {
+        "id": "f2_view_0",
+        "evidence": {
+          "origin": "simulation",
+          "source": "front_camera_image",
+          "reference": "front_camera_image@1789301159.852478504",
+          "captured_at": 1789301159.8524785,
+          "clock_id": "unix",
+          "frame_id": "front_camera_color_optical_frame"
+        },
+        "rgb_sha256": "5a0c3331d1dbf4fb5bbe26188548ee86e4e57b0d33fd5157cf1dd48b2f62d060",
+        "observer_pose": {
+          "ts": 1789301159.9994256,
+          "x": -2.3308312164806253,
+          "y": 0.520314652854076,
+          "yaw": 1.896875056391201,
+          "frame_id": "world"
+        },
+        "pose_source": "mujoco_ground_truth",
+        "map_id": "household_f2",
+        "place_id": null
+      },
+      "cosine_distance": 0.7341346740722656,
+      "source": "dimos_spatial_vector_db"
+    },
+    {
+      "view": {
+        "id": "f2_view_1",
+        "evidence": {
+          "origin": "simulation",
+          "source": "front_camera_image",
+          "reference": "front_camera_image@1789301188.493257523",
+          "captured_at": 1789301188.4932575,
+          "clock_id": "unix",
+          "frame_id": "front_camera_color_optical_frame"
+        },
+        "rgb_sha256": "0e61de678946058c1b7d94ed816c91271faea1210ebf127fcb36ed3b35893611",
+        "observer_pose": {
+          "ts": 1789301188.9226649,
+          "x": 2.6632354073863476,
+          "y": 0.4111953672429525,
+          "yaw": 1.39529071154204,
+          "frame_id": "world"
+        },
+        "pose_source": "mujoco_ground_truth",
+        "map_id": "household_f2",
+        "place_id": null
+      },
+      "cosine_distance": 0.7677949070930481,
+      "source": "dimos_spatial_vector_db"
+    }
+  ],
+  "elapsed_s": 1.7241098929989676,
+  "peak_process_rss_mib": 1760.23046875,
+  "limitations": [
+    "synthetic fixtures, small corpus, not a physical accuracy estimate",
+    "observer pose is not object pose",
+    "detector score and CLIP distance are not calibrated probabilities",
+    "negative review is explicit human/visual review, not YOLO absence detection",
+    "F2 images unannotated: detections reported without accuracy claim"
+  ],
+  "session": {
+    "date": "2026-09-13",
+    "base_commit": "e20897afd",
+    "artifact_directory": ".ignore.f3/acceptance",
+    "corpus_directory": ".ignore.f3/corpus_01",
+    "log": "/tmp/household_f3_acceptance.log",
+    "tests_passed": 67,
+    "mypy_source_files": 8,
+    "cpu_threads": 4
+  },
+  "source_sha256": {
+    "dimos/experimental/household_assistant/assessment.py": "5877dd71399ffa6a1c418922dc03571c02144a00cf455825b526a7fff212a896",
+    "dimos/experimental/household_assistant/configs/semantic_catalog.json": "06530b88a49d32dad66605f03af493a9ca072d58fe86a6799560aec268b1fb3f",
+    "dimos/experimental/household_assistant/configuration.py": "21799cb5be57bdc6dccc2eced1aaba5110980520893cebf82dfa5cd2f03cce45",
+    "dimos/experimental/household_assistant/conftest.py": "8f317abf538cbb6353a259c8d8db767eb2f731393da9176f51e0fdc6120b87fe",
+    "dimos/experimental/household_assistant/contracts.py": "3623823216c61c46b16fdea29e73364977b158827a38c2e837807c1339ae2440",
+    "dimos/experimental/household_assistant/demo_perception.py": "f6cc25304a3fda45c58028f6416c74fedb57ee20760888cc158730efc8f79ec6",
+    "dimos/experimental/household_assistant/demo_spatial.py": "5eff1f54a84f4ebba45e3b9d018635a38ee96e18ea948fe52bed843788b4d0ec",
+    "dimos/experimental/household_assistant/demo_visual_corpus.py": "0ea72ee247fc5e30d2f077b62e8ac1b1b227b0e744abe498ce82b8411a3bd854",
+    "dimos/experimental/household_assistant/local_models.py": "ab65978a3f52386dda77c8825545905dac7ea2ddf404d7151e2707ae2fc81c9e",
+    "dimos/experimental/household_assistant/perception_bridge.py": "92f2e9f716fde181ce9f12b23c01a2dc0d825aca711a5010e722f29c23e39d4e",
+    "dimos/experimental/household_assistant/replay_spatial.py": "a05818d308296c1bd22dcaf2aad28a7c597da1d7a5848f0607723eb956aa9b1e",
+    "dimos/experimental/household_assistant/semantic_memory.py": "d7264784461ad590f7c16da680bb8fa273da6afe4570d61a116342b85e6d5a1c",
+    "dimos/experimental/household_assistant/spatial.py": "51b35db30fafd1449f5cdf85b8af2d1752c66ef305d60a9cb9adf6d5022a92a9",
+    "dimos/experimental/household_assistant/spatial_module.py": "dabc631ed1f5f4f53ec36aed8191f8f74dbf166399cf7c49b04829e9d69bc815",
+    "dimos/experimental/household_assistant/test_contracts.py": "23daa733d3dac8090a48720d1175c1c413cfea3e39f4471021e13ed521fc91bc",
+    "dimos/experimental/household_assistant/test_desk_cases.py": "39b2a63a30ed5c4f3bbec4e500d61d427c8493b1ea4909787b07377348c042a9",
+    "dimos/experimental/household_assistant/test_replay_spatial.py": "94b4f877e2a46bb9ac913e43807c76082ba718f705d6c81f202040fce6d4352b",
+    "dimos/experimental/household_assistant/test_semantic_memory.py": "5fdccd589c2a9e3d4ce5f5aa2a180e29eb943990986d92e5696a7da794a23aa8",
+    "dimos/experimental/household_assistant/test_spatial.py": "33ff47adfa5b9d6b10b751d5012cbc6e7da2dff7914c29e7fee66b75ca28b804",
+    "dimos/experimental/household_assistant/test_visual.py": "55a4065308ce9464f1419fd909d218ecbfe635d3e128f96492f36ae118d8bf35",
+    "dimos/experimental/household_assistant/visual.py": "441decd062fea7d340df1ead2e004ebd1e544f66bd009c758e37883029b6bdc2",
+    "dimos/perception/detection/detectors/yolo.py": "d6bf935e40dde7d33844698aa5e7a2477d59977c1aef7cc9a89e42f29b770efc",
+    "dimos/perception/spatial_vector_db.py": "17aa606b3c6567bbaf583dc1f1a7cac83f433f29e5773210825d6b6851e619b9"
+  },
+  "artifact_sha256": {
+    ".ignore.f3/acceptance/report.json": "ec4b1cf08d7b6ee5830ae202495b64f817452910ccf41bdeb3e61307882a5291",
+    ".ignore.f3/acceptance/journal.json": "4fb4f724532a0c6db1f9aef6973324a2599bf43ab7667a23c93f9f3bcd5eed2a",
+    ".ignore.f3/corpus_01/manifest.json": "0399cb977c21ec4244a60cc9c4e1c93f02c71ee9810207ebc51ff55c4393c688",
+    ".ignore.f3/corpus_01/absence_reviews.json": "ad886561bc9492d88918124cd185cdd090f9bbbf890cd197997c8cfdea080761"
+  }
+}

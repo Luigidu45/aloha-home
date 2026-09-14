@@ -30,7 +30,9 @@ class Yolo2DDetector(Detector):
         model_path: str = "models_yolo",
         model_name: str = "yolo11n.pt",
         device: str | None = None,
+        tracking: bool = True,
     ) -> None:
+        self.tracking = tracking
         self.model = YOLO(
             get_data(model_path) / model_name,
             task="detect",
@@ -57,6 +59,17 @@ class Yolo2DDetector(Detector):
         Returns:
             ImageDetections2D containing all detected objects
         """
+        if not self.tracking:
+            # Independent recorded views must not share temporal tracker state.
+            results = self.model.predict(
+                source=image.to_opencv(),
+                device=self.device,
+                conf=0.5,
+                iou=0.6,
+                verbose=False,
+            )
+            return ImageDetections2D.from_ultralytics_result(image, results)
+
         results = self.model.track(
             source=image.to_opencv(),
             device=self.device,

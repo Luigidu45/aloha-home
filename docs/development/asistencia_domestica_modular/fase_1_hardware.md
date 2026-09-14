@@ -2,6 +2,9 @@
 title: "F1: ficha de interfaces del AlohaMini2 y mediciones pendientes"
 ---
 
+> Actualización posterior: por petición del usuario se adelantó la [adaptación del AM-ARM200 original](/docs/development/asistencia_domestica_modular/adaptacion_am_arm200.md). Los blueprints de navegación y doméstico usan ahora ese modelo. Los resultados históricos de esta fase conservan su procedencia y fecha; los nuevos ensayos se registran por separado.
+
+
 # Hardware objetivo e interfaces
 
 **Fuente de decisiones:** respuestas del usuario durante F1, 12 de septiembre de 2026. Esta ficha distingue elección de hardware de disponibilidad física y de interfaz validada. Los campos pendientes se completarán en F7/F8.
@@ -55,3 +58,9 @@ Consultar a una persona sobre necesidad y región de entrega es trabajo de requi
 F1 no depende de GPU. F2 puede empezar con la configuración ligera existente de simulación. Antes de F5/F7 se verificará cómputo disponible para decidir dónde ejecutar el VLM y entrenar ACT. La disponibilidad prevista de una RTX no se registra como recurso adquirido; tampoco se promete inferencia local en tiempo real antes de medirla.
 
 Los endpoints, redes y rutas de dispositivos se configurarán mediante las interfaces de DimOS cuando existan adaptadores. Esta ficha no asigna puertos, IPs, frecuencias de control ni límites físicos inventados.
+
+## Actualización al cerrar F3
+
+El usuario suministró el URDF original y meshes en `/home/luigidu/AlohaMini/AlohaMini2/urdf`. El [inventario de F3](/docs/development/asistencia_domestica_modular/fase_3_urdf_original.json) identifica `alohamini2_urdf`, seis ejes más pinza por brazo y las 26 referencias a meshes resueltas. Hay dos referencias de rutas inconsistentes y límites de esfuerzo/velocidad en cero que requieren revisión. La disponibilidad de archivos está comprobada; orden SDK, calibración, límites físicos y montajes de sensores siguen pendientes.
+
+Por decisión del usuario, F3 ejecuta percepción y recuperación localmente en CPU; [los ensayos y la migración de dispositivo](/docs/development/asistencia_domestica_modular/fase_3_memoria_percepcion.md) están documentados. No se utilizó inferencia remota. Disponer de una RTX permitirá probar otros modelos, pero no se supone que resuelva por sí sola los errores visuales.

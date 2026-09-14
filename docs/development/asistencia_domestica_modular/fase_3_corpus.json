@@ -1,0 +1,332 @@
+{
+  "schema_version": 1,
+  "source": "MuJoCo RGB render; synthetic fixtures; no physics or depth claims",
+  "annotation_source": "renderer segmentation, evaluation only",
+  "scene_sha256": "c150fe2ed365b738ee71aff0a4d6d78bf59727c86f86b75511b9a33299cd3b5a",
+  "cases": [
+    {
+      "id": "one_bottle",
+      "image": "one_bottle.png",
+      "sha256": "7367426bbdd557d21f0a67fe187936baa2a3d3231aae6e0738395037c460c27f",
+      "captured_at": 1789321223.9563818,
+      "clock_id": "unix",
+      "frame_id": "evaluation_camera",
+      "origin": "simulation",
+      "place_id": "mesa_sala",
+      "observer_pose": {
+        "ts": 1789321223.9563818,
+        "x": -2.5,
+        "y": 0.55,
+        "yaw": 1.5707963267948966,
+        "frame_id": "world"
+      },
+      "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+      "annotation": {
+        "category": "small_bottle",
+        "visible_boxes": [
+          [
+            300,
+            177,
+            340,
+            298
+          ]
+        ],
+        "occluded": false,
+        "physical_count": 1,
+        "split": "development"
+      }
+    },
+    {
+      "id": "two_bottles",
+      "image": "two_bottles.png",
+      "sha256": "55582e3d68376d9930ac0a5b8aa2764ba919c7f332055225ee0603ef6f36e8d4",
+      "captured_at": 1789321224.0759883,
+      "clock_id": "unix",
+      "frame_id": "evaluation_camera",
+      "origin": "simulation",
+      "place_id": "mesa_sala",
+      "observer_pose": {
+        "ts": 1789321224.0759883,
+        "x": -2.5,
+        "y": 0.55,
+        "yaw": 1.5707963267948966,
+        "frame_id": "world"
+      },
+      "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+      "annotation": {
+        "category": "small_bottle",
+        "visible_boxes": [
+          [
+            217,
+            177,
+            262,
+            298
+          ],
+          [
+            378,
+            177,
+            423,
+            298
+          ]
+        ],
+        "occluded": false,
+        "physical_count": 2,
+        "split": "development"
+      }
+    },
+    {
+      "id": "bottle_and_cup",
+      "image": "bottle_and_cup.png",
+      "sha256": "c27814a6126f50daaac8be405429590fcea2de50d55ae6ef8f172964dbff119f",
+      "captured_at": 1789321224.1862915,
+      "clock_id": "unix",
+      "frame_id": "evaluation_camera",
+      "origin": "simulation",
+      "place_id": "mesa_sala",
+      "observer_pose": {
+        "ts": 1789321224.1862915,
+        "x": -2.5,
+        "y": 0.55,
+        "yaw": 1.5707963267948966,
+        "frame_id": "world"
+      },
+      "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+      "annotation": {
+        "category": "small_bottle",
+        "visible_boxes": [
+          [
+            300,
+            177,
+            340,
+            298
+          ]
+        ],
+        "occluded": false,
+        "physical_count": 1,
+        "split": "development"
+      }
+    },
+    {
+      "id": "empty_table",
+      "image": "empty_table.png",
+      "sha256": "fa6b307f90ba499fcbc621ce56b9353a5f5465930014e9d63db0c6f4d529095a",
+      "captured_at": 1789321224.2909396,
+      "clock_id": "unix",
+      "frame_id": "evaluation_camera",
+      "origin": "simulation",
+      "place_id": "mesa_sala",
+      "observer_pose": {
+        "ts": 1789321224.2909396,
+        "x": -2.5,
+        "y": 0.55,
+        "yaw": 1.5707963267948966,
+        "frame_id": "world"
+      },
+      "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+      "annotation": {
+        "category": "small_bottle",
+        "visible_boxes": [],
+        "occluded": false,
+        "physical_count": 0,
+        "split": "development"
+      }
+    },
+    {
+      "id": "cup_only",
+      "image": "cup_only.png",
+      "sha256": "9d2524ed76defe87c51410f5573055f271f1dde31aa6e9d0d4e1f75d6b023fbf",
+      "captured_at": 1789321224.3946295,
+      "clock_id": "unix",
+      "frame_id": "evaluation_camera",
+      "origin": "simulation",
+      "place_id": "mesa_sala",
+      "observer_pose": {
+        "ts": 1789321224.3946295,
+        "x": -2.5,
+        "y": 0.55,
+        "yaw": 1.5707963267948966,
+        "frame_id": "world"
+      },
+      "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+      "annotation": {
+        "category": "small_bottle",
+        "visible_boxes": [],
+        "occluded": false,
+        "physical_count": 0,
+        "split": "development"
+      }
+    },
+    {
+      "id": "occluded_bottle",
+      "image": "occluded_bottle.png",
+      "sha256": "1dfe5debdb1aa6a3cdeccbd469eee7e97bbaaaa4d1c1979b339fee5488b3ccb7",
+      "captured_at": 1789321224.4976523,
+      "clock_id": "unix",
+      "frame_id": "evaluation_camera",
+      "origin": "simulation",
+      "place_id": "mesa_sala",
+      "observer_pose": {
+        "ts": 1789321224.4976523,
+        "x": -2.5,
+        "y": 0.55,
+        "yaw": 1.5707963267948966,
+        "frame_id": "world"
+      },
+      "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+      "annotation": {
+        "category": "small_bottle",
+        "visible_boxes": [
+          [
+            310,
+            177,
+            330,
+            179
+          ]
+        ],
+        "occluded": true,
+        "physical_count": 1,
+        "split": "development"
+      }
+    },
+    {
+      "id": "remote_floor",
+      "image": "remote_floor.png",
+      "sha256": "4e343ab67528f70f98d608ca8e7437aa428ca54d5720b09c64e2686ce0eeeec4",
+      "captured_at": 1789321224.5969815,
+      "clock_id": "unix",
+      "frame_id": "evaluation_camera",
+      "origin": "simulation",
+      "place_id": "suelo_sala",
+      "observer_pose": {
+        "ts": 1789321224.5969815,
+        "x": -3.2,
+        "y": -0.8,
+        "yaw": 1.5707963267948966,
+        "frame_id": "world"
+      },
+      "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+      "annotation": {
+        "category": "remote_control",
+        "visible_boxes": [
+          [
+            306,
+            203,
+            334,
+            283
+          ]
+        ],
+        "occluded": false,
+        "physical_count": 1,
+        "split": "development"
+      }
+    },
+    {
+      "id": "empty_floor",
+      "image": "empty_floor.png",
+      "sha256": "50702fe2eff5aef4f824b71890a6e825a47e0f1e5ea4d9bf6dd1363d318fc2bc",
+      "captured_at": 1789321224.694122,
+      "clock_id": "unix",
+      "frame_id": "evaluation_camera",
+      "origin": "simulation",
+      "place_id": "suelo_sala",
+      "observer_pose": {
+        "ts": 1789321224.694122,
+        "x": -3.0500000000000003,
+        "y": -0.8,
+        "yaw": 1.7975951748487824,
+        "frame_id": "world"
+      },
+      "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+      "annotation": {
+        "category": "remote_control",
+        "visible_boxes": [],
+        "occluded": false,
+        "physical_count": 0,
+        "split": "held_out"
+      }
+    },
+    {
+      "id": "two_bottles_side",
+      "image": "two_bottles_side.png",
+      "sha256": "19157e13ac82ce3011a63729ba2a08bb4f69304e9f5da4a7688ac9d8b8a301bf",
+      "captured_at": 1789321224.8008325,
+      "clock_id": "unix",
+      "frame_id": "evaluation_camera",
+      "origin": "simulation",
+      "place_id": "mesa_sala",
+      "observer_pose": {
+        "ts": 1789321224.8008325,
+        "x": -2.25,
+        "y": 0.55,
+        "yaw": 1.8281200417659853,
+        "frame_id": "world"
+      },
+      "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+      "annotation": {
+        "category": "small_bottle",
+        "visible_boxes": [
+          [
+            226,
+            173,
+            268,
+            288
+          ],
+          [
+            376,
+            184,
+            421,
+            306
+          ]
+        ],
+        "occluded": false,
+        "physical_count": 2,
+        "split": "held_out"
+      }
+    },
+    {
+      "id": "one_bottle_side",
+      "image": "one_bottle_side.png",
+      "sha256": "9f82368fbeb4f0706d0623d5787081bb770718cdeed2db2a148267f5770631d2",
+      "captured_at": 1789321224.9100745,
+      "clock_id": "unix",
+      "frame_id": "evaluation_camera",
+      "origin": "simulation",
+      "place_id": "mesa_sala",
+      "observer_pose": {
+        "ts": 1789321224.9100745,
+        "x": -2.75,
+        "y": 0.55,
+        "yaw": 1.313472611823808,
+        "frame_id": "world"
+      },
+      "pose_source": "synthetic_fixed_camera_not_robot_odometry",
+      "annotation": {
+        "category": "small_bottle",
+        "visible_boxes": [
+          [
+            300,
+            178,
+            340,
+            297
+          ]
+        ],
+        "occluded": false,
+        "physical_count": 1,
+        "split": "held_out"
+      }
+    }
+  ],
+  "local_directory": ".ignore.f3/corpus_01",
+  "absence_reviews": [
+    {
+      "view_id": "empty_table",
+      "rgb_sha256": "fa5c56c8bb0a010bf71fba2362cc7236c8ac043837d53696590b5353145d7171",
+      "category": "small_bottle",
+      "reviewer": "codex_visual_inspection",
+      "region_fully_visible": true,
+      "target_absent": true,
+      "reviewed_at": 1789321604.3543212,
+      "note": "Inspecci\u00f3n visual expl\u00edcita del PNG: superficie de la mesa completa y despejada. No se usaron anotaciones de simulador para esta conclusi\u00f3n; alcance limitado a esta superficie en esta imagen."
+    }
+  ]
+}

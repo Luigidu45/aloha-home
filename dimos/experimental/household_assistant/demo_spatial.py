@@ -35,7 +35,7 @@ from dimos.experimental.household_assistant.spatial_module import (
 )
 from dimos.navigation.replanning_a_star.module import ReplanningAStarPlanner
 from dimos.robot.alohamini2.blueprints.household_navigation_sim import household_navigation_sim
-from dimos.robot.alohamini2.config import ALOHA_MINI2_NAV_MJCF
+from dimos.robot.alohamini2.config import ALOHA_MINI2_AM_ARM200_MJCF, ALOHA_MINI2_NAV_MJCF
 from dimos.utils.testing.waiting import wait_until
 
 
@@ -64,6 +64,7 @@ def run_acceptance(
     coordinator = ModuleCoordinator()
     events: list[dict[str, Any]] = []
     report: dict[str, Any] = {
+        "robot_model": "alohamini2_original_am_arm200",
         "origin": "simulation",
         "localization": "mujoco_ground_truth",
         "clock_id": "unix",
@@ -77,7 +78,8 @@ def run_acceptance(
     source_paths = [
         SPATIAL_SIM_CONFIG,
         SPATIAL_SIM_CONFIG.with_name("pilot.json"),
-        ALOHA_MINI2_NAV_MJCF,
+        ALOHA_MINI2_AM_ARM200_MJCF,
+        ALOHA_MINI2_AM_ARM200_MJCF.parent / "manifest.json",
         scene_path,
         ALOHA_MINI2_NAV_MJCF.parent / "household_navigation.xml",
         Path(__file__),

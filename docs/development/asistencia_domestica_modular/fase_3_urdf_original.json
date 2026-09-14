@@ -1,0 +1,440 @@
+{
+  "date": "2026-09-13",
+  "source": "user-supplied original AlohaMini2 URDF; read-only inspection",
+  "path": "/home/luigidu/AlohaMini/AlohaMini2/urdf/alohamini2/urdf/alohamini2.urdf",
+  "robot_name": "alohamini2_urdf",
+  "sha256": "d8727a9c1f10d5d3b93cceeb20a42a51ec9bc15326e85a84ee1ee53a3e78aaf8",
+  "nonfixed_joints": [
+    {
+      "name": "root_x_axis_joint",
+      "type": "prismatic",
+      "parent": "root",
+      "child": "root_x_link",
+      "axis": {
+        "xyz": "1 0 0"
+      },
+      "limit": {
+        "effort": "500",
+        "lower": "-20",
+        "upper": "20",
+        "velocity": "1.0"
+      }
+    },
+    {
+      "name": "root_y_axis_joint",
+      "type": "prismatic",
+      "parent": "root_x_link",
+      "child": "root_y_link",
+      "axis": {
+        "xyz": "0 1 0"
+      },
+      "limit": {
+        "effort": "500",
+        "lower": "-20",
+        "upper": "20",
+        "velocity": "1.0"
+      }
+    },
+    {
+      "name": "root_z_rotation_joint",
+      "type": "continuous",
+      "parent": "root_y_link",
+      "child": "base_link",
+      "axis": {
+        "xyz": "0 0 1"
+      },
+      "limit": null
+    },
+    {
+      "name": "vertical_move",
+      "type": "prismatic",
+      "parent": "base_link",
+      "child": "vertical_link",
+      "axis": {
+        "xyz": "0 0 1"
+      },
+      "limit": {
+        "lower": "-0.3",
+        "upper": "0.3",
+        "effort": "0",
+        "velocity": "0"
+      }
+    },
+    {
+      "name": "left_shoulder_pan",
+      "type": "revolute",
+      "parent": "left_Base",
+      "child": "left_Rotation_Pitch",
+      "axis": {
+        "xyz": "0 0 -1"
+      },
+      "limit": {
+        "lower": "-3.14",
+        "upper": "3.14",
+        "effort": "0",
+        "velocity": "0"
+      }
+    },
+    {
+      "name": "left_shoulder_lift",
+      "type": "revolute",
+      "parent": "left_Rotation_Pitch",
+      "child": "left_Upper_Arm",
+      "axis": {
+        "xyz": "0 0 -1"
+      },
+      "limit": {
+        "lower": "-3.14",
+        "upper": "3.14",
+        "effort": "0",
+        "velocity": "0"
+      }
+    },
+    {
+      "name": "left_elbow_flex",
+      "type": "revolute",
+      "parent": "left_Upper_Arm",
+      "child": "left_Lower_Arm",
+      "axis": {
+        "xyz": "0 0 -1"
+      },
+      "limit": {
+        "lower": "-3.14",
+        "upper": "3.14",
+        "effort": "0",
+        "velocity": "0"
+      }
+    },
+    {
+      "name": "left_wrist_flex",
+      "type": "revolute",
+      "parent": "left_Lower_Arm",
+      "child": "left_Wrist_Pitch_Roll",
+      "axis": {
+        "xyz": "0 0 1"
+      },
+      "limit": {
+        "lower": "-3.14",
+        "upper": "3.14",
+        "effort": "0",
+        "velocity": "0"
+      }
+    },
+    {
+      "name": "left_wrist_yaw_joint",
+      "type": "revolute",
+      "parent": "left_Wrist_Pitch_Roll",
+      "child": "left_wrist_yaw",
+      "axis": {
+        "xyz": "0 0 -1"
+      },
+      "limit": {
+        "lower": "-3.14",
+        "upper": "3.14",
+        "effort": "0",
+        "velocity": "0"
+      }
+    },
+    {
+      "name": "left_wrist_roll",
+      "type": "revolute",
+      "parent": "left_wrist_yaw",
+      "child": "left_Fixed_Jaw",
+      "axis": {
+        "xyz": "0 0 1"
+      },
+      "limit": {
+        "lower": "-3.14",
+        "upper": "3.14",
+        "effort": "0",
+        "velocity": "0"
+      }
+    },
+    {
+      "name": "left_gripper",
+      "type": "revolute",
+      "parent": "left_Fixed_Jaw",
+      "child": "left_Moving_Jaw",
+      "axis": {
+        "xyz": "0 0 1"
+      },
+      "limit": {
+        "lower": "-3.14",
+        "upper": "3.14",
+        "effort": "0",
+        "velocity": "0"
+      }
+    },
+    {
+      "name": "right_shoulder_pan",
+      "type": "revolute",
+      "parent": "right_Base",
+      "child": "right_Rotation_Pitch",
+      "axis": {
+        "xyz": "0 0 -1"
+      },
+      "limit": {
+        "lower": "-3.14",
+        "upper": "3.14",
+        "effort": "0",
+        "velocity": "0"
+      }
+    },
+    {
+      "name": "right_shoulder_lift",
+      "type": "revolute",
+      "parent": "right_Rotation_Pitch",
+      "child": "right_Upper_Arm",
+      "axis": {
+        "xyz": "0 0 -1"
+      },
+      "limit": {
+        "lower": "-3.14",
+        "upper": "3.14",
+        "effort": "0",
+        "velocity": "0"
+      }
+    },
+    {
+      "name": "right_elbow_flex",
+      "type": "revolute",
+      "parent": "right_Upper_Arm",
+      "child": "right_Lower_Arm",
+      "axis": {
+        "xyz": "0 0 -1"
+      },
+      "limit": {
+        "lower": "-3.14",
+        "upper": "3.14",
+        "effort": "0",
+        "velocity": "0"
+      }
+    },
+    {
+      "name": "right_wrist_flex",
+      "type": "revolute",
+      "parent": "right_Lower_Arm",
+      "child": "right_Wrist_Pitch_Roll",
+      "axis": {
+        "xyz": "0 0 1"
+      },
+      "limit": {
+        "lower": "-3.14",
+        "upper": "3.14",
+        "effort": "0",
+        "velocity": "0"
+      }
+    },
+    {
+      "name": "right_wrist_yaw_joint",
+      "type": "revolute",
+      "parent": "right_Wrist_Pitch_Roll",
+      "child": "right_wrist_yaw",
+      "axis": {
+        "xyz": "0 0 -1"
+      },
+      "limit": {
+        "lower": "-3.14",
+        "upper": "3.14",
+        "effort": "0",
+        "velocity": "0"
+      }
+    },
+    {
+      "name": "right_wrist_roll",
+      "type": "revolute",
+      "parent": "right_wrist_yaw",
+      "child": "right_Fixed_Jaw",
+      "axis": {
+        "xyz": "0 0 1"
+      },
+      "limit": {
+        "lower": "-3.14",
+        "upper": "3.14",
+        "effort": "0",
+        "velocity": "0"
+      }
+    },
+    {
+      "name": "right_gripper",
+      "type": "revolute",
+      "parent": "right_Fixed_Jaw",
+      "child": "right_Moving_Jaw",
+      "axis": {
+        "xyz": "0 0 1"
+      },
+      "limit": {
+        "lower": "-3.14",
+        "upper": "3.14",
+        "effort": "0",
+        "velocity": "0"
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "reference": "alohamini2_urdf/left_Base.STL",
+      "resolved_path": "/home/luigidu/AlohaMini/AlohaMini2/urdf/alohamini2/alohamini2_meshes/left_Base.STL",
+      "sha256": "1e8625141f5a99fa16169517b74e7981f2dc3f90007b8034f176c69370424ce3",
+      "resolution": "basename within supplied mesh directory; package URI not installed"
+    },
+    {
+      "reference": "alohamini2_urdf/right_Base.STL",
+      "resolved_path": "/home/luigidu/AlohaMini/AlohaMini2/urdf/alohamini2/alohamini2_meshes/right_Base.STL",
+      "sha256": "1e8625141f5a99fa16169517b74e7981f2dc3f90007b8034f176c69370424ce3",
+      "resolution": "basename within supplied mesh directory; package URI not installed"
+    },
+    {
+      "reference": "package://alohamini2_urdf/alohamini2_meshes/Link2_dp.STL",
+      "resolved_path": "/home/luigidu/AlohaMini/AlohaMini2/urdf/alohamini2/alohamini2_meshes/Link2_dp.STL",
+      "sha256": "1f89a81a2056a5e5b08e281d4aa0467b8652cbc646a1c7be8febb9d60fbcea03",
+      "resolution": "basename within supplied mesh directory; package URI not installed"
+    },
+    {
+      "reference": "package://alohamini2_urdf/alohamini2_meshes/Link3_dp.STL",
+      "resolved_path": "/home/luigidu/AlohaMini/AlohaMini2/urdf/alohamini2/alohamini2_meshes/Link3_dp.STL",
+      "sha256": "501190ed631c9f359ffc511ff1100ba1e22c91cbf386c673de14b40a8bf6b947",
+      "resolution": "basename within supplied mesh directory; package URI not installed"
+    },
+    {
+      "reference": "package://alohamini2_urdf/alohamini2_meshes/Link4_dp.STL",
+      "resolved_path": "/home/luigidu/AlohaMini/AlohaMini2/urdf/alohamini2/alohamini2_meshes/Link4_dp.STL",
+      "sha256": "2da7cf01ebd33da112eec412f923ee4280ae0a93c62efbf9d83e1213abfde799",
+      "resolution": "basename within supplied mesh directory; package URI not installed"
+    },
+    {
+      "reference": "package://alohamini2_urdf/alohamini2_meshes/back_camera.STL",
+      "resolved_path": "/home/luigidu/AlohaMini/AlohaMini2/urdf/alohamini2/alohamini2_meshes/back_camera.STL",
+      "sha256": "2c2baefbd92ef9ba8daf9f46b5a2757b1b101cf6cf53b2e41210ed7f8d35a7d1",
+      "resolution": "basename within supplied mesh directory; package URI not installed"
+    },
+    {
+      "reference": "package://alohamini2_urdf/alohamini2_meshes/base_link.STL",
+      "resolved_path": "/home/luigidu/AlohaMini/AlohaMini2/urdf/alohamini2/alohamini2_meshes/base_link.STL",
+      "sha256": "3fd5f037e721b8cdfaf489e6280dcbb9b9cf5c96f7d6304f7bd3aa8bdace7f62",
+      "resolution": "basename within supplied mesh directory; package URI not installed"
+    },
+    {
+      "reference": "package://alohamini2_urdf/alohamini2_meshes/chest_camera.STL",
+      "resolved_path": "/home/luigidu/AlohaMini/AlohaMini2/urdf/alohamini2/alohamini2_meshes/chest_camera.STL",
+      "sha256": "1d669640257cd80d35a8f4bb8b8a8f3faf7361d72740445890aaf9d2932ed3e3",
+      "resolution": "basename within supplied mesh directory; package URI not installed"
+    },
+    {
+      "reference": "package://alohamini2_urdf/alohamini2_meshes/front_camera.STL",
+      "resolved_path": "/home/luigidu/AlohaMini/AlohaMini2/urdf/alohamini2/alohamini2_meshes/front_camera.STL",
+      "sha256": "f84933fa72c1a17f0160eb39e003fa5f7e7f88d978524a2100bfd91eec725cee",
+      "resolution": "basename within supplied mesh directory; package URI not installed"
+    },
+    {
+      "reference": "package://alohamini2_urdf/alohamini2_meshes/left_Fixed_Jaw.STL",
+      "resolved_path": "/home/luigidu/AlohaMini/AlohaMini2/urdf/alohamini2/alohamini2_meshes/left_Fixed_Jaw.STL",
+      "sha256": "f9d3f66ae9b9cc8a7cc1aa176a4e66f2e0fc999ff3ba5fea4d3d8b4a0eceb312",
+      "resolution": "basename within supplied mesh directory; package URI not installed"
+    },
+    {
+      "reference": "package://alohamini2_urdf/alohamini2_meshes/left_Lower_Arm.STL",
+      "resolved_path": "/home/luigidu/AlohaMini/AlohaMini2/urdf/alohamini2/alohamini2_meshes/left_Lower_Arm.STL",
+      "sha256": "73ba590f0878faece1145ab3c6b6485469d155e79d46358f1217ccf26cfe0254",
+      "resolution": "basename within supplied mesh directory; package URI not installed"
+    },
+    {
+      "reference": "package://alohamini2_urdf/alohamini2_meshes/left_Moving_Jaw.STL",
+      "resolved_path": "/home/luigidu/AlohaMini/AlohaMini2/urdf/alohamini2/alohamini2_meshes/left_Moving_Jaw.STL",
+      "sha256": "09ce195eaf5771df92eb40c6a1a714e91e0afccb6be3526488095e881ef76c3b",
+      "resolution": "basename within supplied mesh directory; package URI not installed"
+    },
+    {
+      "reference": "package://alohamini2_urdf/alohamini2_meshes/left_Rotation_Pitch.STL",
+      "resolved_path": "/home/luigidu/AlohaMini/AlohaMini2/urdf/alohamini2/alohamini2_meshes/left_Rotation_Pitch.STL",
+      "sha256": "daec5914b072dbf355cfc45a48a305927dd8cbcef4d0d014f40ca2393f3a7a0d",
+      "resolution": "basename within supplied mesh directory; package URI not installed"
+    },
+    {
+      "reference": "package://alohamini2_urdf/alohamini2_meshes/left_Upper_Arm.STL",
+      "resolved_path": "/home/luigidu/AlohaMini/AlohaMini2/urdf/alohamini2/alohamini2_meshes/left_Upper_Arm.STL",
+      "sha256": "054d2b3e330c1ece450a99ac022a1364dbe4439bb5c42420d6adce5c0b6b353a",
+      "resolution": "basename within supplied mesh directory; package URI not installed"
+    },
+    {
+      "reference": "package://alohamini2_urdf/alohamini2_meshes/left_Wrist_Pitch_Roll.STL",
+      "resolved_path": "/home/luigidu/AlohaMini/AlohaMini2/urdf/alohamini2/alohamini2_meshes/left_Wrist_Pitch_Roll.STL",
+      "sha256": "23502ca7a7625455e2a2d82926af1799f7bb7dac3e2b3cec48a3b83145e95f00",
+      "resolution": "basename within supplied mesh directory; package URI not installed"
+    },
+    {
+      "reference": "package://alohamini2_urdf/alohamini2_meshes/left_camera.STL",
+      "resolved_path": "/home/luigidu/AlohaMini/AlohaMini2/urdf/alohamini2/alohamini2_meshes/left_camera.STL",
+      "sha256": "bba9e1f73a3e78e767187da663f79e61770397d6f7676f77e83647bf8c1ffc97",
+      "resolution": "basename within supplied mesh directory; package URI not installed"
+    },
+    {
+      "reference": "package://alohamini2_urdf/alohamini2_meshes/left_wrist_yaw.STL",
+      "resolved_path": "/home/luigidu/AlohaMini/AlohaMini2/urdf/alohamini2/alohamini2_meshes/left_wrist_yaw.STL",
+      "sha256": "62e0acaaa8f0d2bd470da7ea406f079a410d55e39121c61c501ae253c69c333e",
+      "resolution": "basename within supplied mesh directory; package URI not installed"
+    },
+    {
+      "reference": "package://alohamini2_urdf/alohamini2_meshes/right_Fixed_Jaw.STL",
+      "resolved_path": "/home/luigidu/AlohaMini/AlohaMini2/urdf/alohamini2/alohamini2_meshes/right_Fixed_Jaw.STL",
+      "sha256": "f9d3f66ae9b9cc8a7cc1aa176a4e66f2e0fc999ff3ba5fea4d3d8b4a0eceb312",
+      "resolution": "basename within supplied mesh directory; package URI not installed"
+    },
+    {
+      "reference": "package://alohamini2_urdf/alohamini2_meshes/right_Lower_Arm.STL",
+      "resolved_path": "/home/luigidu/AlohaMini/AlohaMini2/urdf/alohamini2/alohamini2_meshes/right_Lower_Arm.STL",
+      "sha256": "73ba590f0878faece1145ab3c6b6485469d155e79d46358f1217ccf26cfe0254",
+      "resolution": "basename within supplied mesh directory; package URI not installed"
+    },
+    {
+      "reference": "package://alohamini2_urdf/alohamini2_meshes/right_Moving_Jaw.STL",
+      "resolved_path": "/home/luigidu/AlohaMini/AlohaMini2/urdf/alohamini2/alohamini2_meshes/right_Moving_Jaw.STL",
+      "sha256": "09ce195eaf5771df92eb40c6a1a714e91e0afccb6be3526488095e881ef76c3b",
+      "resolution": "basename within supplied mesh directory; package URI not installed"
+    },
+    {
+      "reference": "package://alohamini2_urdf/alohamini2_meshes/right_Rotation_Pitch.STL",
+      "resolved_path": "/home/luigidu/AlohaMini/AlohaMini2/urdf/alohamini2/alohamini2_meshes/right_Rotation_Pitch.STL",
+      "sha256": "daec5914b072dbf355cfc45a48a305927dd8cbcef4d0d014f40ca2393f3a7a0d",
+      "resolution": "basename within supplied mesh directory; package URI not installed"
+    },
+    {
+      "reference": "package://alohamini2_urdf/alohamini2_meshes/right_Upper_Arm.STL",
+      "resolved_path": "/home/luigidu/AlohaMini/AlohaMini2/urdf/alohamini2/alohamini2_meshes/right_Upper_Arm.STL",
+      "sha256": "054d2b3e330c1ece450a99ac022a1364dbe4439bb5c42420d6adce5c0b6b353a",
+      "resolution": "basename within supplied mesh directory; package URI not installed"
+    },
+    {
+      "reference": "package://alohamini2_urdf/alohamini2_meshes/right_Wrist_Pitch_Roll.STL",
+      "resolved_path": "/home/luigidu/AlohaMini/AlohaMini2/urdf/alohamini2/alohamini2_meshes/right_Wrist_Pitch_Roll.STL",
+      "sha256": "23502ca7a7625455e2a2d82926af1799f7bb7dac3e2b3cec48a3b83145e95f00",
+      "resolution": "basename within supplied mesh directory; package URI not installed"
+    },
+    {
+      "reference": "package://alohamini2_urdf/alohamini2_meshes/right_camera.STL",
+      "resolved_path": "/home/luigidu/AlohaMini/AlohaMini2/urdf/alohamini2/alohamini2_meshes/right_camera.STL",
+      "sha256": "bba9e1f73a3e78e767187da663f79e61770397d6f7676f77e83647bf8c1ffc97",
+      "resolution": "basename within supplied mesh directory; package URI not installed"
+    },
+    {
+      "reference": "package://alohamini2_urdf/alohamini2_meshes/right_wrist_yaw.STL",
+      "resolved_path": "/home/luigidu/AlohaMini/AlohaMini2/urdf/alohamini2/alohamini2_meshes/right_wrist_yaw.STL",
+      "sha256": "62e0acaaa8f0d2bd470da7ea406f079a410d55e39121c61c501ae253c69c333e",
+      "resolution": "basename within supplied mesh directory; package URI not installed"
+    },
+    {
+      "reference": "package://alohamini2_urdf/alohamini2_meshes/vertical_link.STL",
+      "resolved_path": "/home/luigidu/AlohaMini/AlohaMini2/urdf/alohamini2/alohamini2_meshes/vertical_link.STL",
+      "sha256": "ca0df2d2b789b805c808a7550d2974bf005571db91b2ac3bb929df770011da66",
+      "resolution": "basename within supplied mesh directory; package URI not installed"
+    }
+  ],
+  "physical_validated": false,
+  "issues": [
+    "Two base mesh references use alohamini2_urdf/<name>.STL rather than package://.../alohamini2_meshes/<name>.STL",
+    "Non-base actuator effort and velocity limits are zero; do not use as measured hardware limits",
+    "Six rotational axes plus gripper per arm differs from preserved SO101 simulation",
+    "SDK ordering, zeros, signs, limits, tool/camera/L2 transforms and loaded_home still require validation"
+  ],
+  "unchanged_f2_model": true
+}

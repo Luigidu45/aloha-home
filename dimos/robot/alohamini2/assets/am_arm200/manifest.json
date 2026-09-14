@@ -1,0 +1,219 @@
+{
+  "source_sha256": "d8727a9c1f10d5d3b93cceeb20a42a51ec9bc15326e85a84ee1ee53a3e78aaf8",
+  "robot": "alohamini2_urdf",
+  "mesh_conversion": [
+    {
+      "file": "base_link.STL",
+      "source_sha256": "3fd5f037e721b8cdfaf489e6280dcbb9b9cf5c96f7d6304f7bd3aa8bdace7f62",
+      "output_sha256": "7792832a72c25209a3c056f80b7bce9e4da7a648f0795a6a7b7e85f27caafe46",
+      "input_triangles": 80699,
+      "output_triangles": 4999
+    },
+    {
+      "file": "vertical_link.STL",
+      "source_sha256": "ca0df2d2b789b805c808a7550d2974bf005571db91b2ac3bb929df770011da66",
+      "output_sha256": "1c8c5b30d7c6d627e2d7b2879e3e24f6c54f081905ef8f2afb10f1c5c9bc1618",
+      "input_triangles": 57479,
+      "output_triangles": 5000
+    },
+    {
+      "file": "chest_camera.STL",
+      "source_sha256": "1d669640257cd80d35a8f4bb8b8a8f3faf7361d72740445890aaf9d2932ed3e3",
+      "output_sha256": "1214ac1843aa938ac763742f6cc50a52da33803d40edeea1f6d66aad6f8709ba",
+      "input_triangles": 3342,
+      "output_triangles": 3342
+    },
+    {
+      "file": "Link2_dp.STL",
+      "source_sha256": "1f89a81a2056a5e5b08e281d4aa0467b8652cbc646a1c7be8febb9d60fbcea03",
+      "output_sha256": "e6512af4f8e1bf355aa76e58de82fd75fead715edb469702fbbe5fa6486f7f8d",
+      "input_triangles": 240136,
+      "output_triangles": 5000
+    },
+    {
+      "file": "Link3_dp.STL",
+      "source_sha256": "501190ed631c9f359ffc511ff1100ba1e22c91cbf386c673de14b40a8bf6b947",
+      "output_sha256": "66630997536e8c5656b873dcaad643c2612e1c9261a82aaf74da6eb7ccf152b2",
+      "input_triangles": 240136,
+      "output_triangles": 5000
+    },
+    {
+      "file": "Link4_dp.STL",
+      "source_sha256": "2da7cf01ebd33da112eec412f923ee4280ae0a93c62efbf9d83e1213abfde799",
+      "output_sha256": "03239b3b57d5836a3aa882b639152cdee496559e71073e8f471aed5414935ab2",
+      "input_triangles": 240136,
+      "output_triangles": 5000
+    },
+    {
+      "file": "back_camera.STL",
+      "source_sha256": "2c2baefbd92ef9ba8daf9f46b5a2757b1b101cf6cf53b2e41210ed7f8d35a7d1",
+      "output_sha256": "718231b569559fb5c909955785f92f3ebc4ba0e914384cf9ae48792c2b2b0eee",
+      "input_triangles": 3342,
+      "output_triangles": 3342
+    },
+    {
+      "file": "front_camera.STL",
+      "source_sha256": "f84933fa72c1a17f0160eb39e003fa5f7e7f88d978524a2100bfd91eec725cee",
+      "output_sha256": "7b2db59dd1e496ac01c0ac8916cda062cf3e986729fe97fa08168ea9deff9478",
+      "input_triangles": 3342,
+      "output_triangles": 3342
+    },
+    {
+      "file": "left_Base.STL",
+      "source_sha256": "1e8625141f5a99fa16169517b74e7981f2dc3f90007b8034f176c69370424ce3",
+      "output_sha256": "b7aefae0dab2cc36cb11cb7a42a135fe7fb649a16b3615c9d4e0859b5c60030c",
+      "input_triangles": 128157,
+      "output_triangles": 4999
+    },
+    {
+      "file": "left_Rotation_Pitch.STL",
+      "source_sha256": "daec5914b072dbf355cfc45a48a305927dd8cbcef4d0d014f40ca2393f3a7a0d",
+      "output_sha256": "8c5c2ed0a3e5d87610d454068f66229b4ee020311adfebf5a0176ad5b017d137",
+      "input_triangles": 158817,
+      "output_triangles": 4999
+    },
+    {
+      "file": "left_Upper_Arm.STL",
+      "source_sha256": "054d2b3e330c1ece450a99ac022a1364dbe4439bb5c42420d6adce5c0b6b353a",
+      "output_sha256": "52e04dd298617c19d97d2e47dce943587a60c134af2132a327ab89cb9f123ea2",
+      "input_triangles": 161251,
+      "output_triangles": 5000
+    },
+    {
+      "file": "left_Lower_Arm.STL",
+      "source_sha256": "73ba590f0878faece1145ab3c6b6485469d155e79d46358f1217ccf26cfe0254",
+      "output_sha256": "56bde2533b40458004cb6a775bd37503a60e053c7e395969cb03418fa70c707a",
+      "input_triangles": 119954,
+      "output_triangles": 14356
+    },
+    {
+      "file": "left_Wrist_Pitch_Roll.STL",
+      "source_sha256": "23502ca7a7625455e2a2d82926af1799f7bb7dac3e2b3cec48a3b83145e95f00",
+      "output_sha256": "312ce6fd0b82523fc72c236090111dd62c3ccf1366b7d905d77d5eacd4b8df6e",
+      "input_triangles": 3176,
+      "output_triangles": 3176
+    },
+    {
+      "file": "left_wrist_yaw.STL",
+      "source_sha256": "62e0acaaa8f0d2bd470da7ea406f079a410d55e39121c61c501ae253c69c333e",
+      "output_sha256": "30d066c92ddcebd10a38e2fe1b504cb318ca0bb6bb7a727f7db311c2e7551d41",
+      "input_triangles": 252292,
+      "output_triangles": 33737
+    },
+    {
+      "file": "left_Fixed_Jaw.STL",
+      "source_sha256": "f9d3f66ae9b9cc8a7cc1aa176a4e66f2e0fc999ff3ba5fea4d3d8b4a0eceb312",
+      "output_sha256": "885c812fcf3748ae0c1c0c3e1552872dd50dbc5d6b4966654de9baa920416fd0",
+      "input_triangles": 4020,
+      "output_triangles": 4020
+    },
+    {
+      "file": "left_Moving_Jaw.STL",
+      "source_sha256": "09ce195eaf5771df92eb40c6a1a714e91e0afccb6be3526488095e881ef76c3b",
+      "output_sha256": "af220faae32325975dd0eefd07f2a9751d7265df63b5188994cdaf54084b5905",
+      "input_triangles": 1522,
+      "output_triangles": 1522
+    },
+    {
+      "file": "left_camera.STL",
+      "source_sha256": "bba9e1f73a3e78e767187da663f79e61770397d6f7676f77e83647bf8c1ffc97",
+      "output_sha256": "b922ed84b282ab24845d1db6de0dbdd99cc19f752748f65f0824373bdf18a43b",
+      "input_triangles": 3141,
+      "output_triangles": 3141
+    },
+    {
+      "file": "right_Base.STL",
+      "source_sha256": "1e8625141f5a99fa16169517b74e7981f2dc3f90007b8034f176c69370424ce3",
+      "output_sha256": "b7aefae0dab2cc36cb11cb7a42a135fe7fb649a16b3615c9d4e0859b5c60030c",
+      "input_triangles": 128157,
+      "output_triangles": 4999
+    },
+    {
+      "file": "right_Rotation_Pitch.STL",
+      "source_sha256": "daec5914b072dbf355cfc45a48a305927dd8cbcef4d0d014f40ca2393f3a7a0d",
+      "output_sha256": "8c5c2ed0a3e5d87610d454068f66229b4ee020311adfebf5a0176ad5b017d137",
+      "input_triangles": 158817,
+      "output_triangles": 4999
+    },
+    {
+      "file": "right_Upper_Arm.STL",
+      "source_sha256": "054d2b3e330c1ece450a99ac022a1364dbe4439bb5c42420d6adce5c0b6b353a",
+      "output_sha256": "52e04dd298617c19d97d2e47dce943587a60c134af2132a327ab89cb9f123ea2",
+      "input_triangles": 161251,
+      "output_triangles": 5000
+    },
+    {
+      "file": "right_Lower_Arm.STL",
+      "source_sha256": "73ba590f0878faece1145ab3c6b6485469d155e79d46358f1217ccf26cfe0254",
+      "output_sha256": "56bde2533b40458004cb6a775bd37503a60e053c7e395969cb03418fa70c707a",
+      "input_triangles": 119954,
+      "output_triangles": 14356
+    },
+    {
+      "file": "right_Wrist_Pitch_Roll.STL",
+      "source_sha256": "23502ca7a7625455e2a2d82926af1799f7bb7dac3e2b3cec48a3b83145e95f00",
+      "output_sha256": "312ce6fd0b82523fc72c236090111dd62c3ccf1366b7d905d77d5eacd4b8df6e",
+      "input_triangles": 3176,
+      "output_triangles": 3176
+    },
+    {
+      "file": "right_wrist_yaw.STL",
+      "source_sha256": "62e0acaaa8f0d2bd470da7ea406f079a410d55e39121c61c501ae253c69c333e",
+      "output_sha256": "30d066c92ddcebd10a38e2fe1b504cb318ca0bb6bb7a727f7db311c2e7551d41",
+      "input_triangles": 252292,
+      "output_triangles": 33737
+    },
+    {
+      "file": "right_Fixed_Jaw.STL",
+      "source_sha256": "f9d3f66ae9b9cc8a7cc1aa176a4e66f2e0fc999ff3ba5fea4d3d8b4a0eceb312",
+      "output_sha256": "885c812fcf3748ae0c1c0c3e1552872dd50dbc5d6b4966654de9baa920416fd0",
+      "input_triangles": 4020,
+      "output_triangles": 4020
+    },
+    {
+      "file": "right_Moving_Jaw.STL",
+      "source_sha256": "09ce195eaf5771df92eb40c6a1a714e91e0afccb6be3526488095e881ef76c3b",
+      "output_sha256": "af220faae32325975dd0eefd07f2a9751d7265df63b5188994cdaf54084b5905",
+      "input_triangles": 1522,
+      "output_triangles": 1522
+    },
+    {
+      "file": "right_camera.STL",
+      "source_sha256": "bba9e1f73a3e78e767187da663f79e61770397d6f7676f77e83647bf8c1ffc97",
+      "output_sha256": "b922ed84b282ab24845d1db6de0dbdd99cc19f752748f65f0824373bdf18a43b",
+      "input_triangles": 3141,
+      "output_triangles": 3141
+    }
+  ],
+  "joint_order": [
+    "vertical_move",
+    "left_shoulder_pan",
+    "left_shoulder_lift",
+    "left_elbow_flex",
+    "left_wrist_flex",
+    "left_wrist_yaw_joint",
+    "left_wrist_roll",
+    "left_gripper",
+    "right_shoulder_pan",
+    "right_shoulder_lift",
+    "right_elbow_flex",
+    "right_wrist_flex",
+    "right_wrist_yaw_joint",
+    "right_wrist_roll",
+    "right_gripper"
+  ],
+  "physical_validated": false,
+  "assumptions": [
+    "CAD +X lateral/-Y forward rotated +90 deg about Z into DimOS frame",
+    "free root constrained by existing holonomic driver; wheels fixed as in URDF",
+    "joint zero is simulation reference, not hardware home or loaded_home",
+    "servo gains/forces/damping are simulation parameters, not URDF actuator limits",
+    "convex arm collisions; base envelope/skid approximate",
+    "camera optical orientations follow existing CAD camera convention; mounting/intrinsics not calibrated",
+    "nav ray cameras approximate coverage, not a Unitree L2 sensor model"
+  ],
+  "collision_exclusions": [
+    "left_wrist_yaw / left_Moving_Jaw: convex housing overlaps its own jaw at CAD zero",
+    "right_wrist_yaw / right_Moving_Jaw: convex housing overlaps its own jaw at CAD zero"
+  ]
+}

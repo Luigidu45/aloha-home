@@ -200,36 +200,29 @@ class SpatialVectorDB:
         return self._process_query_results(filtered_results)
 
     def _process_query_results(self, results) -> list[dict]:  # type: ignore[no-untyped-def, type-arg]
-        """Process query results to include decoded images."""
+        """Flatten one Chroma query, preserving every neighbor and its metadata.
+
+        ``query`` returns a batch containing a neighbor list; ``get`` (used by
+        location lookup) returns flat lists. Public queries here use one vector.
+        """
         if not results or not results["ids"]:
             return []
 
+        nested = isinstance(results["ids"][0], list)
+        ids = results["ids"][0] if nested else results["ids"]
+        metadata = results.get("metadatas")
+        distances = results.get("distances")
+        if nested:
+            metadata = metadata[0] if metadata else None
+            distances = distances[0] if distances else None
         processed_results = []
-
-        for i, vector_id in enumerate(results["ids"]):
-            if isinstance(vector_id, list) and not vector_id:
-                continue
-
-            lookup_id = vector_id[0] if isinstance(vector_id, list) else vector_id
-
-            # Create the result dictionary with metadata regardless of image availability
+        for i, vector_id in enumerate(ids):
             result = {
-                "metadata": results["metadatas"][i] if "metadatas" in results else {},
-                "id": lookup_id,
+                "metadata": (metadata[i] or {}) if metadata is not None else {},
+                "id": vector_id,
             }
-
-            # Add distance if available
-            if "distances" in results:
-                result["distance"] = (
-                    results["distances"][i][0]
-                    if isinstance(results["distances"][i], list)
-                    else results["distances"][i]
-                )
-
-            # Get the image from visual memory
-            # image = self.visual_memory.get(lookup_id)
-            # result["image"] = image
-
+            if distances is not None:
+                result["distance"] = distances[i]
             processed_results.append(result)
 
         return processed_results

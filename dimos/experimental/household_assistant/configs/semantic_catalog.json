@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "places": [
+    {
+      "place_id": "mesa_sala",
+      "aliases": [
+        "mesa de la sala",
+        "mesa de recogida"
+      ],
+      "role": "pickup",
+      "region_description": "Superficie de b\u00fasqueda de la mesa de sala; alcance f\u00edsico pendiente."
+    },
+    {
+      "place_id": "mesa_dormitorio",
+      "aliases": [
+        "mesa auxiliar",
+        "mesa del dormitorio",
+        "regi\u00f3n de entrega",
+        "junto al usuario"
+      ],
+      "role": "delivery",
+      "region_description": "Regi\u00f3n accesible sobre la mesa auxiliar; dimensiones y accesibilidad f\u00edsicas pendientes."
+    },
+    {
+      "place_id": "suelo_sala",
+      "aliases": [
+        "suelo de la sala",
+        "zona del control ca\u00eddo"
+      ],
+      "role": "floor_pickup",
+      "region_description": "Zona de b\u00fasqueda del control; no presupone que permanezca aqu\u00ed ni que sea alcanzable."
+    }
+  ],
+  "objects": [
+    {
+      "category": "small_bottle",
+      "aliases": [
+        "botella",
+        "botella peque\u00f1a"
+      ],
+      "retrieval_text": "a bottle on a table",
+      "usual_places": [
+        "mesa_sala",
+        "mesa_dormitorio"
+      ]
+    },
+    {
+      "category": "remote_control",
+      "aliases": [
+        "control",
+        "control remoto",
+        "mando"
+      ],
+      "retrieval_text": "a remote control on the floor",
+      "usual_places": [
+        "suelo_sala"
+      ]
+    }
+  ]
+}

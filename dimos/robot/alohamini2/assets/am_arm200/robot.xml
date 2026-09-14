@@ -1,0 +1,211 @@
+<mujoco model="alohamini2_am_arm200">
+  <compiler angle="radian" autolimits="true" />
+  <option timestep="0.005" integrator="implicitfast" gravity="0 0 -9.81" />
+  <visual>
+    <headlight ambient=".5 .5 .5" diffuse=".7 .7 .7" />
+    <map znear=".0002" />
+  </visual>
+  <asset>
+    <mesh name="base_link" file="meshes/base_link.stl" />
+    <mesh name="vertical_link" file="meshes/vertical_link.stl" />
+    <mesh name="chest_camera" file="meshes/chest_camera.stl" />
+    <mesh name="Link2_dp" file="meshes/link2_dp.stl" />
+    <mesh name="Link3_dp" file="meshes/link3_dp.stl" />
+    <mesh name="Link4_dp" file="meshes/link4_dp.stl" />
+    <mesh name="back_camera" file="meshes/back_camera.stl" />
+    <mesh name="front_camera" file="meshes/front_camera.stl" />
+    <mesh name="left_Base" file="meshes/left_base.stl" />
+    <mesh name="left_Rotation_Pitch" file="meshes/left_rotation_pitch.stl" />
+    <mesh name="left_Upper_Arm" file="meshes/left_upper_arm.stl" />
+    <mesh name="left_Lower_Arm" file="meshes/left_lower_arm.stl" />
+    <mesh name="left_Wrist_Pitch_Roll" file="meshes/left_wrist_pitch_roll.stl" />
+    <mesh name="left_wrist_yaw" file="meshes/left_wrist_yaw.stl" />
+    <mesh name="left_Fixed_Jaw" file="meshes/left_fixed_jaw.stl" />
+    <mesh name="left_Moving_Jaw" file="meshes/left_moving_jaw.stl" />
+    <mesh name="left_camera" file="meshes/left_camera.stl" />
+    <mesh name="right_Base" file="meshes/right_base.stl" />
+    <mesh name="right_Rotation_Pitch" file="meshes/right_rotation_pitch.stl" />
+    <mesh name="right_Upper_Arm" file="meshes/right_upper_arm.stl" />
+    <mesh name="right_Lower_Arm" file="meshes/right_lower_arm.stl" />
+    <mesh name="right_Wrist_Pitch_Roll" file="meshes/right_wrist_pitch_roll.stl" />
+    <mesh name="right_wrist_yaw" file="meshes/right_wrist_yaw.stl" />
+    <mesh name="right_Fixed_Jaw" file="meshes/right_fixed_jaw.stl" />
+    <mesh name="right_Moving_Jaw" file="meshes/right_moving_jaw.stl" />
+    <mesh name="right_camera" file="meshes/right_camera.stl" />
+  </asset>
+  <worldbody>
+    <body name="base_link" pos="0 0 0.005">
+      <freejoint name="root" />
+      <body name="cad_base" quat="0.707106781186548 0 0 0.707106781186548">
+        <inertial pos="-0.000612633316587952 0.0211982181323527 0.18480862701929" mass="8.86139507603108" fullinertia="0.0397444790644 0.0378939463605 0.04559793803 2.09099577498e-05 -2.08628911382e-06 -0.000833813445075" />
+        <geom name="visual_base_link_0" type="mesh" mesh="base_link" rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" contype="0" conaffinity="0" group="2" mass="0" pos="0 0 0" quat="1 0 0 0" />
+        <body name="vertical_link" pos="0 0 0.096196" quat="1 0 0 0">
+          <joint name="vertical_move" type="slide" axis="0 0 1" range="-0.3 0.3" damping="10" armature=".01" />
+          <inertial pos="-0.000482088964298404 -0.0410546516336574 0.425062657231215" mass="1.2335419276614" fullinertia="0.00155091989852 0.00400826783391 0.00325969641024 1.54850590251e-05 -8.46685606879e-07 2.63497049489e-05" />
+          <geom name="visual_vertical_link_0" type="mesh" mesh="vertical_link" rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" contype="0" conaffinity="0" group="2" mass="0" pos="0 0 0" quat="1 0 0 0" />
+          <body name="chest_camera" pos="-0.000225761875701821 -0.0690163597583236 0.447985436693376" quat="0.5 0.5 0.5 -0.5">
+            <inertial pos="0.318266847861093 -0.000370150448734445 -0.0826066487973801" mass="10.0950259540064" fullinertia="0.137148263631 0.491701304001 0.489542292989 0.000755549795832 -0.00219205951257 0.00019767273957" />
+            <geom name="visual_chest_camera_0" type="mesh" mesh="chest_camera" rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" contype="0" conaffinity="0" group="2" mass="0" pos="0 0 0" quat="1 0 0 0" />
+            <camera name="chest_camera" pos="0 0 .025" fovy="69" xyaxes="0 -1 0 -1 0 0" />
+          </body>
+          <body name="left_Base" pos="0.18726 -0.0599 0.4775" quat="1 0 0 0">
+            <inertial pos="-2.45960666746703E-07 0.0311418169687909 0.0175746661003382" mass="0.193184127927598" fullinertia="0.000137030709468 0.000169089551209 0.000145097720857 2.10136126945e-08 4.24087422551e-09 2.26514711037e-05" />
+            <geom name="visual_left_Base_0" type="mesh" mesh="left_Base" rgba=".7 .72 .75 1" contype="0" conaffinity="0" group="2" mass="0" pos="0 0 0" quat="1 0 0 0" />
+            <geom name="collision_left_Base_0" type="mesh" mesh="left_Base" rgba="0 0 0 0" group="3" mass="0" pos="0 0 0" quat="1 0 0 0" />
+            <body name="left_Rotation_Pitch" pos="0 0 0.039671" quat="1 0 0 0">
+              <joint name="left_shoulder_pan" type="hinge" axis="0 0 -1" range="-3.14 3.14" damping="1" armature=".01" />
+              <inertial pos="-0.000892708218042932 -0.0415757409297951 0.0409346003929002" mass="0.170357879655966" fullinertia="0.000317987257095 0.000241773777957 0.000128237985283 7.78602088609e-07 -5.56524855254e-06 6.57456640186e-06" />
+              <geom name="visual_left_Rotation_Pitch_0" type="mesh" mesh="left_Rotation_Pitch" rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" contype="0" conaffinity="0" group="2" mass="0" pos="0 0 0" quat="1 0 0 0" />
+              <geom name="collision_left_Rotation_Pitch_0" type="mesh" mesh="left_Rotation_Pitch" rgba="0 0 0 0" group="3" mass="0" pos="0 0 0" quat="1 0 0 0" />
+              <body name="left_Upper_Arm" pos="0 -0.057994 0.10856" quat="0.707105482511 0 0.707108079859 0">
+                <joint name="left_shoulder_lift" type="hinge" axis="0 0 -1" range="-3.14 3.14" damping="1" armature=".01" />
+                <inertial pos="-0.00498717382802011 0.0711768758039328 2.8269043966363E-05" mass="0.263860498133606" fullinertia="0.000668147021127 0.000223330767976 0.000501587778432 4.03237934739e-06 -2.09697778252e-07 -1.26104445731e-06" />
+                <geom name="visual_left_Upper_Arm_0" type="mesh" mesh="left_Upper_Arm" rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" contype="0" conaffinity="0" group="2" mass="0" pos="0 0 0" quat="1 0 0 0" />
+                <geom name="collision_left_Upper_Arm_0" type="mesh" mesh="left_Upper_Arm" rgba="0 0 0 0" group="3" mass="0" pos="0 0 0" quat="1 0 0 0" />
+                <body name="left_Lower_Arm" pos="-0.041124 0.12849 0" quat="1 0 0 0">
+                  <joint name="left_elbow_flex" type="hinge" axis="0 0 -1" range="-3.14 3.14" damping="1" armature=".01" />
+                  <inertial pos="0.00407284254875812 -0.0804991124148977 -0.00296436542896175" mass="0.270063821451467" fullinertia="0.00083624050562 0.000207982015074 0.000676983508443 7.56438032674e-06 1.34563561753e-07 -3.81627063188e-06" />
+                  <geom name="visual_left_Lower_Arm_0" type="mesh" mesh="left_Lower_Arm" rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" contype="0" conaffinity="0" group="2" mass="0" pos="0 0 0" quat="1 0 0 0" />
+                  <geom name="collision_left_Lower_Arm_0" type="mesh" mesh="left_Lower_Arm" rgba="0 0 0 0" group="3" mass="0" pos="0 0 0" quat="1 0 0 0" />
+                  <body name="left_Wrist_Pitch_Roll" pos="0.0031575 -0.19841 0" quat="1 0 0 0">
+                    <joint name="left_wrist_flex" type="hinge" axis="0 0 1" range="-3.14 3.14" damping="1" armature=".01" />
+                    <inertial pos="-0.000731389938051136 -0.0147937470601834 -0.00272648444717316" mass="0.0304496388845638" fullinertia="1.45088548153e-05 1.12953091794e-05 8.2248962169e-06 -2.4332415697e-07 1.64696078329e-08 5.07349732884e-07" />
+                    <geom name="visual_left_Wrist_Pitch_Roll_0" type="mesh" mesh="left_Wrist_Pitch_Roll" rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" contype="0" conaffinity="0" group="2" mass="0" pos="0 0 0" quat="1 0 0 0" />
+                    <geom name="collision_left_Wrist_Pitch_Roll_0" type="mesh" mesh="left_Wrist_Pitch_Roll" rgba="0 0 0 0" group="3" mass="0" pos="0 0 0" quat="1 0 0 0" />
+                    <body name="left_wrist_yaw" pos="0.0012953 -0.02813 -0.0038124" quat="-2.59734346696e-06 0.707105482506 -2.59735300756e-06 -0.707108079855">
+                      <joint name="left_wrist_yaw_joint" type="hinge" axis="0 0 -1" range="-3.14 3.14" damping="1" armature=".01" />
+                      <inertial pos="0.000180900832202343 0.0313677255592147 0.00893609906516371" mass="0.114211005073855" fullinertia="7.49448585845e-05 7.26124576875e-05 4.70466855793e-05 4.88072189676e-08 -6.75027390071e-08 1.85904539594e-05" />
+                      <geom name="visual_left_wrist_yaw_0" type="mesh" mesh="left_wrist_yaw" rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" contype="0" conaffinity="0" group="2" mass="0" pos="0 0 0" quat="1 0 0 0" />
+                      <geom name="collision_left_wrist_yaw_0" type="mesh" mesh="left_wrist_yaw" rgba="0 0 0 0" group="3" mass="0" pos="0 0 0" quat="1 0 0 0" />
+                      <body name="left_Fixed_Jaw" pos="0 0.060993 -0.022027" quat="0.707105482511 -0.707108079859 0 0">
+                        <joint name="left_wrist_roll" type="hinge" axis="0 0 1" range="-3.14 3.14" damping="1" armature=".01" />
+                        <inertial pos="-0.0120468759752292 -0.00928566647448964 0.0250465628307969" mass="0.0743538332299295" fullinertia="5.47545692356e-05 5.5044284056e-05 2.94444600105e-05 5.89750471878e-07 9.07583304441e-06 -1.59726112696e-06" />
+                        <geom name="visual_left_Fixed_Jaw_0" type="mesh" mesh="left_Fixed_Jaw" rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" contype="0" conaffinity="0" group="2" mass="0" pos="0 0 0" quat="1 0 0 0" />
+                        <geom name="collision_left_Fixed_Jaw_0" type="mesh" mesh="left_Fixed_Jaw" rgba="0 0 0 0" group="3" mass="0" pos="0 0 0" quat="1 0 0 0" />
+                        <site name="left_tool" pos="0 0 0" size=".007" rgba="0 1 0 1" group="4" />
+                        <body name="left_Moving_Jaw" pos="0.020214 0.0020289 0.021614" quat="-2.59734346696e-06 2.59735300756e-06 -0.707108079855 0.707105482506">
+                          <joint name="left_gripper" type="hinge" axis="0 0 1" range="-3.14 3.14" damping="1" armature=".01" />
+                          <inertial pos="-0.0239309041991747 -0.0212490799756402 0.00157431951783818" mass="0.0281637846719423" fullinertia="1.20100227758e-05 1.30854988703e-05 1.51699210538e-05 -6.97809739108e-06 3.71969803259e-09 4.78722917701e-09" />
+                          <geom name="visual_left_Moving_Jaw_0" type="mesh" mesh="left_Moving_Jaw" rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" contype="0" conaffinity="0" group="2" mass="0" pos="0 0 0" quat="1 0 0 0" />
+                          <geom name="collision_left_Moving_Jaw_0" type="mesh" mesh="left_Moving_Jaw" rgba="0 0 0 0" group="3" mass="0" pos="0 0 0" quat="1 0 0 0" />
+                        </body>
+                        <body name="left_camera" pos="0.0018122 -0.07041 -0.0052089" quat="0.977698227343 -0.210014704842 0 0">
+                          <inertial pos="-0.00381113120491425 0.169561472261356 -0.115134376786152" mass="1.27133656756438" fullinertia="0.017629327165 0.00918077990987 0.0101848949128 0.000168350670365 -0.000172233377547 0.00435370060883" />
+                          <geom name="visual_left_camera_0" type="mesh" mesh="left_camera" rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" contype="0" conaffinity="0" group="2" mass="0" pos="0 0 0" quat="1 0 0 0" />
+                          <camera name="left_camera" pos="0 0 .025" fovy="69" quat="0 1 0 0" />
+                        </body>
+                      </body>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+          <body name="right_Base" pos="-0.18726 -0.0599 0.4775" quat="1 0 0 0">
+            <inertial pos="-2.45960666746703E-07 0.0311418169687909 0.0175746661003382" mass="0.193184127927598" fullinertia="0.000137030709468 0.000169089551209 0.000145097720857 2.10136126945e-08 4.24087422551e-09 2.26514711037e-05" />
+            <geom name="visual_right_Base_0" type="mesh" mesh="right_Base" rgba=".7 .72 .75 1" contype="0" conaffinity="0" group="2" mass="0" pos="0 0 0" quat="1 0 0 0" />
+            <geom name="collision_right_Base_0" type="mesh" mesh="right_Base" rgba="0 0 0 0" group="3" mass="0" pos="0 0 0" quat="1 0 0 0" />
+            <body name="right_Rotation_Pitch" pos="0 0 0.039671" quat="1 0 0 0">
+              <joint name="right_shoulder_pan" type="hinge" axis="0 0 -1" range="-3.14 3.14" damping="1" armature=".01" />
+              <inertial pos="-0.000892708218042932 -0.0415757409297951 0.0409346003929002" mass="0.170357879655966" fullinertia="0.000317987257095 0.000241773777957 0.000128237985283 7.78602088609e-07 -5.56524855254e-06 6.57456640186e-06" />
+              <geom name="visual_right_Rotation_Pitch_0" type="mesh" mesh="right_Rotation_Pitch" rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" contype="0" conaffinity="0" group="2" mass="0" pos="0 0 0" quat="1 0 0 0" />
+              <geom name="collision_right_Rotation_Pitch_0" type="mesh" mesh="right_Rotation_Pitch" rgba="0 0 0 0" group="3" mass="0" pos="0 0 0" quat="1 0 0 0" />
+              <body name="right_Upper_Arm" pos="0 -0.057994 0.10856" quat="0.707105482511 0 0.707108079859 0">
+                <joint name="right_shoulder_lift" type="hinge" axis="0 0 -1" range="-3.14 3.14" damping="1" armature=".01" />
+                <inertial pos="-0.00498717382802011 0.0711768758039328 2.8269043966363E-05" mass="0.263860498133606" fullinertia="0.000668147021127 0.000223330767976 0.000501587778432 4.03237934739e-06 -2.09697778252e-07 -1.26104445731e-06" />
+                <geom name="visual_right_Upper_Arm_0" type="mesh" mesh="right_Upper_Arm" rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" contype="0" conaffinity="0" group="2" mass="0" pos="0 0 0" quat="1 0 0 0" />
+                <geom name="collision_right_Upper_Arm_0" type="mesh" mesh="right_Upper_Arm" rgba="0 0 0 0" group="3" mass="0" pos="0 0 0" quat="1 0 0 0" />
+                <body name="right_Lower_Arm" pos="-0.041124 0.12849 0" quat="1 0 0 0">
+                  <joint name="right_elbow_flex" type="hinge" axis="0 0 -1" range="-3.14 3.14" damping="1" armature=".01" />
+                  <inertial pos="0.00407284254875812 -0.0804991124148977 -0.00296436542896175" mass="0.270063821451467" fullinertia="0.00083624050562 0.000207982015074 0.000676983508443 7.56438032674e-06 1.34563561753e-07 -3.81627063188e-06" />
+                  <geom name="visual_right_Lower_Arm_0" type="mesh" mesh="right_Lower_Arm" rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" contype="0" conaffinity="0" group="2" mass="0" pos="0 0 0" quat="1 0 0 0" />
+                  <geom name="collision_right_Lower_Arm_0" type="mesh" mesh="right_Lower_Arm" rgba="0 0 0 0" group="3" mass="0" pos="0 0 0" quat="1 0 0 0" />
+                  <body name="right_Wrist_Pitch_Roll" pos="0.0031575 -0.19841 0" quat="1 0 0 0">
+                    <joint name="right_wrist_flex" type="hinge" axis="0 0 1" range="-3.14 3.14" damping="1" armature=".01" />
+                    <inertial pos="-0.000731389938051136 -0.0147937470601834 -0.00272648444717316" mass="0.0304496388845638" fullinertia="1.45088548153e-05 1.12953091794e-05 8.2248962169e-06 -2.4332415697e-07 1.64696078329e-08 5.07349732884e-07" />
+                    <geom name="visual_right_Wrist_Pitch_Roll_0" type="mesh" mesh="right_Wrist_Pitch_Roll" rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" contype="0" conaffinity="0" group="2" mass="0" pos="0 0 0" quat="1 0 0 0" />
+                    <geom name="collision_right_Wrist_Pitch_Roll_0" type="mesh" mesh="right_Wrist_Pitch_Roll" rgba="0 0 0 0" group="3" mass="0" pos="0 0 0" quat="1 0 0 0" />
+                    <body name="right_wrist_yaw" pos="0.0012953 -0.02813 -0.0038124" quat="-2.59734346696e-06 0.707105482506 -2.59735300756e-06 -0.707108079855">
+                      <joint name="right_wrist_yaw_joint" type="hinge" axis="0 0 -1" range="-3.14 3.14" damping="1" armature=".01" />
+                      <inertial pos="0.000180900832202343 0.0313677255592147 0.00893609906516371" mass="0.114211005073855" fullinertia="7.49448585845e-05 7.26124576875e-05 4.70466855793e-05 4.88072189676e-08 -6.75027390071e-08 1.85904539594e-05" />
+                      <geom name="visual_right_wrist_yaw_0" type="mesh" mesh="right_wrist_yaw" rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" contype="0" conaffinity="0" group="2" mass="0" pos="0 0 0" quat="1 0 0 0" />
+                      <geom name="collision_right_wrist_yaw_0" type="mesh" mesh="right_wrist_yaw" rgba="0 0 0 0" group="3" mass="0" pos="0 0 0" quat="1 0 0 0" />
+                      <body name="right_Fixed_Jaw" pos="0 0.060993 -0.022027" quat="0.707105482511 -0.707108079859 0 0">
+                        <joint name="right_wrist_roll" type="hinge" axis="0 0 1" range="-3.14 3.14" damping="1" armature=".01" />
+                        <inertial pos="-0.0120468759752292 -0.00928566647448964 0.0250465628307969" mass="0.0743538332299295" fullinertia="5.47545692356e-05 5.5044284056e-05 2.94444600105e-05 5.89750471878e-07 9.07583304441e-06 -1.59726112696e-06" />
+                        <geom name="visual_right_Fixed_Jaw_0" type="mesh" mesh="right_Fixed_Jaw" rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" contype="0" conaffinity="0" group="2" mass="0" pos="0 0 0" quat="1 0 0 0" />
+                        <geom name="collision_right_Fixed_Jaw_0" type="mesh" mesh="right_Fixed_Jaw" rgba="0 0 0 0" group="3" mass="0" pos="0 0 0" quat="1 0 0 0" />
+                        <site name="right_tool" pos="0 0 0" size=".007" rgba="0 1 0 1" group="4" />
+                        <body name="right_Moving_Jaw" pos="0.020214 0.0020289 0.021614" quat="-2.59734346696e-06 2.59735300756e-06 -0.707108079855 0.707105482506">
+                          <joint name="right_gripper" type="hinge" axis="0 0 1" range="-3.14 3.14" damping="1" armature=".01" />
+                          <inertial pos="-0.0239309041991747 -0.0212490799756402 0.00157431951783818" mass="0.0281637846719423" fullinertia="1.20100227758e-05 1.30854988703e-05 1.51699210538e-05 -6.97809739108e-06 3.71969803259e-09 4.78722917701e-09" />
+                          <geom name="visual_right_Moving_Jaw_0" type="mesh" mesh="right_Moving_Jaw" rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" contype="0" conaffinity="0" group="2" mass="0" pos="0 0 0" quat="1 0 0 0" />
+                          <geom name="collision_right_Moving_Jaw_0" type="mesh" mesh="right_Moving_Jaw" rgba="0 0 0 0" group="3" mass="0" pos="0 0 0" quat="1 0 0 0" />
+                        </body>
+                        <body name="right_camera" pos="0.0018122 -0.07041 -0.0052089" quat="0.977698227343 -0.210014704842 0 0">
+                          <inertial pos="-0.00381113120491425 0.169561472261356 -0.115134376786152" mass="1.27133656756438" fullinertia="0.017629327165 0.00918077990987 0.0101848949128 0.000168350670365 -0.000172233377547 0.00435370060883" />
+                          <geom name="visual_right_camera_0" type="mesh" mesh="right_camera" rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" contype="0" conaffinity="0" group="2" mass="0" pos="0 0 0" quat="1 0 0 0" />
+                          <camera name="right_camera" pos="0 0 .025" fovy="69" quat="0 1 0 0" />
+                        </body>
+                      </body>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+        <body name="Link2_dp" pos="-0.1337 0.076522 0.063355" quat="0.18303083489 -0.682977307534 0.183013207164 0.683043100307">
+          <inertial pos="-0.162572857658571 -0.0120532949042898 -0.146727084322472" mass="10.0950259540064" fullinertia="0.137148343426 0.489910856141 0.491332661053 -0.00227608010935 0.000472620111779 0.000836241495811" />
+          <geom name="visual_Link2_dp_0" type="mesh" mesh="Link2_dp" rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" contype="0" conaffinity="0" group="2" mass="0" pos="0 0 0" quat="1 0 0 0" />
+        </body>
+        <body name="Link3_dp" pos="-0.0014342 -0.15301 0.063355" quat="0.499998163397 0.499999999997 0.499999999997 -0.500001836603">
+          <inertial pos="-0.162560049646843 0.000838249024472069 -0.166596420117959" mass="10.0950259540064" fullinertia="0.137148263631 0.491701304001 0.489542292989 0.000755549795833 -0.00219205951257 0.00019767273957" />
+          <geom name="visual_Link3_dp_0" type="mesh" mesh="Link3_dp" rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" contype="0" conaffinity="0" group="2" mass="0" pos="0 0 0" quat="1 0 0 0" />
+        </body>
+        <body name="Link4_dp" pos="0.13115 0.076408 0.063355" quat="0.612370878119 -0.612373127487 0.353554789721 -0.353553491044">
+          <inertial pos="-0.01147039688487 -0.162560049646841 -0.145503153867049" mass="10.0950259540064" fullinertia="0.490253235356 0.137148263631 0.490990361634 -0.00152060432658 0.00103371556143 0.0017503550733" />
+          <geom name="visual_Link4_dp_0" type="mesh" mesh="Link4_dp" rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" contype="0" conaffinity="0" group="2" mass="0" pos="0 0 0" quat="1 0 0 0" />
+        </body>
+        <body name="back_camera" pos="0.00034085 0.16827 1.0972" quat="0.220512874571 -0.671842684546 -0.671843532371 -0.22051700021">
+          <inertial pos="-0.640890595074529 -0.00093675959900047 0.610115206341962" mass="10.0950259540064" fullinertia="0.363696186887 0.491701304001 0.262994369733 -0.000606965787944 0.168863788635 0.000491449425894" />
+          <geom name="visual_back_camera_0" type="mesh" mesh="back_camera" rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" contype="0" conaffinity="0" group="2" mass="0" pos="0 0 0" quat="1 0 0 0" />
+          <camera name="back_camera" pos="0 0 .025" fovy="69" xyaxes="0 -1 0 -1 0 0" />
+        </body>
+        <body name="front_camera" pos="0.000309285647814801 -0.0549084504780031 1.10145847792887" quat="-0.270593971869 -0.653283171671 -0.653283171671 0.270593971869">
+          <inertial pos="0.667531496762255 -0.00090519797224118 0.570675109672329" mass="10.0950259540064" fullinertia="0.315541737558 0.491701304001 0.311148819062 0.000394470234068 -0.176196959887 0.000674035043881" />
+          <geom name="visual_front_camera_0" type="mesh" mesh="front_camera" rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" contype="0" conaffinity="0" group="2" mass="0" pos="0 0 0" quat="1 0 0 0" />
+          <camera name="front_camera" pos="0 0 .025" fovy="69" xyaxes="0 -1 0 -1 0 0" />
+        </body>
+      </body>
+      <geom name="base_collision" type="box" pos="0 0 .18" size=".22 .23 .12" rgba="0 0 0 0" group="3" mass="0" />
+      <geom name="ground_skid_collision" type="box" pos="0 0 .026" size=".17 .17 .031" friction=".05 .01 .001" rgba="0 0 0 0" group="3" mass="0" />
+      <geom name="tower_collision" type="box" pos="-.075 0 .7" size=".08 .10 .4" rgba="0 0 0 0" group="3" mass="0" />
+      <camera name="nav_front" pos=".24 0 .58" xyaxes="0 -1 0 0 0 1" fovy="90" />
+      <camera name="nav_left" pos="0 .25 .58" xyaxes="1 0 0 0 0 1" fovy="90" />
+      <camera name="nav_back" pos="-.24 0 .58" xyaxes="0 1 0 0 0 1" fovy="90" />
+      <camera name="nav_right" pos="0 -.25 .58" xyaxes="-1 0 0 0 0 1" fovy="90" />
+    </body>
+  </worldbody>
+  <contact>
+    <exclude body1="left_wrist_yaw" body2="left_Moving_Jaw" />
+    <exclude body1="right_wrist_yaw" body2="right_Moving_Jaw" />
+  </contact>
+  <actuator>
+    <position name="vertical_move_position" joint="vertical_move" kp="4000" kv="200" ctrlrange="-0.3 0.3" forcerange="-500 500" />
+    <position name="left_shoulder_pan_position" joint="left_shoulder_pan" kp="120" kv="8" ctrlrange="-3.14 3.14" forcerange="-40 40" />
+    <position name="left_shoulder_lift_position" joint="left_shoulder_lift" kp="120" kv="8" ctrlrange="-3.14 3.14" forcerange="-40 40" />
+    <position name="left_elbow_flex_position" joint="left_elbow_flex" kp="120" kv="8" ctrlrange="-3.14 3.14" forcerange="-40 40" />
+    <position name="left_wrist_flex_position" joint="left_wrist_flex" kp="120" kv="8" ctrlrange="-3.14 3.14" forcerange="-40 40" />
+    <position name="left_wrist_yaw_joint_position" joint="left_wrist_yaw_joint" kp="120" kv="8" ctrlrange="-3.14 3.14" forcerange="-40 40" />
+    <position name="left_wrist_roll_position" joint="left_wrist_roll" kp="120" kv="8" ctrlrange="-3.14 3.14" forcerange="-40 40" />
+    <position name="left_gripper_position" joint="left_gripper" kp="120" kv="8" ctrlrange="-3.14 3.14" forcerange="-40 40" />
+    <position name="right_shoulder_pan_position" joint="right_shoulder_pan" kp="120" kv="8" ctrlrange="-3.14 3.14" forcerange="-40 40" />
+    <position name="right_shoulder_lift_position" joint="right_shoulder_lift" kp="120" kv="8" ctrlrange="-3.14 3.14" forcerange="-40 40" />
+    <position name="right_elbow_flex_position" joint="right_elbow_flex" kp="120" kv="8" ctrlrange="-3.14 3.14" forcerange="-40 40" />
+    <position name="right_wrist_flex_position" joint="right_wrist_flex" kp="120" kv="8" ctrlrange="-3.14 3.14" forcerange="-40 40" />
+    <position name="right_wrist_yaw_joint_position" joint="right_wrist_yaw_joint" kp="120" kv="8" ctrlrange="-3.14 3.14" forcerange="-40 40" />
+    <position name="right_wrist_roll_position" joint="right_wrist_roll" kp="120" kv="8" ctrlrange="-3.14 3.14" forcerange="-40 40" />
+    <position name="right_gripper_position" joint="right_gripper" kp="120" kv="8" ctrlrange="-3.14 3.14" forcerange="-40 40" />
+  </actuator>
+</mujoco>

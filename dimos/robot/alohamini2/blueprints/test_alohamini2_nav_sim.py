@@ -86,12 +86,11 @@ def test_default_navigation_profile_uses_lite_scene_and_bounded_sensor_work() ->
     assert config["scene_xml"] == ALOHA_MINI2_OFFICE_LITE_MJCF
     assert config["include_legacy_office_person"] is False
     assert (config["width"], config["height"], config["fps"]) == (256, 144, 2)
-    assert config["camera_geom_groups"] == [0, 1]
+    assert config["camera_geom_groups"] is None
+    assert config["arm_model"] == "am_arm200"
+    assert config["dof"] == 15
     assert config["camera_near_clip_fraction"] == 0.0002
-    assert config["camera_geom_group_overrides"] == {
-        "left_camera": [0, 1],
-        "right_camera": [0, 1],
-    }
+    assert config["camera_geom_group_overrides"] == {}
     assert config["camera_max_geom"] == 256
     assert config["max_camera_renders_per_step"] == 1
     assert (

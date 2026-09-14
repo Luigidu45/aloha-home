@@ -2,6 +2,9 @@
 title: "F2: navegación semántica y observaciones en una vivienda simulada"
 ---
 
+> Actualización posterior: por petición del usuario se adelantó la [adaptación del AM-ARM200 original](/docs/development/asistencia_domestica_modular/adaptacion_am_arm200.md). Los blueprints de navegación y doméstico usan ahora ese modelo. Los resultados históricos de esta fase conservan su procedencia y fecha; los nuevos ensayos se registran por separado.
+
+
 # Cierre de F2
 
 **Estado:** completada el 13 de septiembre de 2026, sobre el commit de partida `dbe6fe27a0952d2988cef5b08ebb7bb124780be2`. El usuario confirmó utilizar una vivienda sintética. El [plan de trabajo](/docs/development/asistencia_domestica_modular/plan_trabajo.md) y los [contratos de F1](/docs/development/asistencia_domestica_modular/fase_1_definicion.md) siguen siendo la referencia.
@@ -102,17 +105,17 @@ El plugin ROS `launch_pytest` se desactiva como en F1 por su dependencia ausente
 
 ## Preparación del modelo AM-ARM200
 
-Se revisó la disponibilidad local: existe el modelo SO101 conservado y `/home/luigidu/Downloads/alohamini2pro.urdf`, identificado internamente como `alohamini2pro_urdf` (SHA-256 `bd1b1e6d619d3160fcf1f7faa27a564f933128dc7d729ef87d6e170818389844`). No se encontró un URDF verificado del AlohaMini2 original con AM-ARM200 en el repositorio ni en los archivos locales suministrados. Esto no afirma que no exista públicamente.
+Se revisó la disponibilidad local: existe el modelo SO101 conservado y `/home/luigidu/Downloads/alohamini2pro.urdf`, identificado internamente como `alohamini2pro_urdf` (SHA-256 `bd1b1e6d619d3160fcf1f7faa27a564f933128dc7d729ef87d6e170818389844`). En la revisión de F2 no se había localizado el URDF original entre los archivos entonces suministrados. **Actualización F3:** la nueva ruta del usuario sí contiene `alohamini2_urdf` y sus meshes; el [inventario del original](/docs/development/asistencia_domestica_modular/fase_3_urdf_original.json) registra hashes y problemas de rutas/límites. La correspondencia física con SDK/equipo continúa pendiente.
 
 El archivo Pro contiene seis articulaciones rotacionales por brazo y una articulación de pinza, mientras el SO101 articulado conservado usa cinco más pinza. La semejanza de nombres no acredita correspondencia con el SDK ni límites del equipo original. No se importó el Pro como sustituto del robot elegido.
 
 Antes de F7/F8, preparar la adaptación en `dimos/robot/alohamini2/` con estas comprobaciones:
 
-1. Obtener del proveedor el URDF y meshes de la variante original; registrar versión, licencia y hash, y contrastarlos con el robot recibido.
+1. URDF y meshes originales disponibles desde F3; verificar versión/licencia y contrastar su cinemática y límites con el robot recibido.
 2. Crear la correspondencia por brazo entre articulaciones del modelo, IDs/orden del SDK, unidades, signos, cero y límites. Mantener las pinzas y el elevador como interfaces explícitas.
 3. Verificar árbol de transforms, frames de herramienta y montajes de cámaras/L2; separar piezas fijas de las que se mueven con el elevador.
 4. Comprobar FK en poses medidas y colisiones; no copiar el vector home ni el número de acciones de SO101. Si se incorpora una variante AM-ARM200, declararla por separado en la configuración de manipulación existente.
 5. Medir alcance a ambas mesas y al suelo, luego validar trayectoria y retención de `loaded_home` con carga.
 6. Solo después vincular unidades, límites y cámaras a teleoperación/ACT. Esta adaptación detallada no es requisito para repetir la navegación de F2.
 
-Los pendientes físicos se mantienen en la [ficha de hardware](/docs/development/asistencia_domestica_modular/fase_1_hardware.md). La siguiente fase es F3: memoria y percepción del objetivo usando estas observaciones, sin acceder al estado interno de objetos del simulador.
+Los pendientes físicos se mantienen en la [ficha de hardware](/docs/development/asistencia_domestica_modular/fase_1_hardware.md). La [F3 ya implementada](/docs/development/asistencia_domestica_modular/fase_3_memoria_percepcion.md) consume estas observaciones sin acceder al estado interno de objetos del simulador y precisa la diferencia entre estaciones etiquetadas y búsqueda semántica por memoria.

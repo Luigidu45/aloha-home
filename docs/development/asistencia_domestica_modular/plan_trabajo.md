@@ -4,7 +4,7 @@ title: "Plan de tesis: asistencia doméstica modular con DimOS, VLM y ACT"
 
 # Plan de trabajo por fases
 
-**Actualización:** 13 de septiembre de 2026. **Estado:** F0, F1 y F2 completadas; F3–F10 pendientes. Véanse el [registro de F0](/docs/development/asistencia_domestica_modular/fase_0_limpieza.md), los [contratos y decisiones de F1](/docs/development/asistencia_domestica_modular/fase_1_definicion.md) y la [simulación, resultados y reproducción de F2](/docs/development/asistencia_domestica_modular/fase_2_simulacion.md).
+**Actualización:** 13 de septiembre de 2026. **Estado:** F0–F3 completadas en su alcance de software/simulación; F4–F10 pendientes. Véanse el [registro de F0](/docs/development/asistencia_domestica_modular/fase_0_limpieza.md), los [contratos y decisiones de F1](/docs/development/asistencia_domestica_modular/fase_1_definicion.md) y la [simulación, resultados y reproducción de F2](/docs/development/asistencia_domestica_modular/fase_2_simulacion.md).
 
 Este plan persigue la propuesta actual: un asistente robótico que permita a una persona con movilidad reducida solicitar, supervisar y completar tareas de acceso a objetos mediante lenguaje natural. Integra DimOS, memoria y navegación semántica, supervisión visual y habilidades de manipulación ACT. El éxito final requiere entregar el objeto correcto en una región accesible acordada.
 
@@ -167,6 +167,8 @@ Trabajo:
 
 ### F3. Incorporar memoria y percepción del objetivo
 
+**Cierre:** piloto local en CPU comprobado; véanse [implementación, límites y reproducción](/docs/development/asistencia_domestica_modular/fase_3_memoria_percepcion.md). La detección del control y la percepción física siguen pendientes; la omisión y la incertidumbre se reportan, sin dar B por validada.
+
 **Objetivo:** conectar «qué necesito» con «dónde buscar» y «qué se observa ahora». **Depende de:** F1 y observaciones de F2; puede empezar con imágenes offline. **Aporta a:** O2, O3, O5; C1.
 
 Trabajo:
@@ -238,6 +240,9 @@ Trabajo:
 
 ### F7. Preparar ACT, captura y adaptación física
 
+**Adelanto autorizado por el usuario:** el modelo original AM-ARM200 ya está integrado y ensayado en navegación/simulación; véase la [adaptación](/docs/development/asistencia_domestica_modular/adaptacion_am_arm200.md). Esto no cierra el pipeline ACT ni la validación física de F7/F8.
+
+
 **Objetivo:** llegar al robot con el flujo de datos y las interfaces preparados. **Depende de:** F1 y contrato de ejecutores F4. La ficha de hardware comienza en F1. **Aporta a:** O4, O6; C1 y C2.
 
 Trabajo:
@@ -262,7 +267,7 @@ ACT utiliza imágenes y estado articular para generar bloques de acciones; el si
 - [x] Proyecto descartado retirado; registro, descubrimiento y configuración/carga de blueprints conservados comprobados en F0.
 - [x] Misión, catálogo, lugares y contratos nuevos documentados y comprobados en F1.
 - [x] Navegación entre estaciones y observaciones accesibles en simulación, comprobadas en F2.
-- [ ] Memoria que distingue información histórica de confirmación actual.
+- [x] Memoria que distingue información histórica de confirmación actual, comprobada en F3 con invalidación asistida y modelos locales.
 - [ ] Gestor con éxito, fallo, incertidumbre, consulta y cancelación comprobados.
 - [ ] VLM real recibe imágenes y propone acciones validadas.
 - [ ] Interfaz por texto completa un ciclo desde otro dispositivo.
@@ -401,8 +406,9 @@ Las configuraciones, metadatos y scripts pertenecen al repositorio. Videos, data
 
 1. F0 completada: paquete antiguo y blueprint dependiente retirados; registro regenerado y validado.
 2. F1 completada: misiones A/B, catálogo, contratos, casos de escritorio y ficha de interfaces disponibles.
-3. F2 completada: estaciones, navegación semántica, observaciones recientes y grabaciones disponibles en la simulación conservada.
-4. Siguiente paso, F3: incorporar memoria y percepción del objetivo. Después, F4–F5 completan el ciclo del gestor y conectan el supervisor VLM con imágenes.
+3. F2 completada: estaciones con nombres semánticos y poses registradas, observaciones recientes y grabaciones disponibles en la simulación conservada.
+4. F3 completada: recuperación de observaciones con DimOS/CLIP, candidatos visuales con YOLO en CPU, búsqueda acotada y separación temporal de evidencia. El [registro de F3](/docs/development/asistencia_domestica_modular/fase_3_memoria_percepcion.md) precisa errores y el uso real de las cuatro áreas de DimOS.
+5. Siguiente paso, F4: gestor y verificación de misiones; después, F5 conecta el supervisor VLM con imágenes. La integración continua y las capacidades físicas siguen pendientes.
 5. F6–F7: probar el ciclo desde la interfaz mientras se deja listo el pipeline ACT para el primer día de captura física.
 
 Este orden permite avanzar desde ahora hacia las contribuciones del PDF y deja identificada la evidencia que todavía dependerá del robot.

@@ -34,6 +34,7 @@ from dimos.robot.alohamini2.arm_control import (
     so101_hardware,
 )
 from dimos.robot.alohamini2.config import (
+    ALOHA_MINI2_AM_ARM200_MJCF,
     ALOHA_MINI2_NAV_CAMERAS,
     ALOHA_MINI2_NAV_HEIGHT_M,
     ALOHA_MINI2_NAV_MAX_STEP_HEIGHT_M,
@@ -187,23 +188,26 @@ def _navigation_stack(
     lidar_height: int,
     lidar_fps: float,
     articulated_so101: bool = False,
+    am_arm200: bool = False,
     spawn_xy: tuple[float, float] | None = None,
 ) -> Blueprint:
     return (
         autoconnect(
             AlohaMini2SimModule.blueprint(
-                robot_mjcf=ALOHA_MINI2_NAV_MJCF,
+                robot_mjcf=ALOHA_MINI2_AM_ARM200_MJCF if am_arm200 else ALOHA_MINI2_NAV_MJCF,
+                arm_model="am_arm200" if am_arm200 else "so101",
+                planar_base_height=0.005 if am_arm200 else 0.064,
                 scene_xml=scene_xml,
                 include_legacy_office_person=include_person,
                 spawn_xy=spawn_xy if spawn_xy is not None else global_config.mujoco_start_pos_float,
                 spawn_z=0.0,
                 headless=global_config.viewer == "none",
-                dof=SO101_TOTAL_SIM_JOINTS if articulated_so101 else 0,
+                dof=15 if am_arm200 else SO101_TOTAL_SIM_JOINTS if articulated_so101 else 0,
                 articulated_so101=articulated_so101,
                 camera_name=ALOHA_MINI2_RGB_CAMERAS[0],
                 additional_camera_names=list(ALOHA_MINI2_RGB_CAMERAS),
-                camera_geom_groups=camera_geom_groups,
-                camera_geom_group_overrides=camera_geom_group_overrides or {},
+                camera_geom_groups=None if am_arm200 else camera_geom_groups,
+                camera_geom_group_overrides={} if am_arm200 else camera_geom_group_overrides or {},
                 camera_near_clip_fraction=0.0002,
                 camera_max_geom=camera_max_geom,
                 max_camera_renders_per_step=max_camera_renders_per_step,
@@ -263,9 +267,10 @@ def alohamini2_navigation_sim_stack(
     scene_xml: Path = ALOHA_MINI2_OFFICE_LITE_MJCF,
     spawn_xy: tuple[float, float] | None = None,
 ) -> Blueprint:
-    """Compose the lightweight navigation stack in a chosen scene."""
+    """Compose original AM-ARM200 navigation in a chosen scene."""
     return _navigation_stack(
         scene_xml=scene_xml,
+        am_arm200=True,
         include_person=False,
         camera_width=256,
         camera_height=144,
@@ -285,6 +290,7 @@ _alohamini2_navigation = alohamini2_navigation_sim_stack()
 
 _alohamini2_navigation_full = _navigation_stack(
     scene_xml=ALOHA_MINI2_OFFICE_SCENE_MJCF,
+    am_arm200=True,
     include_person=True,
     camera_width=640,
     camera_height=360,
