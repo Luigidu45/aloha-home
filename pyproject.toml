@@ -241,6 +241,7 @@ web = [
 ]
 
 perception = [
+    "lm-format-enforcer>=0.11,<0.12",  # Local F5 VLM structured proposals
     "ultralytics>=8.3.70",
     "Pillow",
     "lap>=0.5.12",
@@ -591,6 +592,8 @@ module = [
     "open_clip",
     "pinocchio",
     "piper_sdk.*",
+    "lmformatenforcer",
+    "lmformatenforcer.*",
     "plotext",
     "plum.*",
     "portal",
@@ -679,7 +682,7 @@ ignore = [
     "*/Cargo.lock",
     "dimos/web/dimos_interface/themes.json",
     "dimos/manipulation/manipulation_module.py",
-    "dimos/robot/alohamini2/assets/meshes/*.stl",
+    "dimos/robot/alohamini1/assets/meshes/*.stl",
     "misc/DimSim/scenes/apartment/objects/manifest.json",
     "misc/DimSim/src/engine.js",
 ]

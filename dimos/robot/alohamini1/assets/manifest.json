@@ -1,0 +1,333 @@
+{
+  "source_sha256": "92175fefa161717d4e7f845096fde9513e5ad27e24d06beca5af4799abacae79",
+  "robot": "Aloha",
+  "mesh_conversion": [
+    {
+      "file": "base_link.STL",
+      "source_sha256": "801f95dc79f24b8e3b157b53d8a880560132c4bc01d0f8f731e86e05e0a5fff1",
+      "output_sha256": "5d3b66e95bee6cd7ffedd8201abeaf0b9aa7024cb574d351a28c55f6430c52ae",
+      "input_triangles": 96973,
+      "output_triangles": 5000
+    },
+    {
+      "file": "wheel1.STL",
+      "source_sha256": "ffc6d985034de14be47513bff4cbeb7d737a996d3678f98929f38f559853bbbc",
+      "output_sha256": "35cf2803584f145989be278717fedab7e067a26182514b06f358c53164237a9c",
+      "input_triangles": 35840,
+      "output_triangles": 5000
+    },
+    {
+      "file": "wheel2.STL",
+      "source_sha256": "c84054f1d82222b8798c5d26ba170fa0995004d035e8a6ca323e170bb826a749",
+      "output_sha256": "0cfd0c1ea9edf0cf451699847d8c140eaeffbcf55f8ebb3b91968b94ce4dbfc3",
+      "input_triangles": 35840,
+      "output_triangles": 5000
+    },
+    {
+      "file": "wheel3.STL",
+      "source_sha256": "b4ee10a99aa88039fc3e0b6b9cf1aaa1ebfe373e4a509c3b5912b9c8f4a25d54",
+      "output_sha256": "3446107747d8f21627f26e23473a90043025eeb343299d0647f49e6c18702baf",
+      "input_triangles": 35840,
+      "output_triangles": 5000
+    },
+    {
+      "file": "vertical_link.STL",
+      "source_sha256": "1e9162535c796635d404919d9612e684e5c711d3fa405e28c1e9c5326b5134c6",
+      "output_sha256": "ef3b9052567380c2d6291f40403bf8dbb37341c39aad5c60b535f2d667085718",
+      "input_triangles": 22210,
+      "output_triangles": 5000
+    },
+    {
+      "file": "left_base.STL",
+      "source_sha256": "d9d81d3df21305adc748346e5d5ea6700c70a6d433f1ff8b6e08ce423cd6ac17",
+      "output_sha256": "d5f4d0a99e7a001365413a693cd1f351087404ce6256a39ae2e5684509e23463",
+      "input_triangles": 8832,
+      "output_triangles": 5000
+    },
+    {
+      "file": "left_link1.STL",
+      "source_sha256": "5b624a7f841cff25cee593ef03867b8328e0cc0a2dfb47c730290119dd843b02",
+      "output_sha256": "7751cc3b5855df4c26f4a9026696d0aeb9987f7b364201c7e0d88f2bd450cbc6",
+      "input_triangles": 6230,
+      "output_triangles": 4999
+    },
+    {
+      "file": "left_link2.STL",
+      "source_sha256": "d21b9803ef9220ab890574c760dee96d83ad48c19074f70a5ea000c75a46e41e",
+      "output_sha256": "e54c4731da9ce5153a7b07a5c12d386ca34bce743fd2ae1ba662a612ce189dc6",
+      "input_triangles": 4196,
+      "output_triangles": 4196
+    },
+    {
+      "file": "left_link3.STL",
+      "source_sha256": "5ad1cfdfe40ffb9f6a45218f5ef9439125acba966445ddecb6eb7fbe49726f6d",
+      "output_sha256": "0c2b34cceed916c5aeb244ebbedd6e9b86fcffdc789e9ee2585b6938d7702d67",
+      "input_triangles": 4454,
+      "output_triangles": 4454
+    },
+    {
+      "file": "left_link4.STL",
+      "source_sha256": "93cb3ecc3905de57ea715a0c4d59c97f6c499169f2fa41361424d518ed1d3fc6",
+      "output_sha256": "540cfd579631d4de1fa54e15994b804cff3616c898292ed57d83640550f7f7b3",
+      "input_triangles": 6070,
+      "output_triangles": 5000
+    },
+    {
+      "file": "left_link5.STL",
+      "source_sha256": "ebf1ff7f006f2fbbd3cfb0d5998a634948ca2ace95297912cd12f3ed352ec95f",
+      "output_sha256": "707ee99784988d50d84620cfa44b47adbea8a503e618cf1e2e492140d4243cee",
+      "input_triangles": 4264,
+      "output_triangles": 4264
+    },
+    {
+      "file": "left_link6.STL",
+      "source_sha256": "314e182185f1d76180b314809b1d397a4b467bf173f907e754e90e9ad9f9027d",
+      "output_sha256": "12ebc46bf6f3f799c7efdb99e1519b120889a80d06567afeaa923bdbb551e3bd",
+      "input_triangles": 3676,
+      "output_triangles": 3676
+    },
+    {
+      "file": "right_base.STL",
+      "source_sha256": "7992f74647898d037d94c1b41d084904986992c1dac75e867a09007f60b6448d",
+      "output_sha256": "4d9bfb4384b2ea05692efadcd36bc672cad2a7289ae2206c32ce43a8caff1176",
+      "input_triangles": 8832,
+      "output_triangles": 5000
+    },
+    {
+      "file": "right_link1.STL",
+      "source_sha256": "5b624a7f841cff25cee593ef03867b8328e0cc0a2dfb47c730290119dd843b02",
+      "output_sha256": "7751cc3b5855df4c26f4a9026696d0aeb9987f7b364201c7e0d88f2bd450cbc6",
+      "input_triangles": 6230,
+      "output_triangles": 4999
+    },
+    {
+      "file": "right_link2.STL",
+      "source_sha256": "d21b9803ef9220ab890574c760dee96d83ad48c19074f70a5ea000c75a46e41e",
+      "output_sha256": "e54c4731da9ce5153a7b07a5c12d386ca34bce743fd2ae1ba662a612ce189dc6",
+      "input_triangles": 4196,
+      "output_triangles": 4196
+    },
+    {
+      "file": "right_link3.STL",
+      "source_sha256": "5ad1cfdfe40ffb9f6a45218f5ef9439125acba966445ddecb6eb7fbe49726f6d",
+      "output_sha256": "0c2b34cceed916c5aeb244ebbedd6e9b86fcffdc789e9ee2585b6938d7702d67",
+      "input_triangles": 4454,
+      "output_triangles": 4454
+    },
+    {
+      "file": "right_link4.STL",
+      "source_sha256": "93cb3ecc3905de57ea715a0c4d59c97f6c499169f2fa41361424d518ed1d3fc6",
+      "output_sha256": "540cfd579631d4de1fa54e15994b804cff3616c898292ed57d83640550f7f7b3",
+      "input_triangles": 6070,
+      "output_triangles": 5000
+    },
+    {
+      "file": "right_link5.STL",
+      "source_sha256": "ebf1ff7f006f2fbbd3cfb0d5998a634948ca2ace95297912cd12f3ed352ec95f",
+      "output_sha256": "707ee99784988d50d84620cfa44b47adbea8a503e618cf1e2e492140d4243cee",
+      "input_triangles": 4264,
+      "output_triangles": 4264
+    },
+    {
+      "file": "right_link6.STL",
+      "source_sha256": "314e182185f1d76180b314809b1d397a4b467bf173f907e754e90e9ad9f9027d",
+      "output_sha256": "12ebc46bf6f3f799c7efdb99e1519b120889a80d06567afeaa923bdbb551e3bd",
+      "input_triangles": 3676,
+      "output_triangles": 3676
+    }
+  ],
+  "joint_order": [],
+  "locked_joints": [
+    {
+      "name": "wheel1",
+      "type": "continuous",
+      "reason": "navigation_wheel_proxy",
+      "urdf_limit": null
+    },
+    {
+      "name": "wheel2",
+      "type": "continuous",
+      "reason": "navigation_wheel_proxy",
+      "urdf_limit": null
+    },
+    {
+      "name": "wheel3",
+      "type": "continuous",
+      "reason": "navigation_wheel_proxy",
+      "urdf_limit": null
+    },
+    {
+      "name": "vertical_move",
+      "type": "prismatic",
+      "reason": "zero_urdf_limits",
+      "urdf_limit": {
+        "lower": "0",
+        "upper": "0",
+        "effort": "0",
+        "velocity": "0"
+      }
+    },
+    {
+      "name": "left_joint1",
+      "type": "revolute",
+      "reason": "zero_urdf_limits",
+      "urdf_limit": {
+        "lower": "0",
+        "upper": "0",
+        "effort": "0",
+        "velocity": "0"
+      }
+    },
+    {
+      "name": "left_joint2",
+      "type": "revolute",
+      "reason": "zero_urdf_limits",
+      "urdf_limit": {
+        "lower": "0",
+        "upper": "0",
+        "effort": "0",
+        "velocity": "0"
+      }
+    },
+    {
+      "name": "left_joint3",
+      "type": "revolute",
+      "reason": "zero_urdf_limits",
+      "urdf_limit": {
+        "lower": "0",
+        "upper": "0",
+        "effort": "0",
+        "velocity": "0"
+      }
+    },
+    {
+      "name": "left_joint4",
+      "type": "revolute",
+      "reason": "zero_urdf_limits",
+      "urdf_limit": {
+        "lower": "0",
+        "upper": "0",
+        "effort": "0",
+        "velocity": "0"
+      }
+    },
+    {
+      "name": "left_joint5",
+      "type": "revolute",
+      "reason": "zero_urdf_limits",
+      "urdf_limit": {
+        "lower": "0",
+        "upper": "0",
+        "effort": "0",
+        "velocity": "0"
+      }
+    },
+    {
+      "name": "left_joint6",
+      "type": "revolute",
+      "reason": "zero_urdf_limits",
+      "urdf_limit": {
+        "lower": "0",
+        "upper": "0",
+        "effort": "0",
+        "velocity": "0"
+      }
+    },
+    {
+      "name": "right_joint1",
+      "type": "revolute",
+      "reason": "zero_urdf_limits",
+      "urdf_limit": {
+        "lower": "0",
+        "upper": "0",
+        "effort": "0",
+        "velocity": "0"
+      }
+    },
+    {
+      "name": "right_joint2",
+      "type": "revolute",
+      "reason": "zero_urdf_limits",
+      "urdf_limit": {
+        "lower": "0",
+        "upper": "0",
+        "effort": "0",
+        "velocity": "0"
+      }
+    },
+    {
+      "name": "right_joint3",
+      "type": "revolute",
+      "reason": "zero_urdf_limits",
+      "urdf_limit": {
+        "lower": "0",
+        "upper": "0",
+        "effort": "0",
+        "velocity": "0"
+      }
+    },
+    {
+      "name": "right_joint4",
+      "type": "revolute",
+      "reason": "zero_urdf_limits",
+      "urdf_limit": {
+        "lower": "0",
+        "upper": "0",
+        "effort": "0",
+        "velocity": "0"
+      }
+    },
+    {
+      "name": "right_joint5",
+      "type": "revolute",
+      "reason": "zero_urdf_limits",
+      "urdf_limit": {
+        "lower": "0",
+        "upper": "0",
+        "effort": "0",
+        "velocity": "0"
+      }
+    },
+    {
+      "name": "right_joint6",
+      "type": "revolute",
+      "reason": "zero_urdf_limits",
+      "urdf_limit": {
+        "lower": "0",
+        "upper": "0",
+        "effort": "0",
+        "velocity": "0"
+      }
+    }
+  ],
+  "virtual_cameras": [
+    {
+      "name": "left_camera",
+      "parent": "left_link5"
+    },
+    {
+      "name": "right_camera",
+      "parent": "right_link5"
+    },
+    {
+      "name": "front_camera",
+      "parent": "base_link",
+      "pos": "0.14 0 1.08"
+    },
+    {
+      "name": "chest_camera",
+      "parent": "base_link",
+      "pos": "0.15 0 0.78"
+    }
+  ],
+  "physical_validated": false,
+  "assumptions": [
+    "CAD +X lateral/-Y forward rotated +90 deg about Z into DimOS frame",
+    "free root driven by holonomic velocity proxy; continuous wheels locked at CAD zero",
+    "all arm/elevator URDF limits are zero; held at CAD zero pending actual ranges",
+    "no arm/elevator/gripper actuators; no grasp or manipulation physics claimed",
+    "convex arm collisions; base envelope/skid approximate",
+    "all four RGB cameras are virtual additions absent from URDF; mounts and intrinsics uncalibrated",
+    "nav ray cameras approximate coverage, not a Unitree L2 sensor model"
+  ]
+}

@@ -28,7 +28,11 @@ from dimos.msgs.geometry_msgs.Twist import Twist
 from dimos.msgs.nav_msgs.OccupancyGrid import OccupancyGrid
 from dimos.msgs.nav_msgs.Path import Path
 from dimos.navigation.base import NavigationState
-from dimos.navigation.replanning_a_star.controllers import Controller, PController
+from dimos.navigation.replanning_a_star.controllers import (
+    Controller,
+    HolonomicController,
+    PController,
+)
 from dimos.navigation.replanning_a_star.navigation_map import NavigationMap
 from dimos.navigation.replanning_a_star.path_clearance import PathClearance
 from dimos.navigation.replanning_a_star.path_distancer import PathDistancer
@@ -71,7 +75,12 @@ class LocalPlanner(Resource):
     _navigation_costmap_last: float = 0.0
 
     def __init__(
-        self, global_config: GlobalConfig, navigation_map: NavigationMap, goal_tolerance: float
+        self,
+        global_config: GlobalConfig,
+        navigation_map: NavigationMap,
+        goal_tolerance: float,
+        *,
+        holonomic: bool = False,
     ) -> None:
         self.cmd_vel = Subject()
         self.stopped_navigating = Subject()
@@ -90,7 +99,8 @@ class LocalPlanner(Resource):
         if global_config.nerf_speed < 1.0:
             speed *= global_config.nerf_speed
 
-        self._controller = PController(
+        controller = HolonomicController if holonomic else PController
+        self._controller = controller(
             self._global_config,
             speed,
             self._control_frequency,

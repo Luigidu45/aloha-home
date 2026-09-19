@@ -1643,6 +1643,7 @@ all = [
     { name = "langchain-ollama" },
     { name = "langchain-openai" },
     { name = "lap" },
+    { name = "lm-format-enforcer" },
     { name = "manifold3d" },
     { name = "matplotlib" },
     { name = "moondream" },
@@ -1706,6 +1707,7 @@ base = [
     { name = "langchain-ollama" },
     { name = "langchain-openai" },
     { name = "lap" },
+    { name = "lm-format-enforcer" },
     { name = "moondream" },
     { name = "ollama" },
     { name = "omegaconf" },
@@ -1778,6 +1780,7 @@ perception = [
     { name = "einops" },
     { name = "hydra-core" },
     { name = "lap" },
+    { name = "lm-format-enforcer" },
     { name = "moondream" },
     { name = "omegaconf" },
     { name = "pillow" },
@@ -1811,6 +1814,7 @@ unitree = [
     { name = "langchain-ollama" },
     { name = "langchain-openai" },
     { name = "lap" },
+    { name = "lm-format-enforcer" },
     { name = "moondream" },
     { name = "ollama" },
     { name = "omegaconf" },
@@ -1844,6 +1848,7 @@ unitree-dds = [
     { name = "langchain-ollama" },
     { name = "langchain-openai" },
     { name = "lap" },
+    { name = "lm-format-enforcer" },
     { name = "mcap" },
     { name = "moondream" },
     { name = "ollama" },
@@ -2092,6 +2097,7 @@ requires-dist = [
     { name = "lap", marker = "extra == 'perception'", specifier = ">=0.5.12" },
     { name = "lazy-loader" },
     { name = "llvmlite", specifier = ">=0.42.0" },
+    { name = "lm-format-enforcer", marker = "extra == 'perception'", specifier = ">=0.11,<0.12" },
     { name = "lz4", specifier = ">=4.4.5" },
     { name = "manifold3d", marker = "extra == 'apriltag'", specifier = ">=2.5.0" },
     { name = "matplotlib", marker = "extra == 'manipulation'", specifier = ">=3.7.1" },
@@ -3453,6 +3459,15 @@ wheels = [
 ]
 
 [[package]]
+name = "interegular"
+version = "0.3.3"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/dc/9d/8b6dde58a028a3962ce17e84d5fe73758df61378e00ef8ac3d85da34b0ff/interegular-0.3.3.tar.gz", hash = "sha256:d9b697b21b34884711399ba0f0376914b81899ce670032486d0d048344a76600", size = 24705, upload-time = "2024-01-06T23:01:22.372Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c4/01/72d6472f80651673716d1deda2a5bbb633e563ecf94f4479da5519d69d25/interegular-0.3.3-py37-none-any.whl", hash = "sha256:b0c07007d48c89d6d19f7204972d369b2a77222722e126b6aa63aa721dc3b19c", size = 23635, upload-time = "2024-01-06T23:01:20.829Z" },
+]
+
+[[package]]
 name = "iopath"
 version = "0.1.10"
 source = { registry = "https://pypi.org/simple" }
@@ -4327,6 +4342,21 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/aa/85/4890a7c14b4fa54400945cb52ac3cd88545bbdb973c440f98ca41591cdc5/llvmlite-0.46.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:3535bd2bb6a2d7ae4012681ac228e5132cdb75fefb1bcb24e33f2f3e0c865ed4", size = 56275176, upload-time = "2025-12-08T18:15:03.936Z" },
     { url = "https://files.pythonhosted.org/packages/6a/07/3d31d39c1a1a08cd5337e78299fca77e6aebc07c059fbd0033e3edfab45c/llvmlite-0.46.0-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:4cbfd366e60ff87ea6cc62f50bc4cd800ebb13ed4c149466f50cf2163a473d1e", size = 55128630, upload-time = "2025-12-08T18:15:07.196Z" },
     { url = "https://files.pythonhosted.org/packages/2a/6b/d139535d7590a1bba1ceb68751bef22fadaa5b815bbdf0e858e3875726b2/llvmlite-0.46.0-cp312-cp312-win_amd64.whl", hash = "sha256:398b39db462c39563a97b912d4f2866cd37cba60537975a09679b28fbbc0fb38", size = 38138940, upload-time = "2025-12-08T18:15:10.162Z" },
+]
+
+[[package]]
+name = "lm-format-enforcer"
+version = "0.11.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "interegular" },
+    { name = "packaging" },
+    { name = "pydantic" },
+    { name = "pyyaml" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/84/d5/41cd417ba7dfdbbcfe46cebf81fb3dfd7c591b89897560ad05bb410a465d/lm_format_enforcer-0.11.3.tar.gz", hash = "sha256:e68081c108719cce284a9bcc889709b26ffb085a1945b5eba3a12cfa96d528da", size = 40258, upload-time = "2025-08-24T19:37:47.527Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/a0/ef/11292bb0b85cf4c93447cab5a29f64576ed14d3ab4280e35ddd23486594a/lm_format_enforcer-0.11.3-py3-none-any.whl", hash = "sha256:cf586350875def1ae7a8fba84fcbbfc8371424b6c9d05c1fcba70aa233fbf06f", size = 45418, upload-time = "2025-08-24T19:37:46.325Z" },
 ]
 
 [[package]]

@@ -43,6 +43,9 @@ from dimos.utils.trigonometry import angle_diff
 logger = setup_logger()
 
 
+DEFAULT_GOAL_TOLERANCE_M = 0.2
+
+
 class GlobalPlanner(Resource):
     path: Subject[Path]
     goal_reached: Subject[Bool]
@@ -66,7 +69,7 @@ class GlobalPlanner(Resource):
     _safe_goal_clearance: float
 
     _safe_goal_tolerance: float = 4.0
-    _goal_tolerance: float = 0.2
+    _goal_tolerance: float
     _rotation_tolerance: float = math.radians(15)
     _replan_goal_tolerance: float = 0.5
     _stuck_time_window: float = 8.0
@@ -74,7 +77,16 @@ class GlobalPlanner(Resource):
     _max_path_deviation: float = 0.9
     _replanning_enabled: bool = True
 
-    def __init__(self, global_config: GlobalConfig) -> None:
+    def __init__(
+        self,
+        global_config: GlobalConfig,
+        *,
+        goal_tolerance_m: float = DEFAULT_GOAL_TOLERANCE_M,
+        holonomic: bool = False,
+    ) -> None:
+        if not math.isfinite(goal_tolerance_m) or goal_tolerance_m <= 0:
+            raise ValueError("goal_tolerance_m must be finite and positive")
+        self._goal_tolerance = goal_tolerance_m
         self.path = Subject()
         self.goal_reached = Subject()
 
@@ -82,7 +94,7 @@ class GlobalPlanner(Resource):
         self._navigation_map = NavigationMap(self._global_config, "voronoi")
         self._navigation_map_near = NavigationMap(self._global_config, "gradient")
         self._local_planner = LocalPlanner(
-            self._global_config, self._navigation_map, self._goal_tolerance
+            self._global_config, self._navigation_map, self._goal_tolerance, holonomic=holonomic
         )
 
         stuck_threshold = self._stuck_threshold

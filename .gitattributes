@@ -27,5 +27,5 @@ misc/DimSim/public/sims/*.json filter=lfs diff=lfs merge=lfs -text
 misc/DimSim/public/embodiment/*.glb filter=lfs diff=lfs merge=lfs -text
 misc/DimSim/scenes/**/*.glb filter=lfs diff=lfs merge=lfs -text
 misc/DimSim/scenes/**/*.gltf filter=lfs diff=lfs merge=lfs -text
-# Original AlohaMini2 CAD derivatives used by the articulated AM-ARM200 model.
-dimos/robot/alohamini2/assets/am_arm200/meshes/*.stl filter=lfs diff=lfs merge=lfs -text
+# Original AlohaMini1 CAD derivatives used by the URDF navigation model.
+dimos/robot/alohamini1/assets/meshes/*.stl filter=lfs diff=lfs merge=lfs -text

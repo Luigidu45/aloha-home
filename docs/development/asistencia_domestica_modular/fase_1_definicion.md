@@ -15,7 +15,7 @@ F1 entrega una definición ejecutable de contratos y casos de escritorio. No inc
 | Misión A | Llevar una botella de plástico pequeña y cerrada desde una mesa de la sala hasta una mesa auxiliar junto al usuario en el dormitorio. |
 | Transporte | El brazo recoge el objeto, vuelve a una postura home con el objeto en la pinza y se desplaza manteniéndolo sujeto. Se sustituye la propuesta inicial de bandeja fija. |
 | Ampliación B | Recoger un control remoto caído desde el suelo y entregarlo sobre una superficie accesible. Se propone `suelo_sala` como primera zona registrada y la misma mesa de entrega. |
-| Robot | AlohaMini2 original con dos brazos AM-ARM200 y cámaras de muñeca. No se asume que sea la variante Pro. |
+| Robot | AlohaMini1, cambio autorizado el 15/09/2026. Brazos/pinzas según el nuevo URDF, pendientes de identificar y calibrar; no reutilizar AM-ARM200. |
 | Sensores superiores | Unitree L2 4D y RealSense D435i, ambos fijados a la estructura superior. Las transformaciones y el significado de «fijo» respecto de la base se medirán. |
 | Cómputo | Beelink GTi15 Ultra y una RTX de 24 GB de VRAM previstos. El acceso efectivo no está confirmado y la GPU podría llegar después. |
 
@@ -125,7 +125,7 @@ El criterio de extensibilidad exige la nueva manipulación física compuesta con
 
 La [ficha de interfaces y pendientes físicos](/docs/development/asistencia_domestica_modular/fase_1_hardware.md) concentra lo que depende del robot y del posible usuario. Dejarlo pendiente es parte del alcance previsto de F1: no se necesitan medidas ficticias para redactar contratos.
 
-El siguiente trabajo es F2: llevar estaciones y observaciones a la simulación conservada, manteniendo visible la diferencia entre SO101 y AM-ARM200. No se instala un VLM ni se inicia entrenamiento por completar F1.
+El siguiente trabajo es F2: llevar estaciones y observaciones a la simulación conservada, manteniendo explícitos los límites del modelo AlohaMini1. No se instala un VLM ni se inicia entrenamiento por completar F1.
 
 ## Cierre y reproducción
 

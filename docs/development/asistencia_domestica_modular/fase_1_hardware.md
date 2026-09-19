@@ -1,9 +1,8 @@
 ---
-title: "F1: ficha de interfaces del AlohaMini2 y mediciones pendientes"
+title: "F1: ficha de interfaces del AlohaMini1 y mediciones pendientes"
 ---
 
-> Actualización posterior: por petición del usuario se adelantó la [adaptación del AM-ARM200 original](/docs/development/asistencia_domestica_modular/adaptacion_am_arm200.md). Los blueprints de navegación y doméstico usan ahora ese modelo. Los resultados históricos de esta fase conservan su procedencia y fecha; los nuevos ensayos se registran por separado.
-
+> Plataforma cambiada por el usuario al AlohaMini1 el 15/09/2026. Véase la [migración](/docs/development/asistencia_domestica_modular/migracion_alohamini1.md). Los datos de control y calibración anteriores no son transferibles.
 
 # Hardware objetivo e interfaces
 
@@ -11,19 +10,19 @@ title: "F1: ficha de interfaces del AlohaMini2 y mediciones pendientes"
 
 | Elemento | Confirmado por el usuario | Pendiente antes de habilitar hardware |
 | --- | --- | --- |
-| Plataforma | AlohaMini2 original, armado, con ambos AM-ARM200 | Versión de controlador y firmware, alimentación, interfaces y control de parada. |
+| Plataforma | AlohaMini1, URDF y meshes suministrados | Versión de controlador y firmware, alimentación, interfaces y control de parada. |
 | Base | Base de la plataforma original | Transporte/SDK, comando de velocidad, unidades y signos, odometría disponible, referencia temporal, watchdog y confirmación de parada. |
 | Elevador | Elevador de la plataforma | Unidad y cero, homing, recorrido y velocidad permitidos, mando/lectura, movimiento relativo a sensores y confirmación de detención. |
-| Brazos | Dos AM-ARM200 | Nombres y orden de articulaciones, IDs, grados/radianes/unidades del SDK, modos de posición/velocidad, feedback, límites medidos y sincronización. |
+| Brazos | Dos cadenas `left_joint1..6` / `right_joint1..6`; modelo comercial y función de cada eje pendientes | Nombres y orden de articulaciones, IDs, grados/radianes/unidades del SDK, modos de posición/velocidad, feedback, límites medidos y sincronización. |
 | Pinzas | Una por brazo; transporte con objeto sujeto | Comando de apertura y calibración, carga admisible, corriente/fuerza si está disponible, detección de pérdida y comportamiento durante parada. |
-| Cámaras de muñeca | Incluidas en el robot | Modelos y dispositivos estables, intrínsecos, resolución/FPS, tiempos y transformaciones que dependen de cada brazo. |
-| LiDAR | Unitree L2 4D fijo en la parte superior | Driver real, nube e IMU, unidades y tiempos por punto, odometría compatible, calibración LiDAR–IMU y transformación a base. |
-| RGB-D superior | RealSense D435i fija en la parte superior | Dispositivo/serial, streams de color y profundidad alineados, escala de profundidad, intrínsecos, timestamps y transformación a base. |
+| Cámaras de muñeca | Previstas anteriormente; montaje en AlohaMini1 pendiente de confirmar | Modelos y dispositivos estables, intrínsecos, resolución/FPS, tiempos y transformaciones que dependen de cada brazo. |
+| LiDAR | Unitree L2 4D previsto; montaje en la nueva plataforma por confirmar | Driver real, nube e IMU, unidades y tiempos por punto, odometría compatible, calibración LiDAR–IMU y transformación a base. |
+| RGB-D superior | RealSense D435i prevista; montaje en la nueva plataforma por confirmar | Dispositivo/serial, streams de color y profundidad alineados, escala de profundidad, intrínsecos, timestamps y transformación a base. |
 | Postura de transporte | Regresar el brazo a home con la carga en la pinza | Validar `loaded_home` por objeto/brazo: ángulos, retorno libre de colisiones, espacio de botella/control, otro brazo, velocidad y retención. |
 | Computadora | Beelink GTi15 Ultra prevista | Unidad recibida, CPU/RAM/almacenamiento, SO y conexión efectiva al robot; ninguna capacidad se presupone por el nombre comercial. |
 | GPU | RTX de 24 GB de VRAM prevista; puede demorarse | Modelo concreto, disponibilidad, conexión, drivers y presupuesto de inferencia/entrenamiento medido. |
 
-No hay aún brazo dominante elegido. Las pruebas de contratos usan el derecho únicamente como ejemplo artificial. Las políticas físicas deben declarar qué brazo y cámaras usan; no se supondrá que un checkpoint de un brazo se puede ejecutar en el otro.
+Brazo derecho seleccionado por el usuario para las pruebas artificiales de F4; la elección física sigue pendiente de alcance. Las políticas físicas deben declarar qué brazo y cámaras usan; no se supondrá que un checkpoint de un brazo se puede ejecutar en el otro.
 
 ## Marcos y sincronización
 
@@ -33,11 +32,9 @@ La observación de F1 exige nombre de reloj y tiempo de captura. En hardware se 
 
 ## Modelos disponibles y sus límites
 
-La simulación conservada y sus poses home utilizan SO101. No copiar orden, número de articulaciones, límites ni posiciones a los AM-ARM200.
+El modelo suministrado está en `/home/luigidu/AlohaMini/AlohaMini1/simulation/src/Aloha/urdf/Aloha.urdf`, con meshes en el directorio hermano `meshes`. Contiene 19 links, tres ruedas continuas, un elevador prismático y dos cadenas de seis articulaciones. Los 13 límites de brazos/elevador tienen mínimo, máximo, esfuerzo y velocidad en cero. No hay articulaciones adicionales llamadas pinza ni cámaras: hay que identificar qué eje corresponde al cierre y confirmar los montajes.
 
-Existe localmente `/home/luigidu/Downloads/alohamini2pro.urdf`, cuyo nombre de robot es `alohamini2pro_urdf`. Al leerlo se observan articulaciones de brazo y pinza con límites angulares genéricos y `effort`/`velocity` iguales a cero. Ese archivo corresponde a la variante Pro y **no acredita la geometría ni los límites del AlohaMini2 original elegido**. No se ha importado al simulador ni a la configuración de hardware.
-
-En F7/F8 se obtendrá y comprobará el modelo correspondiente a la variante original, junto con la correspondencia real del SDK. El URDF tampoco sustituye calibración, restricciones de carga ni ensayos de parada.
+La conversión de navegación conserva la pose CAD y bloquea esos ejes; no copia homes, límites ni controles del modelo anterior. Las cinco vistas RGB son cámaras virtuales añadidas explícitamente. La base usa una aproximación de velocidad holonómica, no el controlador físico de las tres ruedas.
 
 ## Mediciones de tarea y acceso pendientes
 
@@ -59,8 +56,6 @@ F1 no depende de GPU. F2 puede empezar con la configuración ligera existente de
 
 Los endpoints, redes y rutas de dispositivos se configurarán mediante las interfaces de DimOS cuando existan adaptadores. Esta ficha no asigna puertos, IPs, frecuencias de control ni límites físicos inventados.
 
-## Actualización al cerrar F3
+## Percepción y cómputo
 
-El usuario suministró el URDF original y meshes en `/home/luigidu/AlohaMini/AlohaMini2/urdf`. El [inventario de F3](/docs/development/asistencia_domestica_modular/fase_3_urdf_original.json) identifica `alohamini2_urdf`, seis ejes más pinza por brazo y las 26 referencias a meshes resueltas. Hay dos referencias de rutas inconsistentes y límites de esfuerzo/velocidad en cero que requieren revisión. La disponibilidad de archivos está comprobada; orden SDK, calibración, límites físicos y montajes de sensores siguen pendientes.
-
-Por decisión del usuario, F3 ejecuta percepción y recuperación localmente en CPU; [los ensayos y la migración de dispositivo](/docs/development/asistencia_domestica_modular/fase_3_memoria_percepcion.md) están documentados. No se utilizó inferencia remota. Disponer de una RTX permitirá probar otros modelos, pero no se supone que resuelva por sí sola los errores visuales.
+Se mantiene la decisión de trabajar localmente en CPU y preparar el cambio a RTX. Los contratos de percepción y memoria siguen disponibles; la nueva geometría exige volver a comprobar extrínsecos, campo visual, alcance y datos de entrenamiento antes de conectar hardware. La [migración](/docs/development/asistencia_domestica_modular/migracion_alohamini1.md) registra las verificaciones nuevas por separado de los resultados históricos.

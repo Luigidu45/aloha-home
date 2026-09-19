@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "model_id": "Qwen/Qwen2.5-VL-3B-Instruct",
+  "revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+  "device": "cpu",
+  "dtype": "bfloat16",
+  "cpu_threads": 4,
+  "max_new_tokens": 160,
+  "max_pixels": 200704,
+  "timeout_s": 60,
+  "startup_timeout_s": 120,
+  "max_image_age_s": 2,
+  "prompt_version": "household-f5-v1"
+}

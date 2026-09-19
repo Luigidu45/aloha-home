@@ -1,0 +1,813 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-18",
+  "status": "completed_software_simulation",
+  "robot": "AlohaMini1",
+  "scope": "mission A, right arm, local CPU, no physical ACT claim",
+  "config": {
+    "schema_version": 1,
+    "model_id": "Qwen/Qwen2.5-VL-3B-Instruct",
+    "revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+    "device": "cpu",
+    "dtype": "bfloat16",
+    "cpu_threads": 4,
+    "max_new_tokens": 160,
+    "max_pixels": 200704,
+    "timeout_s": 60.0,
+    "startup_timeout_s": 120.0,
+    "max_image_age_s": 2.0,
+    "prompt_version": "household-f5-v1"
+  },
+  "versions": {
+    "torch": "2.10.0",
+    "transformers": "4.53.3",
+    "ultralytics": "8.4.14",
+    "chromadb": "1.5.9"
+  },
+  "sources": {
+    "planner_grammar.py": "50ff40dabca2725463fcfafe1a286775be001ffc0ff4dcc8dc616894854df2ca",
+    "planner.py": "ecabd4d416235f2b6401968f0e72e69e71d74dc53972ab51d473fcf75434d7d5",
+    "planner_options.py": "883a445122f06612d8e36ae43b7f6cc6d1e2e5cd4a95994b7ba035fc6535c5f9",
+    "planner_resources.py": "8fd3c272928d315a11300e2b7b3b279e7333704d65f7a6d83e6b0bec2ff76e88",
+    "planner_contracts.py": "937159c0733d9cd57b032e660d94a5d8e29c6c771240f440a76b3b3c52ac3627",
+    "planner_backend.py": "c1cdb64373b7018158150eb202293bbbbd1e8e7864d9848939442cb2838b500f"
+  },
+  "prompt_sha256": "7d87a9d486d3a463d33876e0144708e9711fc9428e56b09e2ca8900740cc4aa4",
+  "model_files": {
+    "merges.txt": "599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3",
+    "config.json": "7ed3eed5be6924cc800e8a5e53fc405c1aab1aaf36bad65c33403b36c56827f5",
+    "model.safetensors.index.json": "c7dd78a4c6bea60b51332f1baf37b8f8124ecab2c35395a29a29825bf2619768",
+    "README.md": "0b6da5a154b923da4dc66e416140c9b7f235f9b08fbbcc27fd9df7b586e3150d",
+    "chat_template.json": "ad60d90252ed0b0705ba14e2d0ad0fec0beac1ea955642b54059b36052d8bc96",
+    "LICENSE": "b5c0e5cf74cf51af1ecbc4af597cfcd13fd9925611838884a681070838a14a50",
+    "model-00001-of-00002.safetensors": "41a8895c164b4d32bae6b302f4603fcbc1797f32dafa45c7e9bcda23c6755df8",
+    "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+    "generation_config.json": "533f191cc257b7de37a4fccd0a7a1706d75e1aa660f93efaa54e5a2a9f9aace9",
+    "preprocessor_config.json": "f2058c716eef96ccaed1cc1e2d0c08306b62586d535b28d9d08e691b2fab7ca0",
+    "model-00002-of-00002.safetensors": "365531ff8752420e89dee707b79d021fb2d6e25abafe486f080555a4fe6972e4",
+    "tokenizer_config.json": "4abd3520120e266da84c0864fee064d1fb10806f02225911a47253dd38dc5f56",
+    "tokenizer.json": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539"
+  },
+  "corpus_manifest_sha256": "9913e76d48c952b5361a45efedcb921f4e534a96b48006f181dd4e5a68076fab",
+  "selection": {
+    "candidates": [
+      "HuggingFaceTB/SmolVLM2-500M-Instruct",
+      "Qwen/Qwen2.5-VL-3B-Instruct"
+    ],
+    "smol_probe": {
+      "raw_log": ".ignore.f5/smol_probe.log",
+      "seconds": [
+        6.031285146,
+        5.895878629,
+        5.970661766
+      ],
+      "responses": [
+        "1",
+        "2",
+        "1"
+      ],
+      "cases": [
+        "one_bottle",
+        "two_bottles",
+        "empty_table"
+      ],
+      "structured_valid": 0,
+      "limitations": "initial short probe, not a final equal-prompt benchmark"
+    },
+    "selected": "Qwen/Qwen2.5-VL-3B-Instruct",
+    "reason": "usable pixel interpretation and constrained structured decisions on CPU",
+    "earlier_regression": {
+      "path": ".ignore.f5/acceptance_final/report.json",
+      "correct": 14,
+      "total": 15,
+      "failure": "assumed bottle for Tr\u00e1eme algo al dormitorio",
+      "fix": "independent explicit request-slot guard, ask-only grammar and subsequent admission check"
+    }
+  },
+  "evaluation": {
+    "path": ".ignore.f5/acceptance_complete/report.json",
+    "sha256": "1ade604d0c1a6bb09799b3c8e3e9e80053a7829d6a417b1615a0e9945f054813",
+    "correct": 15,
+    "total": 15,
+    "metric": "expected next decision class, not complete mission success",
+    "stack_load_s": 10.240794811999876,
+    "latency_s": {
+      "min": 27.659961408999834,
+      "median": 29.88561644099991,
+      "max": 36.14801373199998
+    },
+    "worker_peak_rss_mib": 9314.31640625,
+    "parent_peak_rss_mib": 1768.05859375,
+    "aggregate_rss_upper_bound_mib": 11056.921875,
+    "rss_note": "parent + child RSS sampled during inference; shared pages may be counted twice",
+    "concurrent_perception_retrieval": true,
+    "act_resources": "deferred to F7, no ACT implementation available",
+    "cases": [
+      {
+        "case": 0,
+        "image_case": "one_bottle",
+        "stage": "active",
+        "instruction": "Lleva la botella de la sala a la mesa del dormitorio",
+        "expected": "observe_at",
+        "actual": "observe_at",
+        "correct": true,
+        "status": "admitted",
+        "perception_and_retrieval_s": 0.07912960000021485,
+        "shared_rss_upper_bound_mib": 10902.0546875,
+        "reply": {
+          "raw": "{\"kind\":\"action\",\"skill\":\"observe_at\",\"destination\":\"mesa_sala\",\"plan\":[\"observe_at\"],\"views\":[\"rgb_4\"]}",
+          "receipts": [
+            {
+              "view_id": "rgb_4",
+              "rgb_sha256": "f509b281d4b222652dede76f6151834044f1c09358926e1d0bff6ea2ab13b464",
+              "png_sha256": "7367426bbdd557d21f0a67fe187936baa2a3d3231aae6e0738395037c460c27f"
+            }
+          ],
+          "tensor_sha256": "6e634c044bc25c0ed9dd6a017c6736d7ff9215d7ae437a619a429ac5a92a9992",
+          "tensor_shape": [
+            936,
+            1176
+          ],
+          "elapsed_s": 34.56631881999988,
+          "peak_rss_mib": 9130.515625,
+          "generated_tokens": 31,
+          "visual_assessment": "1",
+          "visual_elapsed_s": 4.809418282000024,
+          "visual_clarification_required": false
+        },
+        "report_sha256": "578eadb9374897cdb810b3955f9348e93f1ddc6ad021598a2d6a2603d4f94ffb"
+      },
+      {
+        "case": 1,
+        "image_case": "two_bottles",
+        "stage": "active",
+        "instruction": "Lleva la botella de la sala a la mesa del dormitorio",
+        "expected": "ask",
+        "actual": "ask",
+        "correct": true,
+        "status": "admitted",
+        "perception_and_retrieval_s": 0.0507993720000286,
+        "shared_rss_upper_bound_mib": 10993.56640625,
+        "reply": {
+          "raw": "{\"kind\":\"ask\",\"question\":\"\u00bfCu\u00e1l botella quieres, la azul o la roja?\",\"views\":[\"rgb_5\"]}",
+          "receipts": [
+            {
+              "view_id": "rgb_5",
+              "rgb_sha256": "6ad73a95283e494730651632f9616e1af00dc41b6d00d528fd5013f1535e25ea",
+              "png_sha256": "55582e3d68376d9930ac0a5b8aa2764ba919c7f332055225ee0603ef6f36e8d4"
+            }
+          ],
+          "tensor_sha256": "3d9916d73fb0f0e0a05fca664dd715f7276995f25e910578b9641973001de22c",
+          "tensor_shape": [
+            936,
+            1176
+          ],
+          "elapsed_s": 33.53747677399997,
+          "peak_rss_mib": 9227.16796875,
+          "generated_tokens": 32,
+          "visual_assessment": "2",
+          "visual_elapsed_s": 4.768959450000011,
+          "visual_clarification_required": true
+        },
+        "report_sha256": "3056697848c06df3a89feda2a2325ad1aff05585d3c101725026739d49bd6685"
+      },
+      {
+        "case": 2,
+        "image_case": "empty_table",
+        "stage": "active",
+        "instruction": "Lleva la botella de la sala a la mesa del dormitorio",
+        "expected": "ask",
+        "actual": "ask",
+        "correct": true,
+        "status": "admitted",
+        "perception_and_retrieval_s": 0.04958940100004838,
+        "shared_rss_upper_bound_mib": 10864.203125,
+        "reply": {
+          "raw": "{\"kind\":\"ask\",\"question\":\"\u00bfD\u00f3nde est\u00e1 la botella en la mesa de sala?\",\"views\":[\"rgb_6\"]}",
+          "receipts": [
+            {
+              "view_id": "rgb_6",
+              "rgb_sha256": "fa5c56c8bb0a010bf71fba2362cc7236c8ac043837d53696590b5353145d7171",
+              "png_sha256": "fa6b307f90ba499fcbc621ce56b9353a5f5465930014e9d63db0c6f4d529095a"
+            }
+          ],
+          "tensor_sha256": "945589c3f3a7dfcbb2848c2c471deb9d08a2e9ba8449a27277a5bcf2436196c5",
+          "tensor_shape": [
+            936,
+            1176
+          ],
+          "elapsed_s": 30.36087618900001,
+          "peak_rss_mib": 9227.16796875,
+          "generated_tokens": 31,
+          "visual_assessment": "0",
+          "visual_elapsed_s": 4.718766075000076,
+          "visual_clarification_required": true
+        },
+        "report_sha256": "97c3d1f6c33968496cbc4bbed5fd98829e6e497a22bc79fbd12c8775489de031"
+      },
+      {
+        "case": 3,
+        "image_case": "cup_only",
+        "stage": "active",
+        "instruction": "Lleva la botella de la sala a la mesa del dormitorio",
+        "expected": "ask",
+        "actual": "ask",
+        "correct": true,
+        "status": "admitted",
+        "perception_and_retrieval_s": 0.050777907000110645,
+        "shared_rss_upper_bound_mib": 10838.63671875,
+        "reply": {
+          "raw": "{\"kind\":\"ask\",\"question\":\"\u00bfD\u00f3nde est\u00e1 la botella en la mesa de sala?\",\"views\":[\"rgb_7\"]}",
+          "receipts": [
+            {
+              "view_id": "rgb_7",
+              "rgb_sha256": "fd5ca42b0b8f5c46f08a10bb2e92248e85b7f0b0037e595a024fcde663f3adc6",
+              "png_sha256": "9d2524ed76defe87c51410f5573055f271f1dde31aa6e9d0d4e1f75d6b023fbf"
+            }
+          ],
+          "tensor_sha256": "eae0b01cbfb67c6ffab269f5b20243b2859f7c6de97828df47bef90f890d334f",
+          "tensor_shape": [
+            936,
+            1176
+          ],
+          "elapsed_s": 29.636895206999952,
+          "peak_rss_mib": 9227.16796875,
+          "generated_tokens": 31,
+          "visual_assessment": "0",
+          "visual_elapsed_s": 4.76619988099992,
+          "visual_clarification_required": true
+        },
+        "report_sha256": "3f7b6bc4dc518f044db7aaa7ca7bd1afca8075072dee14a40e4581f613529972"
+      },
+      {
+        "case": 4,
+        "image_case": "occluded_bottle",
+        "stage": "active",
+        "instruction": "Lleva la botella de la sala a la mesa del dormitorio",
+        "expected": "ask",
+        "actual": "ask",
+        "correct": true,
+        "status": "admitted",
+        "perception_and_retrieval_s": 0.04672247799999241,
+        "shared_rss_upper_bound_mib": 10846.8125,
+        "reply": {
+          "raw": "{\"kind\":\"ask\",\"question\":\"\u00bfD\u00f3nde est\u00e1 la botella en la mesa de la sala?\",\"views\":[\"rgb_8\"]}",
+          "receipts": [
+            {
+              "view_id": "rgb_8",
+              "rgb_sha256": "fd7585ec266c4378581392b1ce8fb858dbbf25c86dc558da423cd921f7b50f52",
+              "png_sha256": "1dfe5debdb1aa6a3cdeccbd469eee7e97bbaaaa4d1c1979b339fee5488b3ccb7"
+            }
+          ],
+          "tensor_sha256": "8390497d4ba3234834b1853521c6b4fcbf3c1164e3ef7093a79a2977a63d201d",
+          "tensor_shape": [
+            936,
+            1176
+          ],
+          "elapsed_s": 29.200142553999967,
+          "peak_rss_mib": 9227.16796875,
+          "generated_tokens": 32,
+          "visual_assessment": "0",
+          "visual_elapsed_s": 4.718090674999985,
+          "visual_clarification_required": true
+        },
+        "report_sha256": "4b3f8251824f8acfb16a5807766815bf1e7e89c9d91cac044d7e8cb8b02e726a"
+      },
+      {
+        "case": 5,
+        "image_case": "bottle_and_cup",
+        "stage": "active",
+        "instruction": "Lleva la botella de la sala a la mesa del dormitorio",
+        "expected": "observe_at",
+        "actual": "observe_at",
+        "correct": true,
+        "status": "admitted",
+        "perception_and_retrieval_s": 0.04443570500006899,
+        "shared_rss_upper_bound_mib": 10919.75390625,
+        "reply": {
+          "raw": "{\"kind\":\"action\",\"skill\":\"observe_at\",\"destination\":\"mesa_sala\",\"plan\":[\"observe_at\"],\"views\":[\"rgb_9\"]}",
+          "receipts": [
+            {
+              "view_id": "rgb_9",
+              "rgb_sha256": "4a6a5b235852462f53c1834985b48e7198be5347bec2bacf87af933f9646e9ad",
+              "png_sha256": "c27814a6126f50daaac8be405429590fcea2de50d55ae6ef8f172964dbff119f"
+            }
+          ],
+          "tensor_sha256": "b17c3fccb4a735e589d467768db8848e1e7dee2647e5271f78c2b9f13717e2ec",
+          "tensor_shape": [
+            936,
+            1176
+          ],
+          "elapsed_s": 29.595417228000088,
+          "peak_rss_mib": 9227.16796875,
+          "generated_tokens": 31,
+          "visual_assessment": "1",
+          "visual_elapsed_s": 4.756503243999987,
+          "visual_clarification_required": false
+        },
+        "report_sha256": "bfe412bc0e74433ab4d97387f799704281940bb7d4fc50f97b087541c1a05867"
+      },
+      {
+        "case": 6,
+        "image_case": "one_bottle_side",
+        "stage": "active",
+        "instruction": "Lleva la botella de la sala a la mesa del dormitorio",
+        "expected": "observe_at",
+        "actual": "observe_at",
+        "correct": true,
+        "status": "admitted",
+        "perception_and_retrieval_s": 0.045117374000028576,
+        "shared_rss_upper_bound_mib": 10898.5390625,
+        "reply": {
+          "raw": "{\"kind\":\"action\",\"skill\":\"observe_at\",\"destination\":\"mesa_sala\",\"plan\":[\"observe_at\"],\"views\":[\"rgb_10\"]}",
+          "receipts": [
+            {
+              "view_id": "rgb_10",
+              "rgb_sha256": "65b6c7c97458fca7dfae94b84a3f896bdca34bb6013caebd0a378fb4926f76f0",
+              "png_sha256": "9f82368fbeb4f0706d0623d5787081bb770718cdeed2db2a148267f5770631d2"
+            }
+          ],
+          "tensor_sha256": "b06d0df7613763f156a565ec7dd69697e32b6933206d5bdf09265ba8adcceff2",
+          "tensor_shape": [
+            936,
+            1176
+          ],
+          "elapsed_s": 29.88561644099991,
+          "peak_rss_mib": 9227.16796875,
+          "generated_tokens": 32,
+          "visual_assessment": "1",
+          "visual_elapsed_s": 4.8140572709999105,
+          "visual_clarification_required": false
+        },
+        "report_sha256": "3c63902f6187208f26c96bdcd894f676db904bf5a9ebaec88e52ae1e956f59c0"
+      },
+      {
+        "case": 7,
+        "image_case": "two_bottles_side",
+        "stage": "active",
+        "instruction": "Lleva la botella de la sala a la mesa del dormitorio",
+        "expected": "ask",
+        "actual": "ask",
+        "correct": true,
+        "status": "admitted",
+        "perception_and_retrieval_s": 0.05005558700008805,
+        "shared_rss_upper_bound_mib": 10967.06640625,
+        "reply": {
+          "raw": "{\"kind\":\"ask\",\"question\":\"\u00bfCu\u00e1l botella quieres, la azul o la roja?\",\"views\":[\"rgb_11\"]}",
+          "receipts": [
+            {
+              "view_id": "rgb_11",
+              "rgb_sha256": "7c52d28f3e9d13aa952e43d3d998bb49c42d7b2a1e38432e52c0272dd6b8e9fa",
+              "png_sha256": "19157e13ac82ce3011a63729ba2a08bb4f69304e9f5da4a7688ac9d8b8a301bf"
+            }
+          ],
+          "tensor_sha256": "ec07c1ee2bb0f2f5503d0b4c9cc26f74013ef0fe4bc1538e4f1ce6b672c64689",
+          "tensor_shape": [
+            936,
+            1176
+          ],
+          "elapsed_s": 32.327716566999925,
+          "peak_rss_mib": 9227.16796875,
+          "generated_tokens": 33,
+          "visual_assessment": "unknown",
+          "visual_elapsed_s": 4.821373255000026,
+          "visual_clarification_required": true
+        },
+        "report_sha256": "30b103dc5aba3c935c591ac812ee40c4fb3538fa15c98774911e8766e8aabf66"
+      },
+      {
+        "case": 8,
+        "image_case": "one_bottle",
+        "stage": "new",
+        "instruction": "Por favor, tr\u00e1eme la botella de la sala al dormitorio",
+        "expected": "request",
+        "actual": "request",
+        "correct": true,
+        "status": "admitted",
+        "perception_and_retrieval_s": 0.044893959999853905,
+        "shared_rss_upper_bound_mib": 10844.4453125,
+        "reply": {
+          "raw": "{\"kind\":\"request\",\"destination\":\"mesa_dormitorio\",\"views\":[\"rgb_12\"]}",
+          "receipts": [
+            {
+              "view_id": "rgb_12",
+              "rgb_sha256": "f509b281d4b222652dede76f6151834044f1c09358926e1d0bff6ea2ab13b464",
+              "png_sha256": "7367426bbdd557d21f0a67fe187936baa2a3d3231aae6e0738395037c460c27f"
+            }
+          ],
+          "tensor_sha256": "6e634c044bc25c0ed9dd6a017c6736d7ff9215d7ae437a619a429ac5a92a9992",
+          "tensor_shape": [
+            936,
+            1176
+          ],
+          "elapsed_s": 27.659961408999834,
+          "peak_rss_mib": 9227.16796875,
+          "generated_tokens": 23,
+          "visual_assessment": "1",
+          "visual_elapsed_s": 4.86574364199987,
+          "visual_clarification_required": false
+        },
+        "report_sha256": "737be4b21a319ca3f25da632cd84c100b7dcb6975957bc1248aba23eb2243a4d"
+      },
+      {
+        "case": 9,
+        "image_case": "one_bottle",
+        "stage": "new",
+        "instruction": "\u00bfPuedes dejar la botella de la sala en la mesa de mi habitaci\u00f3n?",
+        "expected": "request",
+        "actual": "request",
+        "correct": true,
+        "status": "admitted",
+        "perception_and_retrieval_s": 0.046457518999886815,
+        "shared_rss_upper_bound_mib": 10912.01953125,
+        "reply": {
+          "raw": "{\"kind\":\"request\",\"destination\":\"mesa_dormitorio\",\"views\":[\"rgb_13\"]}",
+          "receipts": [
+            {
+              "view_id": "rgb_13",
+              "rgb_sha256": "f509b281d4b222652dede76f6151834044f1c09358926e1d0bff6ea2ab13b464",
+              "png_sha256": "7367426bbdd557d21f0a67fe187936baa2a3d3231aae6e0738395037c460c27f"
+            }
+          ],
+          "tensor_sha256": "6e634c044bc25c0ed9dd6a017c6736d7ff9215d7ae437a619a429ac5a92a9992",
+          "tensor_shape": [
+            936,
+            1176
+          ],
+          "elapsed_s": 28.440900145000114,
+          "peak_rss_mib": 9227.16796875,
+          "generated_tokens": 23,
+          "visual_assessment": "1",
+          "visual_elapsed_s": 4.956409524000037,
+          "visual_clarification_required": false
+        },
+        "report_sha256": "16d79c281f586bf84b58b71cc064157dc40af0c03cc3dedac14da488c42dc91d"
+      },
+      {
+        "case": 10,
+        "image_case": "one_bottle",
+        "stage": "new",
+        "instruction": "Tr\u00e1eme algo al dormitorio",
+        "expected": "ask",
+        "actual": "ask",
+        "correct": true,
+        "status": "admitted",
+        "perception_and_retrieval_s": 0.05276666400004615,
+        "shared_rss_upper_bound_mib": 10893.49609375,
+        "reply": {
+          "raw": "{\"kind\":\"ask\",\"question\":\"\u00bfQu\u00e9 objeto quieres que lleve al dormitorio?\",\"views\":[\"rgb_14\"]}",
+          "receipts": [
+            {
+              "view_id": "rgb_14",
+              "rgb_sha256": "f509b281d4b222652dede76f6151834044f1c09358926e1d0bff6ea2ab13b464",
+              "png_sha256": "7367426bbdd557d21f0a67fe187936baa2a3d3231aae6e0738395037c460c27f"
+            }
+          ],
+          "tensor_sha256": "6e634c044bc25c0ed9dd6a017c6736d7ff9215d7ae437a619a429ac5a92a9992",
+          "tensor_shape": [
+            936,
+            1176
+          ],
+          "elapsed_s": 31.916397093999876,
+          "peak_rss_mib": 9227.16796875,
+          "generated_tokens": 29,
+          "visual_assessment": "1",
+          "visual_elapsed_s": 4.980451582999876,
+          "visual_clarification_required": false
+        },
+        "report_sha256": "9c241d1267981dccbf29fd62e82eb9acf831e3e56ad653e6323bcfa63962203f"
+      },
+      {
+        "case": 11,
+        "image_case": "one_bottle",
+        "stage": "new",
+        "instruction": "Lleva la botella",
+        "expected": "ask",
+        "actual": "ask",
+        "correct": true,
+        "status": "admitted",
+        "perception_and_retrieval_s": 0.05250110399992991,
+        "shared_rss_upper_bound_mib": 10901.78515625,
+        "reply": {
+          "raw": "{\"kind\":\"ask\",\"question\":\"\u00bfD\u00f3nde quieres llevar la botella?\",\"views\":[\"rgb_15\"]}",
+          "receipts": [
+            {
+              "view_id": "rgb_15",
+              "rgb_sha256": "f509b281d4b222652dede76f6151834044f1c09358926e1d0bff6ea2ab13b464",
+              "png_sha256": "7367426bbdd557d21f0a67fe187936baa2a3d3231aae6e0738395037c460c27f"
+            }
+          ],
+          "tensor_sha256": "6e634c044bc25c0ed9dd6a017c6736d7ff9215d7ae437a619a429ac5a92a9992",
+          "tensor_shape": [
+            936,
+            1176
+          ],
+          "elapsed_s": 30.373679191999827,
+          "peak_rss_mib": 9227.16796875,
+          "generated_tokens": 28,
+          "visual_assessment": "1",
+          "visual_elapsed_s": 4.947113542999887,
+          "visual_clarification_required": false
+        },
+        "report_sha256": "8ee6a567a3c4559633c429c5e7af136804d7c8a4a8c61097ed85200f0145ed39"
+      },
+      {
+        "case": 12,
+        "image_case": "remote_floor",
+        "stage": "new",
+        "instruction": "Recoge el control remoto del suelo",
+        "expected": "ask",
+        "actual": "ask",
+        "correct": true,
+        "status": "admitted",
+        "perception_and_retrieval_s": 0.05314990300007594,
+        "shared_rss_upper_bound_mib": 10841.69140625,
+        "reply": {
+          "raw": "{\"kind\":\"ask\",\"question\":\"\u00bfD\u00f3nde est\u00e1 el control remoto en el suelo?\",\"views\":[\"rgb_16\"]}",
+          "receipts": [
+            {
+              "view_id": "rgb_16",
+              "rgb_sha256": "ba47c1906983b1442b950475519526e1d91249b7e7e8b7bb570fb3785b1d5938",
+              "png_sha256": "4e343ab67528f70f98d608ca8e7437aa428ca54d5720b09c64e2686ce0eeeec4"
+            }
+          ],
+          "tensor_sha256": "8e98095def8daa414d088e191fdecddd17701698dfeaa3483491069e77ae47c1",
+          "tensor_shape": [
+            936,
+            1176
+          ],
+          "elapsed_s": 28.747632004000025,
+          "peak_rss_mib": 9227.16796875,
+          "generated_tokens": 32,
+          "visual_assessment": "unknown",
+          "visual_elapsed_s": 4.879446817000144,
+          "visual_clarification_required": false
+        },
+        "report_sha256": "3fd9582c890889173423669e9fbe3420f328b5750087144db85acedd74cd11a1"
+      },
+      {
+        "case": 13,
+        "image_case": "empty_floor",
+        "stage": "new",
+        "instruction": "Prep\u00e1rame caf\u00e9 en la cocina",
+        "expected": "ask",
+        "actual": "ask",
+        "correct": true,
+        "status": "admitted",
+        "perception_and_retrieval_s": 0.04518343199993069,
+        "shared_rss_upper_bound_mib": 10862.13671875,
+        "reply": {
+          "raw": "{\"kind\":\"ask\",\"question\":\"\u00bfQu\u00e9 objeto quieres que lleve al dormitorio?\",\"views\":[\"rgb_17\"]}",
+          "receipts": [
+            {
+              "view_id": "rgb_17",
+              "rgb_sha256": "b522e503a742d44cce4356b2b07dc62633c1b350db1c9c9d4849794fa725e91b",
+              "png_sha256": "50702fe2eff5aef4f824b71890a6e825a47e0f1e5ea4d9bf6dd1363d318fc2bc"
+            }
+          ],
+          "tensor_sha256": "bc057518a131a3ce3b15a2f31f3d6d5ad69ab1caa0edd39c4cdc6d6fa99afa11",
+          "tensor_shape": [
+            936,
+            1176
+          ],
+          "elapsed_s": 28.051967602999866,
+          "peak_rss_mib": 9227.16796875,
+          "generated_tokens": 29,
+          "visual_assessment": "0",
+          "visual_elapsed_s": 4.846618512999839,
+          "visual_clarification_required": false
+        },
+        "report_sha256": "57108191d09b6d57ec0fccb577319f1e12637bdab958ccb9cd4603c1a9303bbe"
+      },
+      {
+        "case": 14,
+        "image_case": "empty_table",
+        "stage": "held",
+        "instruction": "Lleva la botella de la sala a la mesa del dormitorio",
+        "expected": "prepare_transport",
+        "actual": "prepare_transport",
+        "correct": true,
+        "status": "admitted",
+        "perception_and_retrieval_s": 0.04562907600006838,
+        "shared_rss_upper_bound_mib": 11056.921875,
+        "reply": {
+          "raw": "{\"kind\":\"action\",\"skill\":\"prepare_transport\",\"destination\":\"mesa_sala\",\"object_id\":\"bottle_01\",\"plan\":[\"prepare_transport\"],\"views\":[\"rgb_18\"]}",
+          "receipts": [
+            {
+              "view_id": "rgb_18",
+              "rgb_sha256": "fa5c56c8bb0a010bf71fba2362cc7236c8ac043837d53696590b5353145d7171",
+              "png_sha256": "fa6b307f90ba499fcbc621ce56b9353a5f5465930014e9d63db0c6f4d529095a"
+            }
+          ],
+          "tensor_sha256": "945589c3f3a7dfcbb2848c2c471deb9d08a2e9ba8449a27277a5bcf2436196c5",
+          "tensor_shape": [
+            936,
+            1176
+          ],
+          "elapsed_s": 36.14801373199998,
+          "peak_rss_mib": 9314.31640625,
+          "generated_tokens": 41,
+          "visual_assessment": "0",
+          "visual_elapsed_s": 4.773213334000047,
+          "visual_clarification_required": false
+        },
+        "report_sha256": "4f586a40acfc8743a010eafed03cd6cd0ce6dcbe346eb9455c19ee9c1b5acb38"
+      }
+    ]
+  },
+  "live": {
+    "live_cancel": {
+      "robot": "alohamini1",
+      "vlm": {
+        "schema_version": 1,
+        "model_id": "Qwen/Qwen2.5-VL-3B-Instruct",
+        "revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+        "device": "cpu",
+        "dtype": "bfloat16",
+        "cpu_threads": 4,
+        "max_new_tokens": 160,
+        "max_pixels": 200704,
+        "timeout_s": 60.0,
+        "startup_timeout_s": 120.0,
+        "max_image_age_s": 2.0,
+        "prompt_version": "household-f5-v1"
+      },
+      "navigation": "live_mujoco",
+      "images": "live_front_camera",
+      "manipulation": "artificial_F4",
+      "act": false,
+      "cancel_during_inference": true,
+      "cancel_requested_at": 1789757358.4573915,
+      "cancel_rpc_s": 0.0007176399230957031,
+      "planner_result": "discarded",
+      "final": {
+        "request_id": "f5_cancel_fixture",
+        "state": "cancelled",
+        "reason": "user_cancel",
+        "action": null,
+        "revision": 3,
+        "selected_object_id": null,
+        "held_object_id": null,
+        "arm": "right",
+        "verification": null,
+        "stop_verification": {
+          "verdict": "success",
+          "reason": "requirements_confirmed",
+          "evidence": [
+            {
+              "origin": "simulation",
+              "source": "mujoco_ground_truth_localization",
+              "reference": "odom@1789757358.4891922",
+              "captured_at": 1789757358.4891922,
+              "clock_id": "unix",
+              "frame_id": "world"
+            },
+            {
+              "origin": "test",
+              "source": "f4_artificial_scene",
+              "reference": "fixture@1789757358.566651821",
+              "captured_at": 1789757358.5666518,
+              "clock_id": "unix",
+              "frame_id": "world"
+            },
+            {
+              "origin": "test",
+              "source": "f4_artificial_scene",
+              "reference": "fixture@1789757358.566651821",
+              "captured_at": 1789757358.5666518,
+              "clock_id": "unix",
+              "frame_id": "world"
+            },
+            {
+              "origin": "test",
+              "source": "f4_artificial_scene",
+              "reference": "fixture@1789757358.566651821",
+              "captured_at": 1789757358.5666518,
+              "clock_id": "unix",
+              "frame_id": "world"
+            }
+          ]
+        },
+        "stop_requested_at": 1789757358.4577355,
+        "stop_confirmed_at": 1789757358.632202,
+        "completed_actions": []
+      },
+      "path": ".ignore.f5/live_cancel/report.json",
+      "sha256": "734d8a6c8c6cd297710a0c16f34a862192ad9b88859a2207451203b6bdd411fa",
+      "outcomes": [
+        {
+          "event": "discarded",
+          "at": 1789757358.4581115,
+          "reason": "operator_cancel"
+        }
+      ],
+      "stop_confirmation_s": 0.17446637153625488
+    },
+    "live_nominal": {
+      "robot": "alohamini1",
+      "vlm": {
+        "schema_version": 1,
+        "model_id": "Qwen/Qwen2.5-VL-3B-Instruct",
+        "revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+        "device": "cpu",
+        "dtype": "bfloat16",
+        "cpu_threads": 4,
+        "max_new_tokens": 160,
+        "max_pixels": 200704,
+        "timeout_s": 60.0,
+        "startup_timeout_s": 120.0,
+        "max_image_age_s": 2.0,
+        "prompt_version": "household-f5-v1"
+      },
+      "navigation": "live_mujoco",
+      "images": "live_front_camera",
+      "manipulation": "artificial_F4",
+      "act": false,
+      "cancel_during_inference": false,
+      "last_wait_reason": "all actuators must be freshly observed stopped during inference",
+      "final": {
+        "request_id": "",
+        "state": "idle",
+        "reason": "not_started",
+        "action": null,
+        "revision": 3,
+        "selected_object_id": null,
+        "held_object_id": null,
+        "arm": "right",
+        "verification": null,
+        "stop_verification": null,
+        "stop_requested_at": null,
+        "stop_confirmed_at": null,
+        "completed_actions": []
+      },
+      "path": ".ignore.f5/live_nominal/report.json",
+      "sha256": "1970c921ee4aa4a6cdae9233b9ad6ef658160cdbd33fcbd4036a399df69c9b7f",
+      "outcomes": [
+        {
+          "event": "inference",
+          "at": 1789757569.0974596,
+          "reply": {
+            "raw": "{\"kind\":\"ask\",\"question\":\"\u00bfD\u00f3nde est\u00e1 la botella en la sala?\",\"views\":[\"rgb_1789757542004716032\"]}",
+            "receipts": [
+              {
+                "view_id": "rgb_1789757542004716032",
+                "rgb_sha256": "a5861d3e16ef8420f66ac8228eebdfb72656a2ee462d8a82733e2dcfc2343754",
+                "png_sha256": "df14622b227f722ed1633d435bcc7f12e15782dd0e1686c6d04f4b524c0dd039"
+              }
+            ],
+            "tensor_sha256": "cefba79b7a3d548be735b236ebcb00e9e6904b870ee7a784e15b19a946959272",
+            "tensor_shape": [
+              180,
+              1176
+            ],
+            "elapsed_s": 26.550550750000184,
+            "peak_rss_mib": 9119.6640625,
+            "generated_tokens": 47,
+            "visual_assessment": "0",
+            "visual_elapsed_s": 1.698658900000055,
+            "visual_clarification_required": false
+          }
+        },
+        {
+          "event": "admitted",
+          "at": 1789757569.0974596,
+          "decision": {
+            "kind": "ask",
+            "skill": null,
+            "destination": null,
+            "object_id": null,
+            "question": "\u00bfD\u00f3nde est\u00e1 la botella en la sala?",
+            "reason": "model_proposal",
+            "plan": [],
+            "views": [
+              "rgb_1789757542004716032"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "checks": {
+    "household_pytest": "118 passed",
+    "mypy": "12 source files passed",
+    "ruff": "passed",
+    "git_diff_check": "passed",
+    "pre_commit": "all applicable F5 hooks passed after formatting and uv-lock cache retry; global largefiles hook reports pre-existing 132KB cronograma_actualizado.xlsx (75KB limit), untouched",
+    "uv_lock": "passed with cache access outside sandbox",
+    "doclinks": "passed",
+    "warnings": "multiprocessing resource_tracker reported one semaphore cleanup on process exit; model and DimOS workers terminated"
+  },
+  "limitations": [
+    "synthetic RGB; fixture object bindings and executors",
+    "paused replay clock; wall-clock backend deadline remains enforced",
+    "no physical manipulation, instance identification or live scene freshness claim",
+    "small development corpus plus two held-out views, not a general accuracy estimate",
+    "VLM + grammar + independent state/slot guards; no claim of unconstrained model accuracy",
+    "F3 side views reused for regression, not an independent generalization estimate",
+    "live camera run admitted a question, not an end-to-end VLM mission",
+    "actuator stop evidence for arms and gripper remains artificial",
+    "no physical hardware, ACT, GPU, voice/UI or cloud inference validation",
+    "exact pixel-change veto is conservative and can reject benign camera noise",
+    "out-of-scope remote/coffee requests were not executed, but generated questions did not clearly explain unsupported scope; refine in F6"
+  ]
+}

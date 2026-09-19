@@ -114,6 +114,31 @@ class PController:
         )
 
 
+class HolonomicController(PController):
+    """Follow a path with body-frame XY velocity and slow down near the target.
+
+    Initial/final orientation remains the local planner's responsibility.
+    """
+
+    def advance(self, lookahead_point: NDArray[np.float64], current_odom: PoseStamped) -> Twist:
+        offset = lookahead_point - np.array([current_odom.position.x, current_odom.position.y])
+        distance = float(np.linalg.norm(offset))
+        if distance < 1e-6:
+            return Twist()
+        # Proportional translation avoids the forward-only controller's minimum
+        # speed and turning radius preventing a precise holonomic arrival.
+        velocity = offset * min(1.0, self._speed / distance)
+        yaw = current_odom.orientation.euler[2]
+        cos_yaw, sin_yaw = math.cos(yaw), math.sin(yaw)
+        return Twist(
+            linear=Vector3(
+                float(cos_yaw * velocity[0] + sin_yaw * velocity[1]),
+                float(-sin_yaw * velocity[0] + cos_yaw * velocity[1]),
+                0.0,
+            )
+        )
+
+
 class PdController(PController):
     _k_derivative: float = 0.15
 

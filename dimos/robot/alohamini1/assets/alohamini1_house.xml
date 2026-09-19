@@ -1,0 +1,273 @@
+<!--
+Copyright 2025-2026 Dimensional Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<!-- House simulation environment for AlohaMini1 navigation: Sala, Dormitorios, Cocina, Baño y Pasillo. -->
+<mujoco model="talos_house">
+  <compiler angle="radian" autolimits="true"/>
+  <option timestep="0.005" gravity="0 0 -9.81" integrator="implicitfast"/>
+
+  <visual>
+    <global azimuth="135" elevation="-25"/>
+    <map znear="0.0002"/>
+    <headlight ambient="0.45 0.45 0.45" diffuse="0.65 0.65 0.65"/>
+  </visual>
+
+  <asset>
+    <material name="floor_wood" rgba="0.75 0.58 0.42 1"/>
+    <material name="floor_tile" rgba="0.82 0.82 0.80 1"/>
+    <material name="wall_mat" rgba="0.92 0.91 0.88 1"/>
+    <material name="sofa_mat" rgba="0.22 0.35 0.50 1"/>
+    <material name="wood_dark" rgba="0.38 0.24 0.15 1"/>
+    <material name="wood_light" rgba="0.68 0.50 0.32 1"/>
+    <material name="white_mat" rgba="0.95 0.95 0.95 1"/>
+    <material name="dark_metal" rgba="0.15 0.15 0.17 1"/>
+    <material name="counter_top" rgba="0.28 0.30 0.32 1"/>
+    <material name="bed_linen_1" rgba="0.22 0.42 0.62 1"/>
+    <material name="bed_linen_2" rgba="0.65 0.40 0.30 1"/>
+    <material name="pillow_mat" rgba="0.92 0.92 0.95 1"/>
+    <material name="appliance_mat" rgba="0.75 0.77 0.80 1"/>
+    <material name="ceramic_mat" rgba="0.93 0.95 0.96 1"/>
+    <material name="glass_mat" rgba="0.65 0.80 0.85 0.6"/>
+    <material name="rug_mat" rgba="0.55 0.50 0.45 1"/>
+  </asset>
+
+  <default>
+    <geom condim="3" friction="1 0.01 0.001" solref="0.01 1"/>
+  </default>
+
+  <worldbody>
+    <light directional="true" pos="0 0 4.5" dir="0 0 -1"/>
+    <light directional="true" pos="-3.5 2.5 3.5" dir="0.2 -0.2 -1"/>
+    <light directional="true" pos="3.5 -2.5 3.5" dir="-0.2 0.2 -1"/>
+
+    <!-- Floors: Wooden floor for living areas, ceramic floor for kitchen and bathroom -->
+    <geom name="floor" type="plane" size="7.0 6.0 0.1" material="floor_wood"/>
+
+    <!-- ================================================================= -->
+    <!-- EXTERIOR WALLS (Bounding Envelope 12m x 10m, Height 2.4m)         -->
+    <!-- ================================================================= -->
+    <geom name="wall_north" type="box" pos="0 5.0 1.2" size="6.06 0.06 1.2" material="wall_mat"/>
+    <geom name="wall_south" type="box" pos="0 -5.0 1.2" size="6.06 0.06 1.2" material="wall_mat"/>
+    <geom name="wall_west" type="box" pos="-6.0 0 1.2" size="0.06 5.0 1.2" material="wall_mat"/>
+    <geom name="wall_east" type="box" pos="6.0 0 1.2" size="0.06 5.0 1.2" material="wall_mat"/>
+
+    <!-- ================================================================= -->
+    <!-- INTERIOR WALLS & DOORWAYS (All doorways >= 1.2m wide)              -->
+    <!-- ================================================================= -->
+    <!-- West interior wall at X = -1.5 (separating Sala & Cocina from Hallway) -->
+    <!-- North segment (Y: 1.8 to 5.0) -->
+    <geom name="wall_hall_west_north" type="box" pos="-1.5 3.4 1.2" size="0.06 1.6 1.2" material="wall_mat"/>
+    <!-- Doorway to Sala: Y = 0.6 to 1.8 (width 1.2m OPEN) -->
+    <!-- Middle segment (Y: -1.0 to 0.6) -->
+    <geom name="wall_hall_west_mid" type="box" pos="-1.5 -0.2 1.2" size="0.06 0.8 1.2" material="wall_mat"/>
+    <!-- Doorway to Cocina: Y = -2.2 to -1.0 (width 1.2m OPEN) -->
+    <!-- South segment (Y: -5.0 to -2.2) -->
+    <geom name="wall_hall_west_south" type="box" pos="-1.5 -3.6 1.2" size="0.06 1.4 1.2" material="wall_mat"/>
+
+    <!-- Partition between Sala and Cocina at Y = 0.0 (West side) -->
+    <geom name="wall_sala_cocina_west" type="box" pos="-4.5 0.0 1.2" size="1.5 0.06 1.2" material="wall_mat"/>
+    <!-- Open passage between Sala & Cocina: X = -3.0 to -1.8 (width 1.2m OPEN) -->
+    <geom name="wall_sala_cocina_east" type="box" pos="-1.65 0.0 1.2" size="0.15 0.06 1.2" material="wall_mat"/>
+
+    <!-- East interior wall at X = 1.2 (separating Bedrooms & Bath from Hallway) -->
+    <!-- North segment (Y: 3.6 to 5.0) -->
+    <geom name="wall_hall_east_north" type="box" pos="1.2 4.3 1.2" size="0.06 0.7 1.2" material="wall_mat"/>
+    <!-- Doorway to Dormitorio 1: Y = 2.4 to 3.6 (width 1.2m OPEN) -->
+    <!-- Middle-north segment (Y: 0.7 to 2.4) -->
+    <geom name="wall_hall_east_midnorth" type="box" pos="1.2 1.55 1.2" size="0.06 0.85 1.2" material="wall_mat"/>
+    <!-- Doorway to Baño: Y = -0.5 to 0.7 (width 1.2m OPEN) -->
+    <!-- Middle-south segment (Y: -2.4 to -0.5) -->
+    <geom name="wall_hall_east_midsouth" type="box" pos="1.2 -1.45 1.2" size="0.06 0.95 1.2" material="wall_mat"/>
+    <!-- Doorway to Dormitorio 2: Y = -3.6 to -2.4 (width 1.2m OPEN) -->
+    <!-- South segment (Y: -5.0 to -3.6) -->
+    <geom name="wall_hall_east_south" type="box" pos="1.2 -4.3 1.2" size="0.06 0.7 1.2" material="wall_mat"/>
+
+    <!-- Partition between Dormitorio 1 and Baño at Y = 1.2 (East side) -->
+    <geom name="wall_bed1_bath" type="box" pos="3.6 1.2 1.2" size="2.4 0.06 1.2" material="wall_mat"/>
+
+    <!-- Partition between Baño and Dormitorio 2 at Y = -1.0 (East side) -->
+    <geom name="wall_bath_bed2" type="box" pos="3.6 -1.0 1.2" size="2.4 0.06 1.2" material="wall_mat"/>
+
+    <!-- ================================================================= -->
+    <!-- SALA (LIVING ROOM) FURNITURE (X: -6.0 to -1.5, Y: 0.0 to 5.0)     -->
+    <!-- ================================================================= -->
+    <!-- Sofá principal -->
+    <body name="sofa" pos="-5.2 3.2 0">
+      <geom name="sofa_seat" type="box" pos="0 0 0.22" size="0.45 1.0 0.22" material="sofa_mat"/>
+      <geom name="sofa_back" type="box" pos="-0.35 0 0.50" size="0.10 1.0 0.28" material="sofa_mat"/>
+      <geom name="sofa_arm_left" type="box" pos="0 0.95 0.35" size="0.45 0.10 0.15" material="sofa_mat"/>
+      <geom name="sofa_arm_right" type="box" pos="0 -0.95 0.35" size="0.45 0.10 0.15" material="sofa_mat"/>
+    </body>
+
+    <!-- Alfombra de sala (visual sutil, sin colisión) -->
+    <geom name="sala_rug" type="box" pos="-4.1 3.2 0.005" size="1.0 1.2 0.005" material="rug_mat" contype="0" conaffinity="0"/>
+
+    <!-- Mesa de centro -->
+    <body name="coffee_table" pos="-4.0 3.2 0">
+      <geom name="coffee_table_top" type="box" pos="0 0 0.25" size="0.30 0.55 0.03" material="wood_light"/>
+      <geom name="coffee_table_base" type="box" pos="0 0 0.11" size="0.22 0.45 0.11" material="dark_metal"/>
+    </body>
+
+    <!-- Mueble de televisión y Televisor -->
+    <body name="tv_unit" pos="-3.8 4.7 0">
+      <geom name="tv_stand" type="box" pos="0 0 0.25" size="0.80 0.20 0.25" material="wood_dark"/>
+      <geom name="tv_screen" type="box" pos="0 0 0.70" size="0.60 0.04 0.32" material="dark_metal"/>
+      <geom name="tv_base" type="box" pos="0 0 0.52" size="0.15 0.08 0.02" material="dark_metal"/>
+    </body>
+
+    <!-- Sillón individual -->
+    <body name="armchair" pos="-3.6 1.8 0">
+      <geom name="armchair_seat" type="box" pos="0 0 0.22" size="0.32 0.32 0.22" material="sofa_mat"/>
+      <geom name="armchair_back" type="box" pos="0 -0.26 0.42" size="0.32 0.06 0.20" material="sofa_mat"/>
+    </body>
+
+    <!-- Estantería baja -->
+    <body name="bookshelf" pos="-5.6 1.1 0">
+      <geom name="bookshelf_body" type="box" pos="0 0 0.45" size="0.25 0.55 0.45" material="wood_dark"/>
+    </body>
+
+    <!-- ================================================================= -->
+    <!-- COCINA Y COMEDOR (X: -6.0 to -1.5, Y: -5.0 to 0.0)                -->
+    <!-- ================================================================= -->
+    <!-- Refrigerador alto -->
+    <body name="refrigerator" pos="-5.5 -1.0 0">
+      <geom name="fridge_body" type="box" pos="0 0 0.90" size="0.35 0.40 0.90" material="appliance_mat"/>
+      <geom name="fridge_handle" type="box" pos="0.36 0.15 0.90" size="0.02 0.03 0.40" material="dark_metal"/>
+    </body>
+
+    <!-- Mesada de cocina con lavaplatos -->
+    <body name="kitchen_counter" pos="-5.5 -2.6 0">
+      <geom name="counter_cabinet" type="box" pos="0 0 0.42" size="0.35 0.95 0.42" material="white_mat"/>
+      <geom name="counter_top_geom" type="box" pos="0 0 0.86" size="0.38 0.98 0.03" material="counter_top"/>
+      <geom name="kitchen_sink" type="box" pos="0 0.10 0.895" size="0.22 0.30 0.01" material="dark_metal"/>
+    </body>
+
+    <!-- Cocina / Estufa -->
+    <body name="stove" pos="-4.2 -4.5 0">
+      <geom name="stove_body" type="box" pos="0 0 0.42" size="0.50 0.35 0.42" material="appliance_mat"/>
+      <geom name="stove_top" type="box" pos="0 0 0.86" size="0.52 0.37 0.03" material="counter_top"/>
+      <geom name="range_hood" type="box" pos="0 0 1.60" size="0.45 0.30 0.15" material="appliance_mat"/>
+    </body>
+
+    <!-- Mesa de comedor -->
+    <body name="dining_table" pos="-3.2 -2.6 0">
+      <geom name="dining_table_top" type="box" pos="0 0 0.72" size="0.55 0.75 0.04" material="wood_light"/>
+      <geom name="dining_table_leg" type="box" pos="0 0 0.34" size="0.35 0.50 0.34" material="dark_metal"/>
+    </body>
+
+    <!-- Sillas de comedor -->
+    <body name="dining_chair_north" pos="-3.2 -1.6 0">
+      <geom type="box" pos="0 0 0.22" size="0.20 0.20 0.22" material="wood_dark"/>
+      <geom type="box" pos="0 0.16 0.48" size="0.20 0.04 0.26" material="wood_dark"/>
+    </body>
+    <body name="dining_chair_south" pos="-3.2 -3.6 0">
+      <geom type="box" pos="0 0 0.22" size="0.20 0.20 0.22" material="wood_dark"/>
+      <geom type="box" pos="0 -0.16 0.48" size="0.20 0.04 0.26" material="wood_dark"/>
+    </body>
+
+    <!-- ================================================================= -->
+    <!-- DORMITORIO 1 - PRINCIPAL (X: 1.2 to 6.0, Y: 1.2 to 5.0)           -->
+    <!-- ================================================================= -->
+    <!-- Cama matrimonial -->
+    <body name="bed_master" pos="4.2 3.8 0">
+      <geom name="bed_master_base" type="box" pos="0 0 0.20" size="1.0 1.05 0.20" material="wood_dark"/>
+      <geom name="bed_master_mattress" type="box" pos="0 0 0.40" size="0.95 1.0 0.10" material="bed_linen_1"/>
+      <geom name="bed_master_headboard" type="box" pos="0 1.08 0.65" size="1.05 0.05 0.40" material="wood_dark"/>
+      <geom name="pillow_master_left" type="box" pos="-0.45 0.75 0.53" size="0.28 0.18 0.05" material="pillow_mat"/>
+      <geom name="pillow_master_right" type="box" pos="0.45 0.75 0.53" size="0.28 0.18 0.05" material="pillow_mat"/>
+    </body>
+
+    <!-- Mesas de noche -->
+    <body name="nightstand_master_left" pos="2.8 4.6 0">
+      <geom type="box" pos="0 0 0.25" size="0.22 0.20 0.25" material="wood_light"/>
+    </body>
+    <body name="nightstand_master_right" pos="5.6 4.6 0">
+      <geom type="box" pos="0 0 0.25" size="0.22 0.20 0.25" material="wood_light"/>
+    </body>
+
+    <!-- Clóset / Ropero grande -->
+    <body name="wardrobe_master" pos="4.5 1.55 0">
+      <geom name="wardrobe_master_body" type="box" pos="0 0 0.95" size="0.85 0.25 0.95" material="wood_dark"/>
+    </body>
+
+    <!-- Cómoda / Mueble auxiliar -->
+    <body name="dresser_master" pos="5.65 2.8 0">
+      <geom name="dresser_body" type="box" pos="0 0 0.42" size="0.22 0.50 0.42" material="wood_light"/>
+    </body>
+
+    <!-- ================================================================= -->
+    <!-- BAÑO (BATHROOM) (X: 1.2 to 6.0, Y: -1.0 to 1.2)                   -->
+    <!-- ================================================================= -->
+    <!-- Inodoro -->
+    <body name="toilet" pos="5.5 0.6 0">
+      <geom name="toilet_tank" type="box" pos="0.22 0 0.45" size="0.12 0.20 0.32" material="ceramic_mat"/>
+      <geom name="toilet_bowl" type="box" pos="-0.08 0 0.22" size="0.20 0.16 0.22" material="ceramic_mat"/>
+    </body>
+
+    <!-- Lavamanos / Mueble de baño -->
+    <body name="bathroom_vanity" pos="5.5 -0.4 0">
+      <geom name="vanity_body" type="box" pos="0 0 0.40" size="0.28 0.35 0.40" material="white_mat"/>
+      <geom name="vanity_sink" type="box" pos="0 0 0.81" size="0.24 0.28 0.02" material="ceramic_mat"/>
+      <!-- Espejo (decorativo) -->
+      <geom name="bathroom_mirror" type="box" pos="0.32 0 1.25" size="0.02 0.28 0.28" material="glass_mat" contype="0" conaffinity="0"/>
+    </body>
+
+    <!-- Ducha con plato y mampara -->
+    <body name="shower" pos="3.5 0.55 0">
+      <geom name="shower_tray" type="box" pos="0 0 0.05" size="0.45 0.45 0.05" material="ceramic_mat"/>
+      <geom name="shower_glass" type="box" pos="0 -0.45 0.95" size="0.45 0.02 0.85" material="glass_mat"/>
+    </body>
+
+    <!-- Estante de toallas -->
+    <body name="towel_rack" pos="2.0 1.0 0">
+      <geom type="box" pos="0 0 0.45" size="0.18 0.25 0.45" material="dark_metal"/>
+    </body>
+
+    <!-- ================================================================= -->
+    <!-- DORMITORIO 2 - SECUNDARIO / ESTUDIO (X: 1.2 to 6.0, Y: -5.0 to -1.0) -->
+    <!-- ================================================================= -->
+    <!-- Cama individual -->
+    <body name="bed_single" pos="4.8 -4.0 0">
+      <geom name="bed_single_base" type="box" pos="0 0 0.18" size="0.55 0.90 0.18" material="wood_dark"/>
+      <geom name="bed_single_mattress" type="box" pos="0 0 0.36" size="0.50 0.85 0.09" material="bed_linen_2"/>
+      <geom name="bed_single_headboard" type="box" pos="0 -0.92 0.55" size="0.58 0.04 0.35" material="wood_dark"/>
+      <geom name="pillow_single" type="box" pos="0 -0.65 0.48" size="0.32 0.18 0.05" material="pillow_mat"/>
+    </body>
+
+    <!-- Mesa de noche individual -->
+    <body name="nightstand_single" pos="3.7 -4.6 0">
+      <geom type="box" pos="0 0 0.22" size="0.20 0.20 0.22" material="wood_light"/>
+    </body>
+
+    <!-- Escritorio de estudio con monitor -->
+    <body name="study_desk" pos="5.5 -2.2 0">
+      <geom name="study_desk_top" type="box" pos="0 0 0.72" size="0.32 0.55 0.03" material="wood_light"/>
+      <geom name="study_desk_legs" type="box" pos="0 0 0.34" size="0.28 0.45 0.34" material="dark_metal"/>
+      <geom name="monitor_screen" type="box" pos="0.08 0 0.95" size="0.04 0.22 0.16" material="dark_metal"/>
+    </body>
+
+    <!-- Silla de escritorio -->
+    <body name="study_chair" pos="4.6 -2.2 0">
+      <geom type="box" pos="0 0 0.22" size="0.20 0.20 0.22" material="dark_metal"/>
+      <geom type="box" pos="-0.16 0 0.46" size="0.04 0.20 0.24" material="dark_metal"/>
+    </body>
+
+    <!-- Armario / Clóset secundario -->
+    <body name="wardrobe_single" pos="2.2 -1.3 0">
+      <geom name="wardrobe_single_body" type="box" pos="0 0 0.90" size="0.45 0.22 0.90" material="wood_dark"/>
+    </body>
+
+  </worldbody>
+</mujoco>

@@ -56,6 +56,9 @@ class Predicate(StrEnum):
     STOPPED = "stopped"
     ALIGNED = "aligned"
     TRANSPORT_READY = "transport_ready"
+    EMPTY = "empty"
+    CLEAR = "clear"
+    STABLE = "stable"
 
 
 class FactKey(Contract):
@@ -73,6 +76,7 @@ class FactKey(Contract):
             Predicate.HELD,
             Predicate.RELEASED,
             Predicate.TRANSPORT_READY,
+            Predicate.EMPTY,
         }
         if arm_specific != (self.arm is not None):
             raise ValueError("holding, release and transport posture require an arm")

@@ -1,0 +1,395 @@
+{
+  "schema_version": 1,
+  "phase": "F4",
+  "date": "2026-09-15",
+  "status": "completed_software_and_simulation_scope",
+  "git_head": "77a250f4f1d6037849514740cb089911dc41fb1b",
+  "working_tree_contains_uncommitted_implementation": true,
+  "robot_model": "alohamini2_original_am_arm200",
+  "active_arm": "right",
+  "physical_validated": false,
+  "act_policy_used": false,
+  "vlm_used": false,
+  "object_mesh_transferred": false,
+  "navigation_origin": "simulation",
+  "localization": "mujoco_ground_truth",
+  "manipulation_origin": "test",
+  "visual_target_binding_origin": "test",
+  "limitations": [
+    "F4 fixture supplies object identity, alignment, wrist and load facts; these are not pixel-derived or physical evidence",
+    "MuJoCo performs only base navigation; the bottle mesh is not moved by manipulation",
+    "F3 visual candidate/memory adapters are tested separately; this nominal fixture does not prove autonomous visual target grounding",
+    "F3 persistent-memory placement and visual-candidate adapters validated by separate integration tests; native blueprint does not initialize perception models or memory",
+    "Cancellation latency is one simulated trial, not a hardware safety or timing guarantee",
+    "Detailed local artifacts are ignored by Git; this summary preserves their hashes and reproduction commands",
+    "Controlled cases and native scenarios validate different boundaries; the 14 fault cases use an artificial clock and executors"
+  ],
+  "native_acceptance": [
+    {
+      "scenario": "nominal",
+      "passed": true,
+      "command": "env MUJOCO_GL=egl .venv/bin/python -m dimos.experimental.household_assistant.demo_mission --scenario nominal --output .ignore.f4/nominal_final",
+      "final_state": "succeeded",
+      "reason": "mission_verified",
+      "completed_actions": [
+        "navigate_to",
+        "observe_at",
+        "align_at",
+        "pick_bottle_from_table",
+        "prepare_transport",
+        "navigate_to",
+        "align_at",
+        "place_on_table"
+      ],
+      "stop_requested_at": null,
+      "stop_confirmed_at": null,
+      "cancel_latency_s": null,
+      "post_cancel_drift_m": null,
+      "event_count": 34,
+      "artifacts_sha256": {
+        ".ignore.f4/nominal_final/events.jsonl": "9b2ad171a217bf212c7eb7639d0ce0bda1cf6f4b4034f9524d115f21b0311afb",
+        ".ignore.f4/nominal_final/final_frame.json": "8d6962f9744abe78bf073fd5c5304f3e656325f26487edbad66048b8dcd43f78",
+        ".ignore.f4/nominal_final/report.json": "aa53964c89ea0b7e33f8b4458de2f0bc4a6a70791a8b6c42787e6064468cd948"
+      }
+    },
+    {
+      "scenario": "cancel",
+      "passed": true,
+      "command": "env MUJOCO_GL=egl .venv/bin/python -m dimos.experimental.household_assistant.demo_mission --scenario cancel --output .ignore.f4/cancel_final",
+      "final_state": "cancelled",
+      "reason": "user_cancel",
+      "completed_actions": [
+        "navigate_to",
+        "observe_at",
+        "align_at",
+        "pick_bottle_from_table",
+        "prepare_transport"
+      ],
+      "stop_requested_at": 1789491516.3632963,
+      "stop_confirmed_at": 1789491516.7736564,
+      "cancel_latency_s": 0.4109649658203125,
+      "post_cancel_drift_m": 1.3032370554076724e-10,
+      "event_count": 26,
+      "artifacts_sha256": {
+        ".ignore.f4/cancel_final/events.jsonl": "10a14565572539776121e179ca7d5746b814def9f690b281c71caef2fabf6556",
+        ".ignore.f4/cancel_final/final_frame.json": "1f5f552db334a68a1bb8290a3e5d5ecb39c2e482d40b662f4351b9f7e32c5219",
+        ".ignore.f4/cancel_final/report.json": "c9c538c517acadc48ace5d762196deb65f0ba7062072da498e86db5e7185226b"
+      }
+    },
+    {
+      "scenario": "blocked",
+      "passed": true,
+      "command": "env MUJOCO_GL=egl .venv/bin/python -m dimos.experimental.household_assistant.demo_mission --scenario blocked --output .ignore.f4/blocked_final",
+      "final_state": "failed",
+      "reason": "navigation_timeout_or_blocked",
+      "completed_actions": [
+        "navigate_to",
+        "observe_at",
+        "align_at",
+        "pick_bottle_from_table",
+        "prepare_transport"
+      ],
+      "stop_requested_at": 1789491614.8575742,
+      "stop_confirmed_at": 1789491615.2635276,
+      "cancel_latency_s": null,
+      "post_cancel_drift_m": null,
+      "event_count": 27,
+      "artifacts_sha256": {
+        ".ignore.f4/blocked_final/events.jsonl": "72344ba3fccd57d8b3323ed7f73172fe44feebc0552b397cef6b596f8c5a49aa",
+        ".ignore.f4/blocked_final/final_frame.json": "6e02ac10329ad0dc3ccfb50eb7b134b4fe8c270b4fd0053d050eb6d7a409f1ae",
+        ".ignore.f4/blocked_final/report.json": "a10de2e63f712f5a6d48f327af1bc6691e64b4e628bea2acf0768ff182064d76"
+      }
+    }
+  ],
+  "controlled_acceptance": {
+    "command": ".venv/bin/python -m dimos.experimental.household_assistant.demo_mission_cases --output .ignore.f4/cases_final",
+    "origin": "test",
+    "clock_id": "f4_test_clock",
+    "passed": true,
+    "case_count": 14,
+    "report_path": ".ignore.f4/cases_final/report.json",
+    "report_sha256": "b2a642c6bccb2248802a3c9937284c5e108fefb7f7af82595619b6fcbeb7d25c",
+    "cases": [
+      {
+        "case": "nominal",
+        "expected": "succeeded",
+        "state": "succeeded",
+        "reason": "mission_verified",
+        "event_count": 34,
+        "dispatched_skills": [
+          "navigate_to",
+          "observe_at",
+          "align_at",
+          "pick_bottle_from_table",
+          "prepare_transport",
+          "navigate_to",
+          "align_at",
+          "place_on_table"
+        ],
+        "trace_sha256": "72735317b91c1f14743ee60f9ab23073baab315c9818384e262affc5308d2656"
+      },
+      {
+        "case": "absent",
+        "expected": "asking",
+        "state": "asking",
+        "reason": "not_found:search_budget_exhausted",
+        "event_count": 10,
+        "dispatched_skills": [
+          "navigate_to",
+          "observe_at"
+        ],
+        "trace_sha256": "5f306d75e566148651d35708aec86d7f4b06e34fee1dab1a3397955bf0c02ebf"
+      },
+      {
+        "case": "ambiguous",
+        "expected": "asking",
+        "state": "asking",
+        "reason": "ambiguous:choose_between_frame_local_candidates",
+        "event_count": 10,
+        "dispatched_skills": [
+          "navigate_to",
+          "observe_at"
+        ],
+        "trace_sha256": "6c103e7ec9ec42192f84359472ebf12ee0b2b69c358bf6a4d04e6d5d82d1f376"
+      },
+      {
+        "case": "unknown",
+        "expected": "asking",
+        "state": "asking",
+        "reason": "unknown:search_budget_exhausted",
+        "event_count": 14,
+        "dispatched_skills": [
+          "navigate_to",
+          "observe_at",
+          "observe_at"
+        ],
+        "trace_sha256": "9a44ad82abfa82281193c1db1a236d214bfa3f21451fa4d63de1874dd7217154"
+      },
+      {
+        "case": "grasp_failure",
+        "expected": "failed",
+        "state": "failed",
+        "reason": "postconditions_false",
+        "event_count": 20,
+        "dispatched_skills": [
+          "navigate_to",
+          "observe_at",
+          "align_at",
+          "pick_bottle_from_table"
+        ],
+        "trace_sha256": "21266fc7736408db7246aab3dd63ca2a57e71e337f2a0a874d85e52e452544c1"
+      },
+      {
+        "case": "unverified_grasp",
+        "expected": "failed",
+        "state": "failed",
+        "reason": "postconditions_inconclusive",
+        "event_count": 20,
+        "dispatched_skills": [
+          "navigate_to",
+          "observe_at",
+          "align_at",
+          "pick_bottle_from_table"
+        ],
+        "trace_sha256": "a7d9531c0d7643dee165e7ed89364ae639788c83a573e38d18d515bfbb705fcd"
+      },
+      {
+        "case": "timeout",
+        "expected": "failed",
+        "state": "failed",
+        "reason": "action_timeout",
+        "event_count": 18,
+        "dispatched_skills": [
+          "navigate_to",
+          "observe_at",
+          "align_at",
+          "pick_bottle_from_table"
+        ],
+        "trace_sha256": "e017b946969366c5703606b65c6897e1b6916c826e67888264c466bd1b1c3bf4"
+      },
+      {
+        "case": "retention_loss",
+        "expected": "failed",
+        "state": "failed",
+        "reason": "transport_retention_or_posture_unconfirmed",
+        "event_count": 26,
+        "dispatched_skills": [
+          "navigate_to",
+          "observe_at",
+          "align_at",
+          "pick_bottle_from_table",
+          "prepare_transport",
+          "navigate_to"
+        ],
+        "trace_sha256": "40fb9c7230dce612594898fd7e624910769a27714c3edbca3a547845f4f82781"
+      },
+      {
+        "case": "posture_loss",
+        "expected": "failed",
+        "state": "failed",
+        "reason": "transport_retention_or_posture_unconfirmed",
+        "event_count": 26,
+        "dispatched_skills": [
+          "navigate_to",
+          "observe_at",
+          "align_at",
+          "pick_bottle_from_table",
+          "prepare_transport",
+          "navigate_to"
+        ],
+        "trace_sha256": "5e86ab3fdba5d8cc667b04ef3a8bc668e9997b6339dbbc7eabaa0ee932eecd30"
+      },
+      {
+        "case": "occupied",
+        "expected": "asking",
+        "state": "asking",
+        "reason": "admission_requires_clarification:current preconditions and required cameras must be confirmed",
+        "event_count": 32,
+        "dispatched_skills": [
+          "navigate_to",
+          "observe_at",
+          "align_at",
+          "pick_bottle_from_table",
+          "prepare_transport",
+          "navigate_to",
+          "align_at"
+        ],
+        "trace_sha256": "10d0110c6d2650bfcd548e90a4612e0420932abb8e00fddf641dcf35f7eaa6e2"
+      },
+      {
+        "case": "disconnect",
+        "expected": "stop_unconfirmed",
+        "state": "stop_unconfirmed",
+        "reason": "sensor_disconnect_or_stale_world",
+        "event_count": 18,
+        "dispatched_skills": [
+          "navigate_to",
+          "observe_at",
+          "align_at",
+          "pick_bottle_from_table"
+        ],
+        "trace_sha256": "96e16ced8614436705bb67d2337c1ee22018725b9ed0b64aa3e21a84ede9d20a"
+      },
+      {
+        "case": "stop_unconfirmed",
+        "expected": "stop_unconfirmed",
+        "state": "stop_unconfirmed",
+        "reason": "action_timeout",
+        "event_count": 18,
+        "dispatched_skills": [
+          "navigate_to",
+          "observe_at",
+          "align_at",
+          "pick_bottle_from_table"
+        ],
+        "trace_sha256": "9914219feef85295729e9ae3ea46664a1413f3b5fe49aa8ab4f8016e6395c2dc"
+      },
+      {
+        "case": "cancel",
+        "expected": "cancelled",
+        "state": "cancelled",
+        "reason": "user_cancel",
+        "event_count": 26,
+        "dispatched_skills": [
+          "navigate_to",
+          "observe_at",
+          "align_at",
+          "pick_bottle_from_table",
+          "prepare_transport",
+          "navigate_to"
+        ],
+        "trace_sha256": "10cda2d996f846ba93fa7cc67a067f8cd4f5f20d046de01b259aa1c2884f25f8"
+      },
+      {
+        "case": "pause_resume",
+        "expected": "succeeded",
+        "state": "succeeded",
+        "reason": "mission_verified",
+        "event_count": 43,
+        "dispatched_skills": [
+          "navigate_to",
+          "observe_at",
+          "align_at",
+          "pick_bottle_from_table",
+          "prepare_transport",
+          "navigate_to",
+          "prepare_transport",
+          "navigate_to",
+          "align_at",
+          "place_on_table"
+        ],
+        "trace_sha256": "05c72d06703e203b41d9d77fa7a4dc1fc984ee51b8fe1c6b21fe9de19c8be281"
+      }
+    ]
+  },
+  "checks": {
+    "pytest": {
+      "command": "env CI=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/pytest -o addopts='' -p pytest_mock -p pytest_timeout -p pytest_env.plugin -p pytest_asyncio.plugin dimos/robot/test_all_blueprints_generation.py dimos/experimental/household_assistant -q",
+      "exit_code": 0,
+      "passed": 91,
+      "elapsed_s": 13.13
+    },
+    "mypy": {
+      "command": ".venv/bin/mypy dimos/experimental/household_assistant/mission*.py dimos/experimental/household_assistant/demo_mission*.py dimos/robot/alohamini2/blueprints/household_mission_sim.py",
+      "exit_code": 0,
+      "source_files": 10
+    },
+    "ruff": {
+      "exit_code": 0
+    },
+    "pre_commit": {
+      "command": "source .venv/bin/activate; pre-commit run --files <modified and new F4 files>",
+      "exit_code": 1,
+      "implementation_hooks_passed": true,
+      "blocking_hook": "largefiles-check",
+      "reason": "Pre-existing artifacts/cronograma_tesis/cronograma_actualizado.xlsx is 132 KB, above the global 75 KB limit; the hook inspects all tracked files regardless of --files",
+      "schedule_modified": false,
+      "scope_decision": "No change to user schedule or unrelated global size policy"
+    },
+    "doclinks": {
+      "exit_code": 0,
+      "paths": [
+        "docs/development/asistencia_domestica_modular/fase_4_gestor_misiones.md",
+        "docs/development/asistencia_domestica_modular/plan_trabajo.md"
+      ]
+    },
+    "git_diff_check": {
+      "exit_code": 0
+    },
+    "schedule_unchanged": {
+      "path": "artifacts/cronograma_tesis/cronograma_actualizado.xlsx",
+      "matches_git_head": true,
+      "sha256": "cc4ab203ac3b0656fb0ac4f14fc7347d62e9a335a86cf407c2fc0367c5cd356d"
+    }
+  },
+  "versions": {
+    "mujoco": "3.5.0",
+    "pydantic": "2.12.5"
+  },
+  "source_sha256": {
+    "dimos/experimental/household_assistant/mission.py": "2f87e9e410fa957ec44e1447755f9b15926483cc88ee28f5e92e56b27ca32095",
+    "dimos/experimental/household_assistant/mission_contracts.py": "34713e075c76c594a68bcaa05a542958569ee291046a9d446a14f43ae39e3efb",
+    "dimos/experimental/household_assistant/mission_module.py": "5177a721626590b1b2bd4a5327f6d2421974dd8a2dfb8e9d3081c1c859bf9699",
+    "dimos/experimental/household_assistant/mission_sequence.py": "cdd55cbe394da50f6e4ed331016e0f7a13af7c9990526ec9a979b4c5c0162613",
+    "dimos/experimental/household_assistant/mission_simulation.py": "e52d0fa29d1238bfb1fabbd13c505c9d3661d717d7782e16b45b22d86744892f",
+    "dimos/experimental/household_assistant/mission_verification.py": "e3d9e1663b8212537789051d3ac318e30b6975e3214495b45ecf55dc3e0023fe",
+    "dimos/experimental/household_assistant/mission_visual.py": "86cc9132c91371c124515962cb469416962ae0b72a442172c9fd624c1b962448",
+    "dimos/experimental/household_assistant/demo_mission.py": "7e1847f0d0dffeae88e2eb9214d176fbf5dac3be172d472a76eef7754fd5c978",
+    "dimos/experimental/household_assistant/configs/spatial_sim.json": "95038d059abf08c0e0ca7f42b8ea477a4a3ae8ea8ab79ec18cb69795c1a04a9b",
+    "dimos/experimental/household_assistant/configs/pilot.json": "4ae8bb3b3d4cf17b7f172ddd6be8200ce2874465fc028934693b4b4ad7d1a789",
+    "dimos/experimental/household_assistant/contracts.py": "6f22b9323650e8455c5b82db93ed43fe106869d52c07b97f7efb6aebb2d7e661",
+    "dimos/experimental/household_assistant/assessment.py": "5877dd71399ffa6a1c418922dc03571c02144a00cf455825b526a7fff212a896",
+    "dimos/experimental/household_assistant/configuration.py": "21799cb5be57bdc6dccc2eced1aaba5110980520893cebf82dfa5cd2f03cce45",
+    "dimos/experimental/household_assistant/spatial.py": "51b35db30fafd1449f5cdf85b8af2d1752c66ef305d60a9cb9adf6d5022a92a9",
+    "dimos/experimental/household_assistant/spatial_module.py": "dabc631ed1f5f4f53ec36aed8191f8f74dbf166399cf7c49b04829e9d69bc815",
+    "dimos/robot/alohamini2/blueprints/household_mission_sim.py": "cb6b66fb476ee04a5210ce28236e4bd25e21e783564a6717e652723b990d9c4d",
+    "dimos/robot/alohamini2/assets/am_arm200/robot.xml": "5fe55f8fd5a1490df5737f45adceb253a871f8cd4e8c99f04bec378e5a84fedd"
+  },
+  "additional_validation_source_sha256": {
+    "dimos/experimental/household_assistant/demo_mission_cases.py": "4473b19ac209d35f90bcd3ede4bd6a9d75e4bc6a06fa09c8eb5fec9d6a111ca6",
+    "dimos/experimental/household_assistant/test_mission.py": "4eb919a6368812c5d75245a7d482c7aa4de5f6ec12a2fe102ab1c65dde06147e",
+    "dimos/experimental/household_assistant/test_mission_module.py": "8b63d39294afd4689a9ad8de64f7364c5792e009f5cb07fb60a0272fb1a41029",
+    "dimos/experimental/household_assistant/test_semantic_memory.py": "0db3ee602275e7ff4c7031ab576100cb0c52967a0133bc86136ded7194e73173",
+    "dimos/robot/all_blueprints.py": "5e92f04dab23550f925dd60c6618c00af84a1f78058ee5e18775c7f2b13fe072"
+  }
+}

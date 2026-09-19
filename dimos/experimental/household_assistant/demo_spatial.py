@@ -34,8 +34,8 @@ from dimos.experimental.household_assistant.spatial_module import (
     SpatialSnapshot,
 )
 from dimos.navigation.replanning_a_star.module import ReplanningAStarPlanner
-from dimos.robot.alohamini2.blueprints.household_navigation_sim import household_navigation_sim
-from dimos.robot.alohamini2.config import ALOHA_MINI2_AM_ARM200_MJCF, ALOHA_MINI2_NAV_MJCF
+from dimos.robot.alohamini1.blueprints.household_navigation_sim import household_navigation_sim
+from dimos.robot.alohamini1.config import ALOHA_MINI1_NAV_MJCF
 from dimos.utils.testing.waiting import wait_until
 
 
@@ -64,7 +64,7 @@ def run_acceptance(
     coordinator = ModuleCoordinator()
     events: list[dict[str, Any]] = []
     report: dict[str, Any] = {
-        "robot_model": "alohamini2_original_am_arm200",
+        "robot_model": "alohamini1_cad_zero",
         "origin": "simulation",
         "localization": "mujoco_ground_truth",
         "clock_id": "unix",
@@ -72,16 +72,16 @@ def run_acceptance(
         "snapshots": [],
         "results": [],
     }
-    scene_path = ALOHA_MINI2_NAV_MJCF.parent / (
+    scene_path = ALOHA_MINI1_NAV_MJCF.parent / (
         "household_navigation_blocked.xml" if blocked else "household_navigation.xml"
     )
     source_paths = [
         SPATIAL_SIM_CONFIG,
         SPATIAL_SIM_CONFIG.with_name("pilot.json"),
-        ALOHA_MINI2_AM_ARM200_MJCF,
-        ALOHA_MINI2_AM_ARM200_MJCF.parent / "manifest.json",
+        ALOHA_MINI1_NAV_MJCF,
+        ALOHA_MINI1_NAV_MJCF.parent / "manifest.json",
         scene_path,
-        ALOHA_MINI2_NAV_MJCF.parent / "household_navigation.xml",
+        ALOHA_MINI1_NAV_MJCF.parent / "household_navigation.xml",
         Path(__file__),
         Path(__file__).with_name("spatial.py"),
         Path(__file__).with_name("spatial_module.py"),
@@ -100,11 +100,11 @@ def run_acceptance(
         coordinator.start()
         sim_args: dict[str, Any] = {"headless": True}
         if blocked:
-            sim_args["scene_xml"] = ALOHA_MINI2_NAV_MJCF.parent / "household_navigation_blocked.xml"
+            sim_args["scene_xml"] = ALOHA_MINI1_NAV_MJCF.parent / "household_navigation_blocked.xml"
         coordinator.load_blueprint(
             household_navigation_sim.global_config(n_workers=0),
             {
-                "alohamini2simmodule": sim_args,
+                "alohamini1simmodule": sim_args,
                 "householdspatialmodule": {"navigation_timeout_s": 15.0 if blocked else 90.0},
                 "voxelgridmapper": {"block_count": 100000},
             },

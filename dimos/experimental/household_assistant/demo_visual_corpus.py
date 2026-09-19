@@ -30,7 +30,7 @@ from PIL import Image as PILImage
 
 from dimos.constants import DIMOS_PROJECT_ROOT
 
-SCENE = DIMOS_PROJECT_ROOT / "dimos/robot/alohamini2/assets/household_navigation.xml"
+SCENE = DIMOS_PROJECT_ROOT / "dimos/robot/alohamini1/assets/household_navigation.xml"
 
 
 def render_corpus(output: Path) -> None:

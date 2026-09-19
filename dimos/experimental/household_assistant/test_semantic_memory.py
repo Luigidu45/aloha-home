@@ -31,6 +31,16 @@ from dimos.experimental.household_assistant.contracts import (
     Predicate,
     Verdict,
 )
+from dimos.experimental.household_assistant.mission import MissionManager
+from dimos.experimental.household_assistant.mission_sequence import (
+    MissionSequence,
+    record_verified_placement,
+)
+from dimos.experimental.household_assistant.mission_simulation import (
+    ArtificialMissionExecutor,
+    simulation_bindings,
+)
+from dimos.experimental.household_assistant.mission_visual import visibility_from_visual
 from dimos.experimental.household_assistant.semantic_memory import (
     BoundedSearch,
     HouseholdMemory,
@@ -301,3 +311,51 @@ def test_changing_embedding_model_requires_new_collection(memory):
     )
     with pytest.raises(ValueError, match="incompatible embedding"):
         changed.candidates("small_bottle", map_id="test", origin=Origin.TEST, clock_id="test")
+
+
+def test_f4_only_verified_delivery_updates_f3_memory(memory, pilot, request_a):
+    manager = MissionManager(pilot, simulation_bindings(pilot), clock_id="test")
+    executor = ArtificialMissionExecutor(manager)
+    first = executor.step(now=100)
+    manager.submit(request_a, now=100)
+    sequence = MissionSequence(manager, request_a)
+    refused = record_verified_placement(memory, manager, first, now=100)
+    assert refused.verdict == Verdict.UNKNOWN
+    assert memory.placements == {}
+    for i in range(1, 200):
+        now = 100 + i * 0.1
+        frame = executor.step(now=now)
+        sequence.advance(frame, now=now)
+        if manager.snapshot().state == "succeeded":
+            break
+    assert manager.snapshot().state == "succeeded"
+    verified = record_verified_placement(memory, manager, frame, now=now)
+    assert verified.verdict == Verdict.SUCCESS
+    assert memory.placements["bottle_01"].place_id == "mesa_dormitorio"
+    assert {e.origin for e in verified.evidence} == {Origin.TEST}
+    assert memory.journal()["verified_placements"][0]["object_id"] == "bottle_01"
+
+
+def test_f3_visibility_preserves_unknown_instances_and_capture_clock(pilot):
+    _, view = capture("current", 10)
+    observation = VisualObservation(
+        view=view,
+        category="small_bottle",
+        model="test_detector",
+        candidates=(
+            PixelCandidate(
+                id="pixel_a", category="small_bottle", bbox_xyxy=(1, 1, 5, 5), score=0.9
+            ),
+        ),
+        status="candidate",
+        reason="frame_local",
+    )
+    facts = visibility_from_visual(pilot, observation, {"pixel_a": "bottle_01"})
+    assert [(f.key.subject_id, f.value) for f in facts] == [
+        ("bottle_01", True),
+        ("bottle_02", None),
+    ]
+    assert all(f.key.predicate == Predicate.VISIBLE for f in facts)
+    assert all(f.evidence == (view.evidence,) for f in facts)
+    with pytest.raises(ValueError, match="this frame"):
+        visibility_from_visual(pilot, observation, {"old_frame_candidate": "bottle_01"})

@@ -28,13 +28,18 @@ from dimos.msgs.nav_msgs.OccupancyGrid import OccupancyGrid
 from dimos.msgs.nav_msgs.Odometry import Odometry
 from dimos.msgs.nav_msgs.Path import Path
 from dimos.navigation.base import NavigationInterface, NavigationState
-from dimos.navigation.replanning_a_star.global_planner import GlobalPlanner
+from dimos.navigation.replanning_a_star.global_planner import (
+    DEFAULT_GOAL_TOLERANCE_M,
+    GlobalPlanner,
+)
 from dimos.utils.logging_config import setup_logger
 
 logger = setup_logger()
 
 
 class ReplanningAStarPlannerConfig(ModuleConfig):
+    holonomic: bool = False
+    goal_tolerance_m: float = DEFAULT_GOAL_TOLERANCE_M
     robot_width: float | None = None
     robot_rotation_diameter: float | None = None
 
@@ -71,7 +76,11 @@ class ReplanningAStarPlanner(Module, NavigationInterface):
         effective_global_config = (
             self.config.g.model_copy(update=overrides) if overrides else self.config.g
         )
-        self._planner = GlobalPlanner(effective_global_config)
+        self._planner = GlobalPlanner(
+            effective_global_config,
+            goal_tolerance_m=self.config.goal_tolerance_m,
+            holonomic=self.config.holonomic,
+        )
 
     @rpc
     def start(self) -> None:

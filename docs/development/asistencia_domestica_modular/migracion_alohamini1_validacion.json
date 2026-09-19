@@ -1,0 +1,796 @@
+{
+  "schema_version": 1,
+  "platform": "AlohaMini1",
+  "date_local": "2026-09-15",
+  "timezone": "America/Lima",
+  "status": "navigation_and_F4_migrated",
+  "git_head": "77a250f4f1d6037849514740cb089911dc41fb1b",
+  "uncommitted_changes": true,
+  "source_urdf": "/home/luigidu/AlohaMini/AlohaMini1/simulation/src/Aloha/urdf/Aloha.urdf",
+  "model_manifest": {
+    "source_sha256": "92175fefa161717d4e7f845096fde9513e5ad27e24d06beca5af4799abacae79",
+    "robot": "Aloha",
+    "mesh_conversion": [
+      {
+        "file": "base_link.STL",
+        "source_sha256": "801f95dc79f24b8e3b157b53d8a880560132c4bc01d0f8f731e86e05e0a5fff1",
+        "output_sha256": "5d3b66e95bee6cd7ffedd8201abeaf0b9aa7024cb574d351a28c55f6430c52ae",
+        "input_triangles": 96973,
+        "output_triangles": 5000
+      },
+      {
+        "file": "wheel1.STL",
+        "source_sha256": "ffc6d985034de14be47513bff4cbeb7d737a996d3678f98929f38f559853bbbc",
+        "output_sha256": "35cf2803584f145989be278717fedab7e067a26182514b06f358c53164237a9c",
+        "input_triangles": 35840,
+        "output_triangles": 5000
+      },
+      {
+        "file": "wheel2.STL",
+        "source_sha256": "c84054f1d82222b8798c5d26ba170fa0995004d035e8a6ca323e170bb826a749",
+        "output_sha256": "0cfd0c1ea9edf0cf451699847d8c140eaeffbcf55f8ebb3b91968b94ce4dbfc3",
+        "input_triangles": 35840,
+        "output_triangles": 5000
+      },
+      {
+        "file": "wheel3.STL",
+        "source_sha256": "b4ee10a99aa88039fc3e0b6b9cf1aaa1ebfe373e4a509c3b5912b9c8f4a25d54",
+        "output_sha256": "3446107747d8f21627f26e23473a90043025eeb343299d0647f49e6c18702baf",
+        "input_triangles": 35840,
+        "output_triangles": 5000
+      },
+      {
+        "file": "vertical_link.STL",
+        "source_sha256": "1e9162535c796635d404919d9612e684e5c711d3fa405e28c1e9c5326b5134c6",
+        "output_sha256": "ef3b9052567380c2d6291f40403bf8dbb37341c39aad5c60b535f2d667085718",
+        "input_triangles": 22210,
+        "output_triangles": 5000
+      },
+      {
+        "file": "left_base.STL",
+        "source_sha256": "d9d81d3df21305adc748346e5d5ea6700c70a6d433f1ff8b6e08ce423cd6ac17",
+        "output_sha256": "d5f4d0a99e7a001365413a693cd1f351087404ce6256a39ae2e5684509e23463",
+        "input_triangles": 8832,
+        "output_triangles": 5000
+      },
+      {
+        "file": "left_link1.STL",
+        "source_sha256": "5b624a7f841cff25cee593ef03867b8328e0cc0a2dfb47c730290119dd843b02",
+        "output_sha256": "7751cc3b5855df4c26f4a9026696d0aeb9987f7b364201c7e0d88f2bd450cbc6",
+        "input_triangles": 6230,
+        "output_triangles": 4999
+      },
+      {
+        "file": "left_link2.STL",
+        "source_sha256": "d21b9803ef9220ab890574c760dee96d83ad48c19074f70a5ea000c75a46e41e",
+        "output_sha256": "e54c4731da9ce5153a7b07a5c12d386ca34bce743fd2ae1ba662a612ce189dc6",
+        "input_triangles": 4196,
+        "output_triangles": 4196
+      },
+      {
+        "file": "left_link3.STL",
+        "source_sha256": "5ad1cfdfe40ffb9f6a45218f5ef9439125acba966445ddecb6eb7fbe49726f6d",
+        "output_sha256": "0c2b34cceed916c5aeb244ebbedd6e9b86fcffdc789e9ee2585b6938d7702d67",
+        "input_triangles": 4454,
+        "output_triangles": 4454
+      },
+      {
+        "file": "left_link4.STL",
+        "source_sha256": "93cb3ecc3905de57ea715a0c4d59c97f6c499169f2fa41361424d518ed1d3fc6",
+        "output_sha256": "540cfd579631d4de1fa54e15994b804cff3616c898292ed57d83640550f7f7b3",
+        "input_triangles": 6070,
+        "output_triangles": 5000
+      },
+      {
+        "file": "left_link5.STL",
+        "source_sha256": "ebf1ff7f006f2fbbd3cfb0d5998a634948ca2ace95297912cd12f3ed352ec95f",
+        "output_sha256": "707ee99784988d50d84620cfa44b47adbea8a503e618cf1e2e492140d4243cee",
+        "input_triangles": 4264,
+        "output_triangles": 4264
+      },
+      {
+        "file": "left_link6.STL",
+        "source_sha256": "314e182185f1d76180b314809b1d397a4b467bf173f907e754e90e9ad9f9027d",
+        "output_sha256": "12ebc46bf6f3f799c7efdb99e1519b120889a80d06567afeaa923bdbb551e3bd",
+        "input_triangles": 3676,
+        "output_triangles": 3676
+      },
+      {
+        "file": "right_base.STL",
+        "source_sha256": "7992f74647898d037d94c1b41d084904986992c1dac75e867a09007f60b6448d",
+        "output_sha256": "4d9bfb4384b2ea05692efadcd36bc672cad2a7289ae2206c32ce43a8caff1176",
+        "input_triangles": 8832,
+        "output_triangles": 5000
+      },
+      {
+        "file": "right_link1.STL",
+        "source_sha256": "5b624a7f841cff25cee593ef03867b8328e0cc0a2dfb47c730290119dd843b02",
+        "output_sha256": "7751cc3b5855df4c26f4a9026696d0aeb9987f7b364201c7e0d88f2bd450cbc6",
+        "input_triangles": 6230,
+        "output_triangles": 4999
+      },
+      {
+        "file": "right_link2.STL",
+        "source_sha256": "d21b9803ef9220ab890574c760dee96d83ad48c19074f70a5ea000c75a46e41e",
+        "output_sha256": "e54c4731da9ce5153a7b07a5c12d386ca34bce743fd2ae1ba662a612ce189dc6",
+        "input_triangles": 4196,
+        "output_triangles": 4196
+      },
+      {
+        "file": "right_link3.STL",
+        "source_sha256": "5ad1cfdfe40ffb9f6a45218f5ef9439125acba966445ddecb6eb7fbe49726f6d",
+        "output_sha256": "0c2b34cceed916c5aeb244ebbedd6e9b86fcffdc789e9ee2585b6938d7702d67",
+        "input_triangles": 4454,
+        "output_triangles": 4454
+      },
+      {
+        "file": "right_link4.STL",
+        "source_sha256": "93cb3ecc3905de57ea715a0c4d59c97f6c499169f2fa41361424d518ed1d3fc6",
+        "output_sha256": "540cfd579631d4de1fa54e15994b804cff3616c898292ed57d83640550f7f7b3",
+        "input_triangles": 6070,
+        "output_triangles": 5000
+      },
+      {
+        "file": "right_link5.STL",
+        "source_sha256": "ebf1ff7f006f2fbbd3cfb0d5998a634948ca2ace95297912cd12f3ed352ec95f",
+        "output_sha256": "707ee99784988d50d84620cfa44b47adbea8a503e618cf1e2e492140d4243cee",
+        "input_triangles": 4264,
+        "output_triangles": 4264
+      },
+      {
+        "file": "right_link6.STL",
+        "source_sha256": "314e182185f1d76180b314809b1d397a4b467bf173f907e754e90e9ad9f9027d",
+        "output_sha256": "12ebc46bf6f3f799c7efdb99e1519b120889a80d06567afeaa923bdbb551e3bd",
+        "input_triangles": 3676,
+        "output_triangles": 3676
+      }
+    ],
+    "joint_order": [],
+    "locked_joints": [
+      {
+        "name": "wheel1",
+        "type": "continuous",
+        "reason": "navigation_wheel_proxy",
+        "urdf_limit": null
+      },
+      {
+        "name": "wheel2",
+        "type": "continuous",
+        "reason": "navigation_wheel_proxy",
+        "urdf_limit": null
+      },
+      {
+        "name": "wheel3",
+        "type": "continuous",
+        "reason": "navigation_wheel_proxy",
+        "urdf_limit": null
+      },
+      {
+        "name": "vertical_move",
+        "type": "prismatic",
+        "reason": "zero_urdf_limits",
+        "urdf_limit": {
+          "lower": "0",
+          "upper": "0",
+          "effort": "0",
+          "velocity": "0"
+        }
+      },
+      {
+        "name": "left_joint1",
+        "type": "revolute",
+        "reason": "zero_urdf_limits",
+        "urdf_limit": {
+          "lower": "0",
+          "upper": "0",
+          "effort": "0",
+          "velocity": "0"
+        }
+      },
+      {
+        "name": "left_joint2",
+        "type": "revolute",
+        "reason": "zero_urdf_limits",
+        "urdf_limit": {
+          "lower": "0",
+          "upper": "0",
+          "effort": "0",
+          "velocity": "0"
+        }
+      },
+      {
+        "name": "left_joint3",
+        "type": "revolute",
+        "reason": "zero_urdf_limits",
+        "urdf_limit": {
+          "lower": "0",
+          "upper": "0",
+          "effort": "0",
+          "velocity": "0"
+        }
+      },
+      {
+        "name": "left_joint4",
+        "type": "revolute",
+        "reason": "zero_urdf_limits",
+        "urdf_limit": {
+          "lower": "0",
+          "upper": "0",
+          "effort": "0",
+          "velocity": "0"
+        }
+      },
+      {
+        "name": "left_joint5",
+        "type": "revolute",
+        "reason": "zero_urdf_limits",
+        "urdf_limit": {
+          "lower": "0",
+          "upper": "0",
+          "effort": "0",
+          "velocity": "0"
+        }
+      },
+      {
+        "name": "left_joint6",
+        "type": "revolute",
+        "reason": "zero_urdf_limits",
+        "urdf_limit": {
+          "lower": "0",
+          "upper": "0",
+          "effort": "0",
+          "velocity": "0"
+        }
+      },
+      {
+        "name": "right_joint1",
+        "type": "revolute",
+        "reason": "zero_urdf_limits",
+        "urdf_limit": {
+          "lower": "0",
+          "upper": "0",
+          "effort": "0",
+          "velocity": "0"
+        }
+      },
+      {
+        "name": "right_joint2",
+        "type": "revolute",
+        "reason": "zero_urdf_limits",
+        "urdf_limit": {
+          "lower": "0",
+          "upper": "0",
+          "effort": "0",
+          "velocity": "0"
+        }
+      },
+      {
+        "name": "right_joint3",
+        "type": "revolute",
+        "reason": "zero_urdf_limits",
+        "urdf_limit": {
+          "lower": "0",
+          "upper": "0",
+          "effort": "0",
+          "velocity": "0"
+        }
+      },
+      {
+        "name": "right_joint4",
+        "type": "revolute",
+        "reason": "zero_urdf_limits",
+        "urdf_limit": {
+          "lower": "0",
+          "upper": "0",
+          "effort": "0",
+          "velocity": "0"
+        }
+      },
+      {
+        "name": "right_joint5",
+        "type": "revolute",
+        "reason": "zero_urdf_limits",
+        "urdf_limit": {
+          "lower": "0",
+          "upper": "0",
+          "effort": "0",
+          "velocity": "0"
+        }
+      },
+      {
+        "name": "right_joint6",
+        "type": "revolute",
+        "reason": "zero_urdf_limits",
+        "urdf_limit": {
+          "lower": "0",
+          "upper": "0",
+          "effort": "0",
+          "velocity": "0"
+        }
+      }
+    ],
+    "virtual_cameras": [
+      {
+        "name": "left_camera",
+        "parent": "left_link5"
+      },
+      {
+        "name": "right_camera",
+        "parent": "right_link5"
+      },
+      {
+        "name": "front_camera",
+        "parent": "base_link",
+        "pos": ".08 0 1.10"
+      },
+      {
+        "name": "back_camera",
+        "parent": "base_link",
+        "pos": "-.08 0 1.10"
+      },
+      {
+        "name": "chest_camera",
+        "parent": "base_link",
+        "pos": ".15 0 .78"
+      }
+    ],
+    "physical_validated": false,
+    "assumptions": [
+      "CAD +X lateral/-Y forward rotated +90 deg about Z into DimOS frame",
+      "free root driven by holonomic velocity proxy; continuous wheels locked at CAD zero",
+      "all arm/elevator URDF limits are zero; held at CAD zero pending actual ranges",
+      "no arm/elevator/gripper actuators; no grasp or manipulation physics claimed",
+      "convex arm collisions; base envelope/skid approximate",
+      "all five RGB cameras are virtual additions absent from URDF; mounts and intrinsics uncalibrated",
+      "nav ray cameras approximate coverage, not a Unitree L2 sensor model"
+    ]
+  },
+  "model_render": {
+    "origin": "simulation",
+    "robot": "alohamini1_cad_zero",
+    "mjcf_sha256": "2f1ca4c1cf83ce8bbf9501a8f3aeb63b458be9bef6f8891b12267c411edbbbf4",
+    "zero_pose_bounds_m": [
+      [
+        -0.1527112248142588,
+        -0.21343505743652735,
+        -0.007170903860519671
+      ],
+      [
+        0.3060550295698974,
+        0.21141353208363944,
+        1.0831888846174045
+      ]
+    ],
+    "zero_pose_radius_m": 0.3457285177062809,
+    "images": [
+      {
+        "file": "robot_reference.png",
+        "sha256": "ecf0296d4a984cf0e32659de868ad942a27857af17570742bd1652fa1aae9907"
+      },
+      {
+        "file": "front_camera.png",
+        "sha256": "ed39614daeab2deac4bb969c1da53eab83754a42e61a73cbbebd92740f489d2a"
+      },
+      {
+        "file": "back_camera.png",
+        "sha256": "5177a0513c05e588c53540937131a90bc1f2481a53f106768fe29957d003b2c4"
+      },
+      {
+        "file": "chest_camera.png",
+        "sha256": "4e7e4a7ea3338beb129af8594c649f8e57c84949416ef8e876da89e134ea5c94"
+      },
+      {
+        "file": "left_camera.png",
+        "sha256": "68463465437154cf0c4203ca870625475434d5067125be6d749bc23d2bea49ba"
+      },
+      {
+        "file": "right_camera.png",
+        "sha256": "fa718a44870c3dbb270a4a5c8bff4c6311bdc2613d21ac29b6c93f3e6d666254"
+      }
+    ],
+    "physical_validated": false,
+    "articulated_manipulation_validated": false,
+    "cameras_are_virtual": true,
+    "passed": true
+  },
+  "native_acceptance": [
+    {
+      "scenario": "nominal",
+      "passed": true,
+      "state": "succeeded",
+      "reason": "mission_verified",
+      "completed_actions": [
+        "navigate_to",
+        "observe_at",
+        "align_at",
+        "pick_bottle_from_table",
+        "prepare_transport",
+        "navigate_to",
+        "align_at",
+        "place_on_table"
+      ],
+      "cancel_latency_s": null,
+      "post_cancel_drift_m": null,
+      "artifacts_sha256": {
+        ".ignore.migration_alohamini1/nominal_holonomic/events.jsonl": "2dcffc5cbdbb4139f023f5679f27dd7c30b44bea0afe224600e00aabebf80870",
+        ".ignore.migration_alohamini1/nominal_holonomic/final_frame.json": "05040736ac21257b2c530d0b9a48372d91a177537e3bd8aff0225c17bb911ce6",
+        ".ignore.migration_alohamini1/nominal_holonomic/report.json": "14980d635ba705d5fa70ee4ca0c16bbe44d0786e688cb0bafb9864c3663f4423"
+      }
+    },
+    {
+      "scenario": "cancel",
+      "passed": true,
+      "state": "cancelled",
+      "reason": "user_cancel",
+      "completed_actions": [
+        "navigate_to",
+        "observe_at",
+        "align_at",
+        "pick_bottle_from_table",
+        "prepare_transport"
+      ],
+      "cancel_latency_s": 0.4412710666656494,
+      "post_cancel_drift_m": 0.0,
+      "artifacts_sha256": {
+        ".ignore.migration_alohamini1/cancel/events.jsonl": "d424f10c8f7c5ffa8e838f84b4719319adbcbc594c05fd1b01dbd9987824aaa0",
+        ".ignore.migration_alohamini1/cancel/final_frame.json": "bc00930ae23dd4f3c64cd4c0a82db63a992d8a5d815bac00a6fd59d073662064",
+        ".ignore.migration_alohamini1/cancel/report.json": "b8c1435cb1774cd6922700a13526201cfc64f678dea662d19f37794dec967f78"
+      }
+    },
+    {
+      "scenario": "blocked",
+      "passed": true,
+      "state": "failed",
+      "reason": "navigation_timeout_or_blocked",
+      "completed_actions": [
+        "navigate_to",
+        "observe_at",
+        "align_at",
+        "pick_bottle_from_table",
+        "prepare_transport"
+      ],
+      "cancel_latency_s": null,
+      "post_cancel_drift_m": null,
+      "artifacts_sha256": {
+        ".ignore.migration_alohamini1/blocked/events.jsonl": "78122e7cf2f970f082677834d33c5b3ea182196f0994cb573d126c47cfb7c9c6",
+        ".ignore.migration_alohamini1/blocked/final_frame.json": "59b3f11c4ac0f60e23ccd0712bdeed447566aad2d86a0d5780fcdbf6d30e0de4",
+        ".ignore.migration_alohamini1/blocked/report.json": "404cb2d1ca9a477e4139600e06b581799beda7ae5215b7200295dfe71ff76f4b"
+      }
+    }
+  ],
+  "failed_attempts_retained": [
+    {
+      "path": ".ignore.migration_alohamini1/nominal/report.json",
+      "sha256": "ad9829f1c22c7c8706b45409fee93767c10e9501def814425861a325b8879df5",
+      "passed": false,
+      "reason": "planner_arrived_outside_station",
+      "pose": {
+        "ts": 1789516240.1839902,
+        "x": 2.4650728924201184,
+        "y": 0.2299898944141043,
+        "yaw": 1.259800570957369,
+        "frame_id": "world"
+      }
+    },
+    {
+      "path": ".ignore.migration_alohamini1/nominal_adjusted/report.json",
+      "sha256": "ae0c13eb736819f54a462018b20390a6e7459d69da5274a1c49be0e4c6caa92d",
+      "passed": false,
+      "reason": "planner_arrived_outside_station",
+      "pose": {
+        "ts": 1789516451.9523103,
+        "x": 2.552799642828736,
+        "y": 0.34249430159442595,
+        "yaw": 0.5022226850235866,
+        "frame_id": "world"
+      }
+    }
+  ],
+  "controlled_cases": [
+    {
+      "case": "nominal",
+      "expected": "succeeded",
+      "state": "succeeded",
+      "reason": "mission_verified",
+      "event_count": 34,
+      "dispatched_skills": [
+        "navigate_to",
+        "observe_at",
+        "align_at",
+        "pick_bottle_from_table",
+        "prepare_transport",
+        "navigate_to",
+        "align_at",
+        "place_on_table"
+      ],
+      "trace_sha256": "72735317b91c1f14743ee60f9ab23073baab315c9818384e262affc5308d2656"
+    },
+    {
+      "case": "absent",
+      "expected": "asking",
+      "state": "asking",
+      "reason": "not_found:search_budget_exhausted",
+      "event_count": 10,
+      "dispatched_skills": [
+        "navigate_to",
+        "observe_at"
+      ],
+      "trace_sha256": "5f306d75e566148651d35708aec86d7f4b06e34fee1dab1a3397955bf0c02ebf"
+    },
+    {
+      "case": "ambiguous",
+      "expected": "asking",
+      "state": "asking",
+      "reason": "ambiguous:choose_between_frame_local_candidates",
+      "event_count": 10,
+      "dispatched_skills": [
+        "navigate_to",
+        "observe_at"
+      ],
+      "trace_sha256": "6c103e7ec9ec42192f84359472ebf12ee0b2b69c358bf6a4d04e6d5d82d1f376"
+    },
+    {
+      "case": "unknown",
+      "expected": "asking",
+      "state": "asking",
+      "reason": "unknown:search_budget_exhausted",
+      "event_count": 14,
+      "dispatched_skills": [
+        "navigate_to",
+        "observe_at",
+        "observe_at"
+      ],
+      "trace_sha256": "9a44ad82abfa82281193c1db1a236d214bfa3f21451fa4d63de1874dd7217154"
+    },
+    {
+      "case": "grasp_failure",
+      "expected": "failed",
+      "state": "failed",
+      "reason": "postconditions_false",
+      "event_count": 20,
+      "dispatched_skills": [
+        "navigate_to",
+        "observe_at",
+        "align_at",
+        "pick_bottle_from_table"
+      ],
+      "trace_sha256": "21266fc7736408db7246aab3dd63ca2a57e71e337f2a0a874d85e52e452544c1"
+    },
+    {
+      "case": "unverified_grasp",
+      "expected": "failed",
+      "state": "failed",
+      "reason": "postconditions_inconclusive",
+      "event_count": 20,
+      "dispatched_skills": [
+        "navigate_to",
+        "observe_at",
+        "align_at",
+        "pick_bottle_from_table"
+      ],
+      "trace_sha256": "a7d9531c0d7643dee165e7ed89364ae639788c83a573e38d18d515bfbb705fcd"
+    },
+    {
+      "case": "timeout",
+      "expected": "failed",
+      "state": "failed",
+      "reason": "action_timeout",
+      "event_count": 18,
+      "dispatched_skills": [
+        "navigate_to",
+        "observe_at",
+        "align_at",
+        "pick_bottle_from_table"
+      ],
+      "trace_sha256": "e017b946969366c5703606b65c6897e1b6916c826e67888264c466bd1b1c3bf4"
+    },
+    {
+      "case": "retention_loss",
+      "expected": "failed",
+      "state": "failed",
+      "reason": "transport_retention_or_posture_unconfirmed",
+      "event_count": 26,
+      "dispatched_skills": [
+        "navigate_to",
+        "observe_at",
+        "align_at",
+        "pick_bottle_from_table",
+        "prepare_transport",
+        "navigate_to"
+      ],
+      "trace_sha256": "40fb9c7230dce612594898fd7e624910769a27714c3edbca3a547845f4f82781"
+    },
+    {
+      "case": "posture_loss",
+      "expected": "failed",
+      "state": "failed",
+      "reason": "transport_retention_or_posture_unconfirmed",
+      "event_count": 26,
+      "dispatched_skills": [
+        "navigate_to",
+        "observe_at",
+        "align_at",
+        "pick_bottle_from_table",
+        "prepare_transport",
+        "navigate_to"
+      ],
+      "trace_sha256": "5e86ab3fdba5d8cc667b04ef3a8bc668e9997b6339dbbc7eabaa0ee932eecd30"
+    },
+    {
+      "case": "occupied",
+      "expected": "asking",
+      "state": "asking",
+      "reason": "admission_requires_clarification:current preconditions and required cameras must be confirmed",
+      "event_count": 32,
+      "dispatched_skills": [
+        "navigate_to",
+        "observe_at",
+        "align_at",
+        "pick_bottle_from_table",
+        "prepare_transport",
+        "navigate_to",
+        "align_at"
+      ],
+      "trace_sha256": "10d0110c6d2650bfcd548e90a4612e0420932abb8e00fddf641dcf35f7eaa6e2"
+    },
+    {
+      "case": "disconnect",
+      "expected": "stop_unconfirmed",
+      "state": "stop_unconfirmed",
+      "reason": "sensor_disconnect_or_stale_world",
+      "event_count": 18,
+      "dispatched_skills": [
+        "navigate_to",
+        "observe_at",
+        "align_at",
+        "pick_bottle_from_table"
+      ],
+      "trace_sha256": "96e16ced8614436705bb67d2337c1ee22018725b9ed0b64aa3e21a84ede9d20a"
+    },
+    {
+      "case": "stop_unconfirmed",
+      "expected": "stop_unconfirmed",
+      "state": "stop_unconfirmed",
+      "reason": "action_timeout",
+      "event_count": 18,
+      "dispatched_skills": [
+        "navigate_to",
+        "observe_at",
+        "align_at",
+        "pick_bottle_from_table"
+      ],
+      "trace_sha256": "9914219feef85295729e9ae3ea46664a1413f3b5fe49aa8ab4f8016e6395c2dc"
+    },
+    {
+      "case": "cancel",
+      "expected": "cancelled",
+      "state": "cancelled",
+      "reason": "user_cancel",
+      "event_count": 26,
+      "dispatched_skills": [
+        "navigate_to",
+        "observe_at",
+        "align_at",
+        "pick_bottle_from_table",
+        "prepare_transport",
+        "navigate_to"
+      ],
+      "trace_sha256": "10cda2d996f846ba93fa7cc67a067f8cd4f5f20d046de01b259aa1c2884f25f8"
+    },
+    {
+      "case": "pause_resume",
+      "expected": "succeeded",
+      "state": "succeeded",
+      "reason": "mission_verified",
+      "event_count": 43,
+      "dispatched_skills": [
+        "navigate_to",
+        "observe_at",
+        "align_at",
+        "pick_bottle_from_table",
+        "prepare_transport",
+        "navigate_to",
+        "prepare_transport",
+        "navigate_to",
+        "align_at",
+        "place_on_table"
+      ],
+      "trace_sha256": "05c72d06703e203b41d9d77fa7a4dc1fc984ee51b8fe1c6b21fe9de19c8be281"
+    }
+  ],
+  "checks": {
+    "pytest": {
+      "passed": 142,
+      "elapsed_s": 12.37,
+      "exit_code": 0,
+      "command": "env CI=1 MUJOCO_GL=egl PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/pytest -o addopts='' -p pytest_mock -p pytest_timeout -p pytest_env.plugin -p pytest_asyncio.plugin dimos/robot/alohamini1 dimos/experimental/household_assistant dimos/navigation/replanning_a_star/test_holonomic_controller.py dimos/navigation/replanning_a_star/test_global_planner.py dimos/robot/test_all_blueprints_generation.py dimos/cli/test_dimos.py -q"
+    },
+    "broader_navigation_suite": {
+      "passed": 116,
+      "setup_errors": 8,
+      "reason": "Missing credentials for private LFS occupancy_simple.npy and three_paths.npy; existing dataset-dependent tests cannot run"
+    },
+    "mypy": {
+      "exit_code": 0,
+      "source_files": 15
+    },
+    "cli_list": {
+      "exit_code": 0,
+      "blueprints": [
+        "alohamini1-nav-sim",
+        "alohamini1-nav-sim-full",
+        "household-navigation-sim",
+        "household-mission-sim"
+      ]
+    },
+    "pre_commit": {
+      "implementation_hooks_passed": true,
+      "uv_lock_check_passed_on_retry": true,
+      "remaining_failed_hook": "largefiles-check",
+      "reason": "Unmodified existing cronograma_actualizado.xlsx is 132 KB, above global 75 KB limit"
+    },
+    "doclinks": {
+      "exit_code": 0
+    },
+    "git_diff_check": {
+      "exit_code": 0
+    }
+  },
+  "source_sha256": {
+    "dimos/experimental/household_assistant/mission.py": "2f87e9e410fa957ec44e1447755f9b15926483cc88ee28f5e92e56b27ca32095",
+    "dimos/experimental/household_assistant/mission_contracts.py": "34713e075c76c594a68bcaa05a542958569ee291046a9d446a14f43ae39e3efb",
+    "dimos/experimental/household_assistant/mission_module.py": "5177a721626590b1b2bd4a5327f6d2421974dd8a2dfb8e9d3081c1c859bf9699",
+    "dimos/experimental/household_assistant/mission_sequence.py": "cdd55cbe394da50f6e4ed331016e0f7a13af7c9990526ec9a979b4c5c0162613",
+    "dimos/experimental/household_assistant/mission_simulation.py": "e52d0fa29d1238bfb1fabbd13c505c9d3661d717d7782e16b45b22d86744892f",
+    "dimos/experimental/household_assistant/mission_verification.py": "e3d9e1663b8212537789051d3ac318e30b6975e3214495b45ecf55dc3e0023fe",
+    "dimos/experimental/household_assistant/mission_visual.py": "86cc9132c91371c124515962cb469416962ae0b72a442172c9fd624c1b962448",
+    "dimos/experimental/household_assistant/demo_mission.py": "60bf28346a43d4720715077d2f595de24a4b1103876c27b59da53875f342c138",
+    "dimos/experimental/household_assistant/configs/spatial_sim.json": "95038d059abf08c0e0ca7f42b8ea477a4a3ae8ea8ab79ec18cb69795c1a04a9b",
+    "dimos/experimental/household_assistant/configs/pilot.json": "4ae8bb3b3d4cf17b7f172ddd6be8200ce2874465fc028934693b4b4ad7d1a789",
+    "dimos/experimental/household_assistant/contracts.py": "6f22b9323650e8455c5b82db93ed43fe106869d52c07b97f7efb6aebb2d7e661",
+    "dimos/experimental/household_assistant/assessment.py": "5877dd71399ffa6a1c418922dc03571c02144a00cf455825b526a7fff212a896",
+    "dimos/experimental/household_assistant/configuration.py": "21799cb5be57bdc6dccc2eced1aaba5110980520893cebf82dfa5cd2f03cce45",
+    "dimos/experimental/household_assistant/spatial.py": "51b35db30fafd1449f5cdf85b8af2d1752c66ef305d60a9cb9adf6d5022a92a9",
+    "dimos/experimental/household_assistant/spatial_module.py": "dabc631ed1f5f4f53ec36aed8191f8f74dbf166399cf7c49b04829e9d69bc815",
+    "dimos/robot/alohamini1/blueprints/household_mission_sim.py": "6d335cf634a32d0fb143b90c22c2d42678fe57f84c93785373a574d03229f54d",
+    "dimos/robot/alohamini1/assets/robot.xml": "2f1ca4c1cf83ce8bbf9501a8f3aeb63b458be9bef6f8891b12267c411edbbbf4",
+    "dimos/robot/alohamini1/assets/manifest.json": "7c788ae43c8e96feacf0290f91bb90d0e7c73835a3ab461522e909e55135ceec",
+    "dimos/robot/alohamini1/config.py": "9dead058a66e4048b9c58ccd40544c332f9d0a9c72777e1afbd7e542003e63a1",
+    "dimos/robot/alohamini1/sim_module.py": "60660ae460a56cb293dd3ce1624f384b27b132a9ff40119959c40413566ef876",
+    "dimos/robot/alohamini1/blueprints/alohamini1_nav_sim.py": "0179355af5fb5024dba25d4499ebe2202b2f09731901117cd781b65137fb62c9",
+    "dimos/navigation/replanning_a_star/controllers.py": "2715d26518e1ef306aade421fa5f4a1fee74d14ea5883bfb3d07230e82eaed4e",
+    "dimos/navigation/replanning_a_star/global_planner.py": "9411f65010393b0a26af6d3b74c24adafe0b09eb94be2bf31817692deb1ca610",
+    "dimos/navigation/replanning_a_star/goal_validator.py": "7850ef2fe1f3935a282d345b289e220b2c6663a1459d1146bb7a0759390277ee",
+    "dimos/navigation/replanning_a_star/local_planner.py": "947fc6e2e6c804b22a58c5c0bd94fd17765095c29c8fcd083f1d6a3233863811",
+    "dimos/navigation/replanning_a_star/min_cost_astar.py": "d5faa6bed07742cb5f91a9a204ddbaba0fc590ee68aa6dd3019426c16557805d",
+    "dimos/navigation/replanning_a_star/module.py": "1aadd83ff58cfec9875aad85fb179d6d6b2da7fc5d851dca0dab10dfcd537a8a",
+    "dimos/navigation/replanning_a_star/module_spec.py": "44781a4c943ba221f19d1e77958e2472063cc5bf2617e854714810d5b3cb8fa2",
+    "dimos/navigation/replanning_a_star/navigation_map.py": "8bfcffb538027fc30420212a1befe4c76234fc5b95dda95b4c3a2455cae2d784",
+    "dimos/navigation/replanning_a_star/path_clearance.py": "42e2b15f4db75a30951a924f1976f3f1287fec79f9e7b0486575795c7c1ff948",
+    "dimos/navigation/replanning_a_star/path_distancer.py": "db858b06e057cad4173cc1f2c32cb63aae54719aae3c4a2d0e70b5869ba979dd",
+    "dimos/navigation/replanning_a_star/position_tracker.py": "58f29c02531cab3d19bd99707d87a28974c19e5d3e32a7ddfdea308546ffc6c2",
+    "dimos/navigation/replanning_a_star/replan_limiter.py": "af4b5bc1716bf4bae2519b29a215342732b18351ea5bcdb709cdc06b528676da",
+    "dimos/navigation/replanning_a_star/test_global_planner.py": "806172728bc704b2495231caa71efe5471f526cc5331b392617383b3f38960e5",
+    "dimos/navigation/replanning_a_star/test_goal_validator.py": "5b9644d7368abd2cda06acad8d490530da02b2ee113386212a7c56e396f43684",
+    "dimos/navigation/replanning_a_star/test_holonomic_controller.py": "c148945b17c30a7f2a6f54fa28102ba96bd39240acdd26377cf534700921e7dc",
+    "dimos/navigation/replanning_a_star/test_min_cost_astar.py": "d6455a2318a141e9f83f937fe553de3dabf091f8a17979c0410b7f077c81376f"
+  },
+  "schedule": {
+    "path": "artifacts/cronograma_tesis/cronograma_actualizado.xlsx",
+    "unchanged_from_head": true,
+    "sha256": "cc4ab203ac3b0656fb0ac4f14fc7347d62e9a335a86cf407c2fc0367c5cd356d"
+  },
+  "limitations": [
+    "CAD zero pose, no arm/elevator actuators because all 13 joint limits are zero",
+    "Continuous wheels locked for a holonomic free-base velocity proxy",
+    "Cameras and IMU are virtual additions, not calibrated hardware",
+    "No independent gripper joints named in supplied URDF; actuator roles need confirmation",
+    "Manipulation and identity bindings remain F4 artificial fixtures; no bottle mesh transfer",
+    "Sensor hardware arrangement and physical joint limits requested from user; not yet supplied",
+    "Legacy SO101/AM-ARM200 controls removed, not relabeled as AlohaMini1",
+    "Historical evidence is archived without attributing old results to new hardware"
+  ],
+  "physical_validated": false,
+  "act_validated": false,
+  "vlm_used": false
+}

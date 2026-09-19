@@ -1,0 +1,44 @@
+{
+  "origin": "simulation",
+  "robot": "alohamini1_cad_zero",
+  "mjcf_sha256": "eb6f8267aa0e152cb2642408a9364007d7f73bdaa9f6bd1dceca8bf4187b19a7",
+  "zero_pose_bounds_m": [
+    [
+      -0.15380379358352858,
+      -0.21343505743652735,
+      -0.007170903860519671
+    ],
+    [
+      0.3060550295698974,
+      0.21141353208363944,
+      1.0831889081704833
+    ]
+  ],
+  "zero_pose_radius_m": 0.3457285177062809,
+  "images": [
+    {
+      "file": "robot_reference.png",
+      "sha256": "e4fbf4e8aee9163360257b8c7a044bf0510bae58554f9706fca7193f6b81d6ce"
+    },
+    {
+      "file": "front_camera.png",
+      "sha256": "527864140f1a32720b50e3b1ac40ccb1e475c016a5a8fb86b1e1b6a609ab1a3b"
+    },
+    {
+      "file": "chest_camera.png",
+      "sha256": "3e02a4e2abf5eded5e7490ebba7f9c2460a94921e091b5bbd4b1a724fb397981"
+    },
+    {
+      "file": "left_camera.png",
+      "sha256": "7a11311a4027f12705ef3f0256b25a9e04e931d2b1c40d45d6292793b3b7707a"
+    },
+    {
+      "file": "right_camera.png",
+      "sha256": "b2e4185e40d965858b7f3eba6e865abd0e0f6752a96ab6c91bac0dd1c3f3cf82"
+    }
+  ],
+  "physical_validated": false,
+  "articulated_manipulation_validated": false,
+  "cameras_are_virtual": true,
+  "passed": true
+}

@@ -39,6 +39,7 @@ from dimos.experimental.household_assistant.spatial import (
     load_spatial,
     within_approach,
 )
+from dimos.experimental.household_assistant.visual import ObservedView, rgb_digest
 from dimos.msgs.geometry_msgs.PoseStamped import PoseStamped
 from dimos.msgs.geometry_msgs.Quaternion import Quaternion
 from dimos.msgs.geometry_msgs.Vector3 import Vector3
@@ -140,6 +141,39 @@ class HouseholdSpatialModule(Module):
         with self._lock:
             if self._cloud is None or cloud.ts > self._cloud.ts:
                 self._cloud = cloud
+
+    @rpc
+    def get_planner_image(self) -> tuple[Image, ObservedView] | None:
+        """Current localized RGB for F5, including before the first navigation goal.
+
+        This is camera/observer localization, never an object pose or identity.
+        The planner independently requires all actuators to be observed stopped.
+        """
+        with self._lock:
+            image = self._image
+            pose = self._poses.latest
+            if image is None or pose is None or abs(image.ts - pose.ts) > 0.5:
+                return None
+            now = time.time()
+            if not 0 <= now - image.ts <= self.config.observation_max_age_s:
+                return None
+            view = ObservedView(
+                id=f"rgb_{int(image.ts * 1e9)}",
+                evidence=Evidence(
+                    origin=Origin.SIMULATION,
+                    source="front_camera_image",
+                    reference=f"front_camera_image@{image.ts:.9f}",
+                    captured_at=image.ts,
+                    clock_id="unix",
+                    frame_id=image.frame_id,
+                ),
+                rgb_sha256=rgb_digest(image),
+                observer_pose=pose,
+                pose_source="mujoco_ground_truth_localization",
+                map_id="household_f2_sim",
+                place_id=self._status.place_id if self._status.state == "arrived" else None,
+            )
+            return image, view
 
     @rpc
     def go_to(self, place_id: str, purpose: Purpose = "observe") -> SpatialStatus:

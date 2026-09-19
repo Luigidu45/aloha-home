@@ -4,15 +4,15 @@ title: "Plan de tesis: asistencia doméstica modular con DimOS, VLM y ACT"
 
 # Plan de trabajo por fases
 
-**Actualización:** 13 de septiembre de 2026. **Estado:** F0–F3 completadas en su alcance de software/simulación; F4–F10 pendientes. Véanse el [registro de F0](/docs/development/asistencia_domestica_modular/fase_0_limpieza.md), los [contratos y decisiones de F1](/docs/development/asistencia_domestica_modular/fase_1_definicion.md) y la [simulación, resultados y reproducción de F2](/docs/development/asistencia_domestica_modular/fase_2_simulacion.md).
+**Actualización:** 18 de septiembre de 2026. **Plataforma vigente:** AlohaMini1; véase la [migración y sus límites](/docs/development/asistencia_domestica_modular/migracion_alohamini1.md). **Estado:** F0–F5 completadas en su alcance de software/simulación; F6–F10 pendientes. El [registro F4](/docs/development/asistencia_domestica_modular/fase_4_gestor_misiones.md) distingue navegación simulada de manipulación y asociaciones visuales artificiales. El [registro F5](/docs/development/asistencia_domestica_modular/fase_5_vlm.md) documenta decisiones de un VLM local real y sus límites. Véanse el [registro de F0](/docs/development/asistencia_domestica_modular/fase_0_limpieza.md), los [contratos y decisiones de F1](/docs/development/asistencia_domestica_modular/fase_1_definicion.md) y la [simulación, resultados y reproducción de F2](/docs/development/asistencia_domestica_modular/fase_2_simulacion.md).
 
 Este plan persigue la propuesta actual: un asistente robótico que permita a una persona con movilidad reducida solicitar, supervisar y completar tareas de acceso a objetos mediante lenguaje natural. Integra DimOS, memoria y navegación semántica, supervisión visual y habilidades de manipulación ACT. El éxito final requiere entregar el objeto correcto en una región accesible acordada.
 
-Se considera un único tesista, tres meses disponibles y la llegada del AlohaMini2 armado, cámaras de muñeca, LiDAR Unitree L2 y RealSense D435i aproximadamente dentro de veinte días. Son referencias relativas de planificación; no se presupone que el robot llegue calibrado ni integrado con DimOS. En F1 el usuario confirmó la variante original con dos AM-ARM200 y ambos sensores fijos en la parte superior. El cómputo previsto es Beelink GTi15 Ultra y RTX de 24 GB, cuya llegada puede demorarse; las interfaces y la disponibilidad efectiva se registran en la [ficha de hardware](/docs/development/asistencia_domestica_modular/fase_1_hardware.md).
+Se considera un único tesista, tres meses disponibles y la llegada del AlohaMini1 armado, cámaras de muñeca, LiDAR Unitree L2 y RealSense D435i aproximadamente dentro de veinte días. Son referencias relativas de planificación; no se presupone que el robot llegue calibrado ni integrado con DimOS. La plataforma objetivo se cambió al AlohaMini1 por decisión del usuario. La selección anterior de AM-ARM200 ya no se aplica: límites, pinzas y montaje de sensores del nuevo robot deben confirmarse. El cómputo previsto es Beelink GTi15 Ultra y RTX de 24 GB, cuya llegada puede demorarse; las interfaces y la disponibilidad efectiva se registran en la [ficha de hardware](/docs/development/asistencia_domestica_modular/fase_1_hardware.md).
 
 La fuente es `propuesta_tesis_asistencia_domestica.pdf`, once páginas, proporcionada por el usuario en `/home/luigidu/Downloads/`. SHA-256: `9d6d12973f432c250a37a78bcc2a29f43a00cd25770a74926702163e524fa642`. Se revisaron el código y los documentos presentes en el checkout con HEAD `ea4980756`; esta revisión no incluye ensayos físicos.
 
-**La implementación antigua en `dimos/experimental/domestic_assistance` fue retirada en F0 por decisión del usuario**, junto con su blueprint dependiente y las entradas generadas. No se adopta como núcleo, no se importarán sus contratos y no se heredan sus misiones ni objetivos científicos. El stack genérico de navegación AlohaMini2 se conserva.
+**La implementación antigua en `dimos/experimental/domestic_assistance` fue retirada en F0 por decisión del usuario**, junto con su blueprint dependiente y las entradas generadas. No se adopta como núcleo, no se importarán sus contratos y no se heredan sus misiones ni objetivos científicos. El stack genérico se reutiliza adaptado al AlohaMini1.
 
 ## 1. Qué debe demostrar la tesis
 
@@ -46,7 +46,7 @@ El transporte confirmado por el usuario mantiene el objeto en la pinza: recoger 
 
 **Ampliación B, confirmada en F1:** recoger un control remoto caído desde el suelo y entregarlo sobre la mesa accesible. Se propone `suelo_sala` como primera zona de recogida y se reutilizará la entrega en el dormitorio. La nueva habilidad cambia el dominio de altura, geometría y postura de recogida; su evaluación forma parte de C2. Alcance al suelo, agarre y compatibilidad de transporte/colocación deben comprobarse físicamente. Si no resulta alcanzable, se documentará la limitación y se revisará la elección con el usuario antes de sustituirla. Cambiar el nombre del objeto o registrar de nuevo el mismo checkpoint no constituye por sí solo una habilidad nueva.
 
-El AlohaMini2 es una plataforma bimanual. La coordinación simultánea de ambos brazos se incorpora solo si las habilidades básicas ya funcionan y aporta una ventaja útil. Si no se evalúa, debe declararse así y ajustar el título y las afirmaciones sobre manipulación bimanual. Esto es una recomendación de alcance, no una afirmación de que esa parte ya esté resuelta.
+El AlohaMini1 es una plataforma bimanual. La coordinación simultánea de ambos brazos se incorpora solo si las habilidades básicas ya funcionan y aporta una ventaja útil. Si no se evalúa, debe declararse así y ajustar el título y las afirmaciones sobre manipulación bimanual. Esto es una recomendación de alcance, no una afirmación de que esa parte ya esté resuelta.
 
 ### Requisitos finales y extensiones
 
@@ -68,7 +68,7 @@ La entrega se define mediante una región elegida con el usuario, no solo por pe
 | Componente existente | Uso previsto | Límite que el plan debe resolver |
 | --- | --- | --- |
 | [Módulos](/docs/usage/modules.md) y [blueprints](/docs/usage/blueprints.md) | Componer procesos, streams y RPC mediante las interfaces de DimOS. | Una conexión tipada no valida unidades, calibración ni condiciones físicas. |
-| [Simulación AlohaMini2](/docs/usage/alohamini2-simulation.md) y [blueprints de navegación](/dimos/robot/alohamini2/blueprints/alohamini2_nav_sim.py) | Reutilizar navegación, cámaras, mapa, costo y planificación. | La versión articulada usa SO101. No acredita la cinemática ni los agarres de los AM-ARM200 objetivo. |
+| [Simulación AlohaMini1](/docs/usage/alohamini1-simulation.md) y [blueprints de navegación](/dimos/robot/alohamini1/blueprints/alohamini1_nav_sim.py) | Reutilizar navegación, cámaras, mapa, costo y planificación. | La navegación usa el URDF del AlohaMini1, bloqueado en cero CAD porque sus límites están sin completar. Cámaras virtuales y base holonómica aproximada; no acredita manipulación. |
 | [Navegación semántica](/dimos/agents/skills/navigation.py) | Etiquetas y búsqueda de destinos por texto. | Algunos caminos devuelven que empezó la navegación; el gestor debe comprobar llegada y parada. |
 | [Memoria espacial](/dimos/perception/spatial_perception.py) | Buscar observaciones por texto, imagen y ubicación. | Una imagen recuperada es una pista histórica, no una posición actual confirmada del objeto. |
 | [WorldBelief](/dimos/perception/worldbelief_module.py) | Evaluar posteriormente si simplifica identidad y recuperación de objetos. | No será una dependencia obligatoria del piloto. |
@@ -76,7 +76,7 @@ La entrega se define mediante una región elegida con el usuario, no solo por pe
 | [Cliente MCP](/dimos/agents/mcp/mcp_client.py) y [anotación de habilidades](/dimos/agents/annotation.py) | Exponer capacidades y descubrir herramientas cuando sea necesario. | El nuevo gestor debe ser el único responsable del despacho físico; no debe existir otro agente enviando movimientos en paralelo. |
 | [RealSense](/dimos/hardware/sensors/camera/realsense/camera.py) | Color, profundidad, información de cámara y nubes. | Faltan montajes, calibración y sincronización del equipo que llegará. |
 | [Point-LIO nativo](/dimos/hardware/sensors/lidar/pointlio/cpp/main.cpp) | Referencia para odometría y publicación de nube. | La fuente actual inicializa Livox. La etiqueta `unilidar` no acredita conexión directa del L2. |
-| [Grabación y preparación de datos](/dimos/imitation/README.md) | Registrar demostraciones y exportarlas a LeRobot. | Adaptar AM-ARM200 y múltiples cámaras; el ejemplo usa el siguiente estado articular como acción, no necesariamente el comando enviado. |
+| [Grabación y preparación de datos](/dimos/imitation/README.md) | Registrar demostraciones y exportarlas a LeRobot. | Adaptar las articulaciones y pinzas del AlohaMini1 y múltiples cámaras; el ejemplo usa el siguiente estado articular como acción, no necesariamente el comando enviado. |
 | [Stack web](/web/README.md) | Ampliar cockpit y conexión con el robot. | Implementar el flujo asistencial y probar otro dispositivo, micrófono y reconexión. |
 
 El [SDK oficial del L2](https://github.com/unitreerobotics/unilidar_sdk2) ofrece nube e IMU, incluyendo interfaces ROS/ROS2. El plan debe elegir una cadena de odometría compatible y un puente a DimOS; recibir nube no resuelve por sí solo localización y relocalización.
@@ -92,9 +92,9 @@ F1 implementa los contratos, la configuración del piloto y los chequeos de escr
 | `docs/development/asistencia_domestica_modular/` | Este plan, decisiones, protocolo experimental y guías de reproducción. |
 | `dimos/experimental/household_assistant/` | Núcleo nuevo y acotado de la aplicación: modelos de misión, catálogo, gestor, verificación y adaptadores semánticos. |
 | `dimos/experimental/household_assistant/configs/` | Tareas, estaciones, catálogo y configuraciones versionadas. |
-| `dimos/experimental/household_assistant/testing/` | Dobles de prueba e inyección de fallos; no exponerlos como habilidades físicas. |
-| `dimos/robot/alohamini2/` | Adaptación específica de base, elevador, brazos, sensores y modelo físico. |
-| `dimos/robot/alohamini2/blueprints/` | Composiciones nuevas de simulación, captura y ejecución física cuando estén integradas. |
+| `dimos/experimental/household_assistant/mission_simulation.py` | Dobles explícitos de F4 e inyección de fallos; no exponerlos como habilidades físicas. |
+| `dimos/robot/alohamini1/` | Adaptación específica de base, elevador, brazos, sensores y modelo físico. |
+| `dimos/robot/alohamini1/blueprints/` | Composiciones nuevas de simulación, captura y ejecución física cuando estén integradas. |
 | `dimos/models/vl/` | Extensión del backend visual únicamente si las interfaces existentes no cubren lo necesario. |
 | `dimos/imitation/` | Reutilización del flujo de datos; cambios genéricos solo cuando sean necesarios para cámaras y acciones de la tesis. |
 | `web/cockpit/src/` y `dimos/web/` | Vista asistencial y canal de solicitudes, estado y consultas. |
@@ -117,9 +117,9 @@ Trabajo:
 
 1. Inventariar los cambios locales y preservar los borrados y trabajos del usuario ajenos a esta limpieza.
 2. Retirar `dimos/experimental/domestic_assistance` y sus pruebas/configuraciones específicas. La inspección actual identifica 32 archivos versionados en ese paquete.
-3. Retirar `dimos/robot/alohamini2/blueprints/alohamini2_domestic_sim.py`, que importa el paquete descartado. Buscar referencias adicionales antes de eliminar.
+3. Retirar el blueprint doméstico antiguo que importaba el paquete descartado (véase el registro histórico de F0). Buscar referencias adicionales antes de eliminar.
 4. Regenerar el registro con `pytest dimos/robot/test_all_blueprints_generation.py`; no editar `all_blueprints.py` manualmente. Deben desaparecer las dos misiones antiguas y el módulo de simulación antiguo.
-5. Conservar el stack genérico de navegación AlohaMini2 y sus recursos. Es reutilizable independientemente del proyecto descartado.
+5. Conservar el stack genérico de navegación AlohaMini1 y sus recursos. Es reutilizable independientemente del proyecto descartado.
 6. Registrar versión del código, dependencias relevantes y resultados de comprobaciones iniciales.
 
 **Entregable:** cambio de limpieza delimitado y una referencia reproducible del entorno.
@@ -154,12 +154,12 @@ Trabajo:
 
 Trabajo:
 
-1. Reutilizar el stack de navegación AlohaMini2 y añadir dos estaciones conectadas, una superficie de recogida y otra de entrega.
+1. Reutilizar el stack de navegación AlohaMini1 y añadir dos estaciones conectadas, una superficie de recogida y otra de entrega.
 2. Publicar poses, imágenes, nubes y estado de navegación con nombres y marcos documentados. Guardar una grabación corta para pruebas repetibles.
 3. Distinguir pose para observar de pose para manipular: posición y orientación de base, altura prevista y tolerancias.
 4. Integrar un adaptador que traduzca destinos semánticos a navegación y espere llegada/parada. Probar destino bloqueado y cancelación.
 5. Separar las observaciones disponibles para el supervisor de la verdad interna del simulador. Si se usan posiciones exactas para evaluar, mantenerlas en el evaluador y declarar la localización simulada como tal.
-6. Anotar las diferencias del modelo SO101. Revisar la disponibilidad del URDF AM-ARM200 y preparar su adaptación sin convertir un simulador de manipulación detallado en requisito de este piloto.
+6. Mantener explícitos los límites del URDF AlohaMini1: articulaciones bloqueadas en cero CAD, límites operativos desconocidos y cámaras virtuales. Completar articulación solo con datos de la nueva plataforma.
 
 **Entregables:** escena/configuración pequeña, adaptador espacial, reproducción de un recorrido y blueprint nuevo cuando el comportamiento esté integrado.
 
@@ -186,6 +186,8 @@ Trabajo:
 
 ### F4. Implementar el gestor y la verificación de misiones
 
+**Estado:** completada en el alcance de software el 15/09/2026. Gestor, verificación, watchdog, pausa/repreparación, trazas y blueprint `household-mission-sim`; brazo derecho para las pruebas. Navegación MuJoCo y manipulación explícitamente artificial. [Implementación y límites](/docs/development/asistencia_domestica_modular/fase_4_gestor_misiones.md).
+
 **Objetivo:** completar el ciclo de ejecución independientemente del modelo lingüístico. **Depende de:** F1; integra F2–F3 al estar disponibles. **Aporta a:** O4, O5; C1 y C2.
 
 Trabajo:
@@ -204,6 +206,8 @@ Trabajo:
 **Criterio de cierre:** casos reproducibles de misión nominal, objeto ausente, fallo de agarre, resultado incierto, timeout, cancelación y desconexión. Una pinza que completó el movimiento no debe producir automáticamente «objeto recogido». Al detenerse el VLM o fallar el backend, el gestor sigue respondiendo.
 
 ### F5. Conectar un VLM real a decisiones acotadas
+
+**Estado:** completada en software/simulación el 18/09/2026. Qwen2.5-VL-3B local en CPU, imágenes verificadas, memoria CLIP/Chroma, propuestas acotadas y admisión atómica en F4. La regresión final obtuvo las 15 clases de decisión esperadas en 15 casos (27,66–36,15 s por decisión); pasaron 118 pruebas del paquete. Cancelación comprobada durante inferencia en MuJoCo. No equivale a una misión completa dirigida por el VLM ni a manipulación física. La medición conjunta con ACT se realizará en F7 cuando exista su ejecutor. [Implementación y reproducción](/docs/development/asistencia_domestica_modular/fase_5_vlm.md), [evidencia y limitaciones](/docs/development/asistencia_domestica_modular/fase_5_validacion.json).
 
 **Objetivo:** pasar de un guion de prueba a decisiones condicionadas por la petición y la escena. **Depende de:** F1, F3 y F4. **Aporta a:** O3, O5; C1.
 
@@ -240,7 +244,7 @@ Trabajo:
 
 ### F7. Preparar ACT, captura y adaptación física
 
-**Adelanto autorizado por el usuario:** el modelo original AM-ARM200 ya está integrado y ensayado en navegación/simulación; véase la [adaptación](/docs/development/asistencia_domestica_modular/adaptacion_am_arm200.md). Esto no cierra el pipeline ACT ni la validación física de F7/F8.
+**Cambio de plataforma autorizado:** la [migración al AlohaMini1](/docs/development/asistencia_domestica_modular/migracion_alohamini1.md) sustituye el modelo anterior. Los límites cero impiden reutilizar el control articular previo; completar límites, pinzas y cámaras antes de preparar ACT. No se cierra la manipulación ni la validación física de F7/F8.
 
 
 **Objetivo:** llegar al robot con el flujo de datos y las interfaces preparados. **Depende de:** F1 y contrato de ejecutores F4. La ficha de hardware comienza en F1. **Aporta a:** O4, O6; C1 y C2.
@@ -251,9 +255,9 @@ Trabajo:
 2. Fijar una representación de acción coherente con el controlador. Registrar tanto estado como comandos cuando sea posible; no reutilizar sin revisión los índices, unidades ni poses SO101.
 3. Preparar el adaptador de inferencia: carga del checkpoint, construcción de observaciones, control de ritmo, vaciado de acciones pendientes y cancelación. Probarlo primero contra un receptor de comandos de prueba.
 4. Reutilizar captura/exportación de DimOS o el flujo compatible de LeRobot, escogiendo una ruta principal para evitar dos sistemas de datos diferentes.
-5. Crear un dataset pequeño artificial o compatible para verificar exportación, carga, dimensiones y un ensayo breve de entrenamiento/inferencia. Etiquetarlo como prueba del pipeline; no llamarlo entrenamiento físico del AlohaMini2.
+5. Crear un dataset pequeño artificial o compatible para verificar exportación, carga, dimensiones y un ensayo breve de entrenamiento/inferencia. Etiquetarlo como prueba del pipeline; no llamarlo entrenamiento físico del AlohaMini1.
 6. Preparar captura de múltiples cámaras, identificación de episodios, reinicio de escena y división por sesiones. Separar datos motores de los registros de decisiones de misión.
-7. Documentar interfaces de L2, D435i, base, elevador y AM-ARM200. Si existen grabaciones compatibles, ensayar recepción/conversión; mantener como pendientes los drivers no comprobados con el equipo real.
+7. Documentar interfaces de L2, D435i, base, elevador y brazos/pinzas del AlohaMini1. Si existen grabaciones compatibles, ensayar recepción/conversión; mantener como pendientes los drivers no comprobados con el equipo real.
 8. Planificar el protocolo de demostraciones y reservar acceso efectivo a cómputo. Un primer lote pequeño sirve para detectar errores de datos; el número final depende de la curva de aprendizaje.
 
 ACT utiliza imágenes y estado articular para generar bloques de acciones; el significado de la solicitud no condiciona automáticamente la política estándar. La [documentación oficial de ACT en LeRobot](https://huggingface.co/docs/lerobot/act) sirve de referencia para preparar el pipeline. Un checkpoint de otra morfología puede probar infraestructura, pero no acredita competencia en estos brazos.
@@ -268,7 +272,7 @@ ACT utiliza imágenes y estado articular para generar bloques de acciones; el si
 - [x] Misión, catálogo, lugares y contratos nuevos documentados y comprobados en F1.
 - [x] Navegación entre estaciones y observaciones accesibles en simulación, comprobadas en F2.
 - [x] Memoria que distingue información histórica de confirmación actual, comprobada en F3 con invalidación asistida y modelos locales.
-- [ ] Gestor con éxito, fallo, incertidumbre, consulta y cancelación comprobados.
+- [x] Gestor con éxito, fallo, incertidumbre, consulta y cancelación comprobados en F4 con evidencia artificial/simulada explícita.
 - [ ] VLM real recibe imágenes y propone acciones validadas.
 - [ ] Interfaz por texto completa un ciclo desde otro dispositivo.
 - [ ] Captura, representación de acciones y adaptador ACT preparados.
@@ -408,7 +412,8 @@ Las configuraciones, metadatos y scripts pertenecen al repositorio. Videos, data
 2. F1 completada: misiones A/B, catálogo, contratos, casos de escritorio y ficha de interfaces disponibles.
 3. F2 completada: estaciones con nombres semánticos y poses registradas, observaciones recientes y grabaciones disponibles en la simulación conservada.
 4. F3 completada: recuperación de observaciones con DimOS/CLIP, candidatos visuales con YOLO en CPU, búsqueda acotada y separación temporal de evidencia. El [registro de F3](/docs/development/asistencia_domestica_modular/fase_3_memoria_percepcion.md) precisa errores y el uso real de las cuatro áreas de DimOS.
-5. Siguiente paso, F4: gestor y verificación de misiones; después, F5 conecta el supervisor VLM con imágenes. La integración continua y las capacidades físicas siguen pendientes.
-5. F6–F7: probar el ciclo desde la interfaz mientras se deja listo el pipeline ACT para el primer día de captura física.
+5. F4 completada: gestor, verificación posterior, cancelación y fallos con navegación MuJoCo y manipulación artificial. Las asociaciones visuales de la demostración son fixtures; no acreditan percepción autónoma ni agarre físico.
+6. F5 completada: supervisor VLM local con imágenes y memoria efectivas, validación de propuestas, consultas, timeout y cancelación. Se evaluaron decisiones aisladas y la conexión a cámara/gestor en vivo; la misión completa con percepción continua sigue por validar.
+7. Siguiente paso, F6: conectar solicitud, preguntas, selección de instancia y cancelación a la interfaz. F7 prepara el pipeline ACT y mide recursos conjuntos antes de la captura física.
 
 Este orden permite avanzar desde ahora hacia las contribuciones del PDF y deja identificada la evidencia que todavía dependerá del robot.
