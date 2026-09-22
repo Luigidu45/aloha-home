@@ -1,0 +1,219 @@
+{
+  "phase": "F6",
+  "closed_on": "2026-09-22",
+  "status": "completed_pre_robot_text",
+  "platform": "AlohaMini1",
+  "active_arm": "right",
+  "destinations": [
+    "mesa_dormitorio",
+    "mesa_sala"
+  ],
+  "physical_android": {
+    "date": "2026-09-19",
+    "browser": "Chrome on Android",
+    "user_confirmed": true,
+    "flow": [
+      "request",
+      "confirm",
+      "choose_object",
+      "cancel"
+    ],
+    "reported_final_state": "Cancelada - parada confirmada",
+    "camera_visible": true,
+    "schematic_map_visible": true,
+    "source": ".ignore.f6/browser_fixture/interaction.jsonl"
+  },
+  "browser_final": {
+    "date": "2026-09-22",
+    "browser": "Chromium desktop with mobile viewport; not physical Android",
+    "result": "passed",
+    "final_state": "succeeded",
+    "destination": "mesa_sala",
+    "pause_distance_from_pickup_m": 0.46613368530537164,
+    "page_errors": [],
+    "checks": [
+      "incomplete_request_correction",
+      "explicit_confirmation",
+      "ambiguity_choice",
+      "pause_after_departure",
+      "destination_change",
+      "return_and_delivery",
+      "reload",
+      "offline",
+      "reconnection_without_new_mission"
+    ],
+    "mode": "fixture_with_native_mujoco_navigation"
+  },
+  "vlm_web": {
+    "date": "2026-09-19",
+    "model": "Qwen2.5-VL-3B",
+    "device": "CPU",
+    "result": "one_visual_navigation_decision_admitted_and_executed_then_cancelled",
+    "inference": {
+      "raw": "{\"kind\":\"action\",\"skill\":\"navigate_to\",\"destination\":\"mesa_sala\",\"plan\":[\"navigate_to\"],\"views\":[\"rgb_1789820606684020736\"]}",
+      "receipts": [
+        {
+          "view_id": "rgb_1789820606684020736",
+          "rgb_sha256": "a5861d3e16ef8420f66ac8228eebdfb72656a2ee462d8a82733e2dcfc2343754",
+          "png_sha256": "df14622b227f722ed1633d435bcc7f12e15782dd0e1686c6d04f4b524c0dd039"
+        }
+      ],
+      "tensor_sha256": "cefba79b7a3d548be735b236ebcb00e9e6904b870ee7a784e15b19a946959272",
+      "tensor_shape": [
+        180,
+        1176
+      ],
+      "elapsed_s": 30.162346779000018,
+      "peak_rss_mib": 9156.37890625,
+      "generated_tokens": 49,
+      "visual_assessment": "0",
+      "visual_elapsed_s": 3.8308429190001334,
+      "visual_clarification_required": false
+    },
+    "cancel_confirmation_browser_s": 0.8118351919997622,
+    "final_state": "cancelled",
+    "full_vlm_mission_validated": false
+  },
+  "checks": {
+    "pytest": {
+      "passed": 131,
+      "log": ".ignore.f6/pytest_final.log"
+    },
+    "vitest": {
+      "passed": 126,
+      "log": ".ignore.f6/vitest_final.log"
+    },
+    "typescript": {
+      "passed": true,
+      "log": ".ignore.f6/typescript_final.log"
+    },
+    "mypy": {
+      "passed": true,
+      "files": 10,
+      "log": ".ignore.f6/mypy_final.log"
+    },
+    "ruff": {
+      "passed": true
+    },
+    "final_hooks": {
+      "command": "pre-commit run --files <all modified and new F6 files>",
+      "log": ".ignore.f6/hooks_final.log",
+      "all_applicable_hooks_passed_except": [
+        "largefiles-check"
+      ],
+      "pre_existing_large_files": [
+        {
+          "path": "artifacts/cronograma_tesis/cronograma_actualizado.xlsx",
+          "size_kib_reported": 132
+        },
+        {
+          "path": "artifacts/plan_tesis/propuesta_tesis_asistencia_domestica.pdf",
+          "size_kib_reported": 116
+        },
+        {
+          "path": "artifacts/reporte_visual_vlm_skills.html",
+          "size_kib_reported": 88
+        }
+      ],
+      "limit_kib": 75,
+      "existing_artifacts_modified": false
+    },
+    "build": {
+      "passed": true,
+      "log": ".ignore.f6/build_final.log"
+    }
+  },
+  "limits": [
+    "Manipulation, payload and object identities are artificial F4 evidence; only base navigation and camera are native simulation.",
+    "Map is a synthetic home schematic with current MuJoCo pose, not SLAM.",
+    "Text entry is a bounded confirmed mission A form, not unrestricted VLM request interpretation.",
+    "Browser desktop mobile viewport and physical Android are distinct tests.",
+    "CPU VLM trace validates one navigation decision and cancellation, not a full visual mission.",
+    "LAN session is shared and does not implement user authentication."
+  ],
+  "pending": {
+    "F7_F8": [
+      "ACT pipeline",
+      "joint limits and real controllers",
+      "physical manipulation"
+    ],
+    "F9": [
+      "trusted HTTPS on Android",
+      "microphone permissions and local Spanish recognition availability",
+      "real voice usability and integrated testing"
+    ]
+  },
+  "artifacts": [
+    {
+      "path": ".ignore.f6/browser_fixture/interaction.jsonl",
+      "bytes": 30547,
+      "sha256": "95b0031b2c9d0ad509811c786c0cd58c767ad7ba805561c1b8fd28450ba13545"
+    },
+    {
+      "path": ".ignore.f6/browser_fixture/mission_events.json",
+      "bytes": 77617,
+      "sha256": "3034f50084d18840b034cf1829cfbb8d851dd90f1e9e29e63ab8d8f3e2cf0b20"
+    },
+    {
+      "path": ".ignore.f6/browser_recording/page@a4baf1e83d073c25f44a293543a4d006.webm",
+      "bytes": 1145455,
+      "sha256": "1f377f63dde34ad7c0d817c90cbffaa27281b3a59f026594af4b4686951fdb58"
+    },
+    {
+      "path": ".ignore.f6/browser_recording/report.json",
+      "bytes": 4201,
+      "sha256": "91bad9cb7c7be44e7a70c31cf5bb680b0da07cf47c84c7d0fb611cfb14f15751"
+    },
+    {
+      "path": ".ignore.f6/live_vlm/interaction.jsonl",
+      "bytes": 51117,
+      "sha256": "bdb7ab342a2d312d9d31afa91cb6a771c195f0fe817e8db100f3826baa4475f6"
+    },
+    {
+      "path": ".ignore.f6/vlm_browser_final/page@004ebc5fbc8345469171bcc7114a5e51.webm",
+      "bytes": 1459808,
+      "sha256": "82546e0715116e3cf5e7fb07d7ca25b45e6da65a84bd1932c3ff033160f7e633"
+    },
+    {
+      "path": ".ignore.f6/vlm_browser_final/report.json",
+      "bytes": 6921,
+      "sha256": "97a2268411e33084982f2e67fd038ae56c17157478f999b9862a580b05914d1f"
+    },
+    {
+      "path": ".ignore.f6/final_browser/choice.png",
+      "bytes": 182113,
+      "sha256": "1adc339fe15e0bf4ec037746540ca279f52e2065c3cf857ddfb04d3562a109f5"
+    },
+    {
+      "path": ".ignore.f6/final_browser/offline.png",
+      "bytes": 166926,
+      "sha256": "817729e4b6a0b66a2e4b36ef4c7649395b1e9034340c44f8f04a6590f622b01b"
+    },
+    {
+      "path": ".ignore.f6/final_browser/page@1aea651053de94be5def63f908f1f5e8.webm",
+      "bytes": 1327618,
+      "sha256": "054706820570ea8bad2e9aff1d2cc562626767d5ba61061f31ca934207826006"
+    },
+    {
+      "path": ".ignore.f6/final_browser/report.json",
+      "bytes": 6695,
+      "sha256": "764de8677194c941aef02dea114c66e83872c926debcfec68e1bf9997f0b5fda"
+    },
+    {
+      "path": ".ignore.f6/final_fixture/interaction.jsonl",
+      "bytes": 26478,
+      "sha256": "de899290c713283544b42de2d6e9c86ecbbb2401f9098ef0669c4dc0222878c7"
+    },
+    {
+      "path": ".ignore.f6/final_fixture/mission_events.json",
+      "bytes": 54272,
+      "sha256": "f828f48d08025c5322601817b2628cfd635c435b5c52949f9d570cdf382af59d"
+    },
+    {
+      "path": ".ignore.f6/final_fixture/final.json",
+      "bytes": 5198,
+      "sha256": "19e504e261238df30254b1eb1e9aec3a5e2b790b5e4dcf37a376c09e8f859c72"
+    }
+  ],
+  "artifact_storage": "Raw evidence lives in ignored local .ignore.f6, not in Git; copy explicitly to archive."
+}

@@ -122,6 +122,7 @@ class ArtificialMissionExecutor:
         self.held: str | None = None
         self.loaded = False
         self.placed: str | None = None
+        self.placed_at: str | None = None
         self.grasp_unknown = False
         self.disconnected = False
         self.latest_frame: WorldFrame | None = None
@@ -162,6 +163,16 @@ class ArtificialMissionExecutor:
                 self._poses.add(self._status.pose)
             if self._status.state == "arrived":
                 self.place = self._status.place_id
+            elif self._status.state in {
+                "navigating",
+                "stopping",
+                "cancelled",
+                "failed",
+                "stop_unconfirmed",
+            }:
+                # A cancelled route does not leave the base at its previous station.
+                self.place = "between_stations"
+                self.aligned = ""
         for command in self.manager.take_commands():
             if command.kind == "stop":
                 self.active = command
@@ -276,6 +287,7 @@ class ArtificialMissionExecutor:
             self.loaded = True
         elif operation == Operation.PLACE:
             self.placed = self.held
+            self.placed_at = self.active.action.destination_id
             self.held = None
             self.loaded = False
 
@@ -381,7 +393,9 @@ class ArtificialMissionExecutor:
                     ),
                     Observation(
                         key=fact(
-                            obj.id, Predicate.INSIDE, self.manager.pilot.mission.destination_id
+                            obj.id,
+                            Predicate.INSIDE,
+                            self.placed_at or self.manager.pilot.mission.destination_id,
                         ),
                         value=self.placed == obj.id,
                         evidence=(ev,),

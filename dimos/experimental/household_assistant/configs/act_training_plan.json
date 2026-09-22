@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "route": "official LeRobotDataset v3 and ACTPolicy in separate Miniforge environment",
+  "policies": [
+    "pick_bottle_from_table",
+    "place_on_table"
+  ],
+  "per_policy_dataset": true,
+  "smoke": {
+    "provenance": "artificial_pipeline_only",
+    "device": "cpu",
+    "seed": 7,
+    "steps": 5,
+    "batch_size": 2,
+    "fps": 10,
+    "cameras": 3,
+    "rgb_hw": [
+      128,
+      128
+    ],
+    "action_dim": 6,
+    "chunk_size": 4,
+    "n_action_steps": 2,
+    "vision_backbone": "resnet18",
+    "pretrained_backbone_weights": null,
+    "dim_model": 64,
+    "n_heads": 4,
+    "dim_feedforward": 128,
+    "n_encoder_layers": 1,
+    "n_decoder_layers": 1,
+    "n_vae_encoder_layers": 1,
+    "latent_dim": 8,
+    "lr": 0.0001,
+    "cpu_threads": 2
+  },
+  "physical_proposal": {
+    "status": "not_run_requires_calibration_and_demonstrations",
+    "device": "cuda_when_available",
+    "policy_type": "act",
+    "batch_size_initial": 8,
+    "learning_rate_initial": 1e-05,
+    "rgb_hw_initial": [
+      224,
+      224
+    ],
+    "chunk_size_initial": 20,
+    "n_action_steps_initial": 5,
+    "architecture": "LeRobot ACT default architecture; not the reduced smoke model",
+    "steps": "choose from held-out learning curve; no fixed success guarantee",
+    "pretrained_backbone": "official ResNet18 weights, download/cache must be planned separately",
+    "normalization": "mean_std from training sessions only; save with checkpoint",
+    "run_concurrency": "VLM planning while stationary, then ACT; avoid overlapping CPU-heavy inference on the control path"
+  },
+  "demonstrations": {
+    "first_diagnostic_episodes_per_skill": 5,
+    "first_training_batch_proposal_per_skill": 30,
+    "sessions_minimum": 3,
+    "split": "whole sessions, predetermined train/validation/test assignment; never random adjacent frames",
+    "learning_curve_episode_counts": [
+      10,
+      20,
+      30
+    ],
+    "expansion": "increase only after dataset quality checks and held-out measurements"
+  },
+  "compute": {
+    "cpu_available": true,
+    "gpu_available": false,
+    "lab_gpu_reservation": "pending user arranging borrowed/lab GPU; no reservation made",
+    "full_physical_training_validated": false
+  }
+}

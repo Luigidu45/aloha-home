@@ -6,16 +6,19 @@ title: "F1: ficha de interfaces del AlohaMini1 y mediciones pendientes"
 
 # Hardware objetivo e interfaces
 
-**Fuente de decisiones:** respuestas del usuario durante F1, 12 de septiembre de 2026. Esta ficha distingue elección de hardware de disponibilidad física y de interfaz validada. Los campos pendientes se completarán en F7/F8.
+**Actualización F7, 22/09/2026:** el usuario usará la base/elevador AlohaMini1 con **dos seguidores SO101 de 7,4 V y dos maestros SO101**, brazo derecho por defecto y las tres cámaras superior/derecha/izquierda activas. Los brazos SO100 y servos de 12 V del BOM original dejan de describir sus seguidores. El SO101 estándar tiene seis motores incluida la pinza, no siete. La geometría de brazos del simulador aún es la original AlohaMini1; adaptación y límites físicos pendientes. Véanse la [preparación ACT y el procedimiento de captura](/docs/development/asistencia_domestica_modular/fase_7_act.md) y la [plantilla de interfaces físicas](/dimos/experimental/household_assistant/configs/act_hardware_pending.json).
+
+
+**Fuente de decisiones:** respuestas del usuario durante F1, 12 de septiembre de 2026, actualizadas en F7 el 22/09/2026. Esta ficha distingue elección de hardware de disponibilidad física y de interfaz validada. Los campos pendientes se completarán en F7/F8.
 
 | Elemento | Confirmado por el usuario | Pendiente antes de habilitar hardware |
 | --- | --- | --- |
 | Plataforma | AlohaMini1, URDF y meshes suministrados | Versión de controlador y firmware, alimentación, interfaces y control de parada. |
 | Base | Base de la plataforma original | Transporte/SDK, comando de velocidad, unidades y signos, odometría disponible, referencia temporal, watchdog y confirmación de parada. |
 | Elevador | Elevador de la plataforma | Unidad y cero, homing, recorrido y velocidad permitidos, mando/lectura, movimiento relativo a sensores y confirmación de detención. |
-| Brazos | Dos cadenas `left_joint1..6` / `right_joint1..6`; modelo comercial y función de cada eje pendientes | Nombres y orden de articulaciones, IDs, grados/radianes/unidades del SDK, modos de posición/velocidad, feedback, límites medidos y sincronización. |
+| Brazos | Dos seguidores SO101 de 7,4 V; seis motores por brazo incluida pinza. URDF original `left_joint1..6` / `right_joint1..6` aún sin adaptar | Nombres y orden de articulaciones, IDs, grados/radianes/unidades del SDK, modos de posición/velocidad, feedback, límites medidos y sincronización. |
 | Pinzas | Una por brazo; transporte con objeto sujeto | Comando de apertura y calibración, carga admisible, corriente/fuerza si está disponible, detección de pérdida y comportamiento durante parada. |
-| Cámaras de muñeca | Previstas anteriormente; montaje en AlohaMini1 pendiente de confirmar | Modelos y dispositivos estables, intrínsecos, resolución/FPS, tiempos y transformaciones que dependen de cada brazo. |
+| Cámaras de muñeca | Izquierda y derecha confirmadas en F7; junto con superior/frontal, adquisición continua prevista | Modelos y dispositivos estables, intrínsecos, resolución/FPS, tiempos y transformaciones que dependen de cada brazo. |
 | LiDAR | Unitree L2 4D previsto; montaje en la nueva plataforma por confirmar | Driver real, nube e IMU, unidades y tiempos por punto, odometría compatible, calibración LiDAR–IMU y transformación a base. |
 | RGB-D superior | RealSense D435i prevista; montaje en la nueva plataforma por confirmar | Dispositivo/serial, streams de color y profundidad alineados, escala de profundidad, intrínsecos, timestamps y transformación a base. |
 | Postura de transporte | Regresar el brazo a home con la carga en la pinza | Validar `loaded_home` por objeto/brazo: ángulos, retorno libre de colisiones, espacio de botella/control, otro brazo, velocidad y retención. |

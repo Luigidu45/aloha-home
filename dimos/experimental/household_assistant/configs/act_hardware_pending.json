@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "status": "physical_execution_blocked",
+  "platform": "AlohaMini1 base and lift with two SO101 follower arms",
+  "confirmed_on": "2026-09-22",
+  "default_active_arm": "right",
+  "bimanual_policy_available": false,
+  "followers": {
+    "count": 2,
+    "model": "SO101",
+    "servo_family": "STS3215",
+    "nominal_motor_variant_v": 7.4,
+    "motor_count_per_arm_including_gripper": 6,
+    "gear_ratio": "1/345"
+  },
+  "leaders": {
+    "count": 2,
+    "model": "SO101",
+    "motor_count_per_arm_including_gripper": 6,
+    "servo_variant_v": 7.4,
+    "gear_ratios_by_axis": [
+      "1/191",
+      "1/345",
+      "1/191",
+      "1/147",
+      "1/147",
+      "1/147"
+    ]
+  },
+  "controller_proposal": {
+    "driver": "lerobot.robots.so_follower.SOFollower",
+    "robot_type": "so101_follower",
+    "use_degrees": true,
+    "action_kind": "absolute_position_target",
+    "record_action": "actual target issued after teleoperation limiting, not measured follower state",
+    "other_arm": "stationary monitored; no actuation by unilateral policy",
+    "base_and_lift": "stationary during ACT; excluded from action vector"
+  },
+  "right_policy_axes": [
+    {
+      "name": "right.shoulder_pan.pos",
+      "expected_factory_id": 1,
+      "unit": "degree",
+      "verified_device_id": null,
+      "measured_limits": null,
+      "urdf_joint_mapping": null
+    },
+    {
+      "name": "right.shoulder_lift.pos",
+      "expected_factory_id": 2,
+      "unit": "degree",
+      "verified_device_id": null,
+      "measured_limits": null,
+      "urdf_joint_mapping": null
+    },
+    {
+      "name": "right.elbow_flex.pos",
+      "expected_factory_id": 3,
+      "unit": "degree",
+      "verified_device_id": null,
+      "measured_limits": null,
+      "urdf_joint_mapping": null
+    },
+    {
+      "name": "right.wrist_flex.pos",
+      "expected_factory_id": 4,
+      "unit": "degree",
+      "verified_device_id": null,
+      "measured_limits": null,
+      "urdf_joint_mapping": null
+    },
+    {
+      "name": "right.wrist_roll.pos",
+      "expected_factory_id": 5,
+      "unit": "degree",
+      "verified_device_id": null,
+      "measured_limits": null,
+      "urdf_joint_mapping": null
+    },
+    {
+      "name": "right.gripper.pos",
+      "expected_factory_id": 6,
+      "unit": "calibrated_gripper_percent_0_100",
+      "verified_device_id": null,
+      "measured_limits": null,
+      "urdf_joint_mapping": null
+    }
+  ],
+  "camera_aliases": {
+    "top_rgb": {
+      "role": "front/superior",
+      "expected_source": "D435i RGB, mount and serial pending",
+      "device_id": null
+    },
+    "right_wrist_rgb": {
+      "role": "right wrist",
+      "device_id": null
+    },
+    "left_wrist_rgb": {
+      "role": "left wrist",
+      "device_id": null
+    }
+  },
+  "capture_policy": "all three RGB streams continuously acquired and timestamped; all three required by current ACT profiles",
+  "sampling_proposal": {
+    "physical_target_fps": 10,
+    "physical_rgb_hw": [
+      224,
+      224
+    ],
+    "validated": false,
+    "note": "Measure bus/camera/inference budget before freezing physical dataset; raw source resolution retained separately if needed"
+  },
+  "missing": [
+    "serial ports and bus IDs verified",
+    "individual leader/follower calibration files",
+    "mount transforms and SO101 geometry in simulator",
+    "measured joint/step/speed limits",
+    "gripper retention/stop behavior with bottle",
+    "loaded_home and pickup/place trajectories",
+    "camera serials, intrinsics, extrinsics and capture-clock conversion",
+    "work regions and bottle dimensions",
+    "physical watchdog and independent stop acknowledgement"
+  ],
+  "sources": [
+    "/home/luigidu/AlohaMini/AlohaMini1/docs/BOM.md",
+    "https://github.com/TheRobotStudio/SO-ARM100",
+    "https://huggingface.co/docs/lerobot/so101",
+    "/home/luigidu/lerobot/src/lerobot/robots/so_follower/so_follower.py"
+  ],
+  "warning": "Template only; no executable motor interface. Original AlohaMini1 12 V arm BOM superseded by user-confirmed SO101 7.4 V followers. Base/lift BOM remains separate."
+}

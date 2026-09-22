@@ -215,10 +215,12 @@ def test_finished_pick_waits_for_later_held_evidence(mission):
     assert manager.snapshot().held_object_id == "bottle_01"
 
 
-def test_pause_reprepares_payload_and_never_replays_interrupted_action(mission):
+def test_pause_reprepares_changed_payload_posture_and_never_replays_interrupted_action(mission):
     manager, driver, _ = mission
     now = drive(mission, lambda s: s.state == "navigating" and s.held_object_id == "bottle_01")
     interrupted = manager.snapshot().action.id
+    # Simulate a posture change while stopping: resume must require fresh stowing.
+    driver.loaded = False
     manager.cancel(now=now, pause=True)
     driver.step(now=now + 0.1)
     assert manager.snapshot().state == "paused"

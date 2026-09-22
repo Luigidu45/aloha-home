@@ -32,3 +32,7 @@ Para usar imágenes con un VLM local en CPU, véanse la [configuración, comando
 Se retiraron los comandos de calibración/diseño SO101 y el blueprint antiguo de manipulación porque pertenecían a otra mecánica. Los identificadores `alohamini1-nav-sim`, `alohamini1-nav-sim-full` y `aloha-mini1-sim-module` sustituyen los anteriores; los dos nombres `household-…` se conservan.
 
 Véanse la [migración y validación](/docs/development/asistencia_domestica_modular/migracion_alohamini1.md), la [configuración](/dimos/robot/alohamini1/config.py) y el [origen del modelo](/dimos/robot/alohamini1/assets/README.md).
+
+Para solicitar y supervisar la misión desde un celular, véanse la [interfaz F6, comandos y grabaciones](/docs/development/asistencia_domestica_modular/fase_6_interfaz.md). El cockpit ofrece texto, elección de objeto, cambio de destino, pausa/cancelación, cámara y mapa esquemático. El modo `--fixture` usa la secuencia artificial F4; al omitirlo utiliza el VLM local F5. La validación de voz permanece pendiente para F9.
+
+En F7 el usuario confirmó seguidores SO101 de 7,4 V sobre la base AlohaMini1. La geometría de brazos aquí descrita sigue siendo la del URDF original; no representa todavía ese montaje. El [pipeline ACT y protocolo de captura](/docs/development/asistencia_domestica_modular/fase_7_act.md) usa tres cámaras y un perfil artificial separado, sin actuadores.

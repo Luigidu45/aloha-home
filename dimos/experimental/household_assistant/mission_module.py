@@ -234,6 +234,30 @@ class HouseholdMissionModule(Module):
         with self._control:
             return self._manager.resume(now=time.time())
 
+    @rpc
+    def clarify_mission(self, answer: str, expected_revision: int) -> MissionSnapshot:
+        """Record an answer without replacing the mission or creating visual facts."""
+        with self._control:
+            result = self._manager.clarify(
+                answer, expected_revision=expected_revision, now=time.time()
+            )
+            request = self._manager.planning_state().request
+            if self._sequence is not None and request is not None:
+                self._sequence.request = request
+            return result
+
+    @rpc
+    def redirect_mission(self, destination_id: str, expected_revision: int) -> MissionSnapshot:
+        """Confirm a paused mission's destination and reprepare from observed payload."""
+        with self._control:
+            result = self._manager.redirect(
+                destination_id, expected_revision=expected_revision, now=time.time()
+            )
+            request = self._manager.planning_state().request
+            if self._sequence is not None and request is not None:
+                self._sequence.request = request
+            return result
+
     def _run_adapter(self, executor: ArtificialMissionExecutor) -> None:
         try:
             while not self._shutdown.wait(self.config.tick_s):

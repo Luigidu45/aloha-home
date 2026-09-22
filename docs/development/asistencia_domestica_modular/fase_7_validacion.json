@@ -1,0 +1,541 @@
+{
+  "phase": "F7",
+  "date": "2026-09-22",
+  "status": "software_preparation_complete_artificial_pipeline_only",
+  "hardware_decisions": {
+    "platform": "AlohaMini1 base/lift with SO101 followers",
+    "follower_count": 2,
+    "leader_count": 2,
+    "follower_servo_variant_v": 7.4,
+    "motors_per_arm_including_gripper": 6,
+    "active_arm": "right",
+    "continuous_capture_cameras": [
+      "top_rgb",
+      "right_wrist_rgb",
+      "left_wrist_rgb"
+    ],
+    "bimanual_execution_available": false,
+    "physical_geometry_calibration_drivers_validated": false
+  },
+  "environment": {
+    "python": "/home/luigidu/miniforge3/envs/lerobot/bin/python",
+    "python_version": "3.12.13",
+    "lerobot_source": "/home/luigidu/lerobot/src",
+    "lerobot_git_commit": "9a6bb61043bac8c14353fcb6ea513b7473c118e3",
+    "lerobot_installed_metadata": "0.6.2",
+    "torch": "2.11.0",
+    "cuda_available": false,
+    "editable_install_stale_target": "/home/luigidu/handumi/lerobot/src",
+    "draccus_installed": "0.10.0",
+    "draccus_isolated_overlay": "0.11.6",
+    "overlay_path": ".ignore.f7/deps",
+    "external_repo_and_environment_modified": false
+  },
+  "training_smokes": {
+    "pick": {
+      "provenance": "artificial_pipeline_only",
+      "device": "cpu",
+      "steps": 5,
+      "losses": [
+        30.4576358795166,
+        29.706247329711914,
+        30.164289474487305,
+        29.48052215576172,
+        28.70783042907715
+      ],
+      "validation_loss": 0.7273014187812805,
+      "elapsed_s": 1.1940213349998885,
+      "peak_rss_mib": 1262.63671875,
+      "parameters": 11320854,
+      "action_shape": [
+        4,
+        6
+      ],
+      "finite_inference": true,
+      "dataset_frames": 72,
+      "episodes": [
+        {
+          "episode_index": 0,
+          "session_id": "synthetic_train",
+          "split": "train",
+          "reset_id": "reset_0",
+          "frames": 12,
+          "provenance": "artificial_pipeline_only"
+        },
+        {
+          "episode_index": 1,
+          "session_id": "synthetic_train",
+          "split": "train",
+          "reset_id": "reset_1",
+          "frames": 12,
+          "provenance": "artificial_pipeline_only"
+        },
+        {
+          "episode_index": 2,
+          "session_id": "synthetic_validation",
+          "split": "validation",
+          "reset_id": "reset_2",
+          "frames": 12,
+          "provenance": "artificial_pipeline_only"
+        },
+        {
+          "episode_index": 3,
+          "session_id": "synthetic_validation",
+          "split": "validation",
+          "reset_id": "reset_3",
+          "frames": 12,
+          "provenance": "artificial_pipeline_only"
+        },
+        {
+          "episode_index": 4,
+          "session_id": "synthetic_test",
+          "split": "test",
+          "reset_id": "reset_4",
+          "frames": 12,
+          "provenance": "artificial_pipeline_only"
+        },
+        {
+          "episode_index": 5,
+          "session_id": "synthetic_test",
+          "split": "test",
+          "reset_id": "reset_5",
+          "frames": 12,
+          "provenance": "artificial_pipeline_only"
+        }
+      ],
+      "normalization_sessions": [
+        "synthetic_train"
+      ],
+      "heldout_test_used": false,
+      "profile_sha256": "ff15783725a2d49803edae0a3186e9fc07308c1d320c2297495ee23a35309e25",
+      "physical_skill_trained": false
+    },
+    "place": {
+      "provenance": "artificial_pipeline_only",
+      "device": "cpu",
+      "steps": 5,
+      "losses": [
+        30.4576358795166,
+        29.706247329711914,
+        30.164289474487305,
+        29.48052215576172,
+        28.70783042907715
+      ],
+      "validation_loss": 0.7273014187812805,
+      "elapsed_s": 1.1437385179997364,
+      "peak_rss_mib": 1249.33203125,
+      "parameters": 11320854,
+      "action_shape": [
+        4,
+        6
+      ],
+      "finite_inference": true,
+      "dataset_frames": 72,
+      "episodes": [
+        {
+          "episode_index": 0,
+          "session_id": "synthetic_train",
+          "split": "train",
+          "reset_id": "reset_0",
+          "frames": 12,
+          "provenance": "artificial_pipeline_only"
+        },
+        {
+          "episode_index": 1,
+          "session_id": "synthetic_train",
+          "split": "train",
+          "reset_id": "reset_1",
+          "frames": 12,
+          "provenance": "artificial_pipeline_only"
+        },
+        {
+          "episode_index": 2,
+          "session_id": "synthetic_validation",
+          "split": "validation",
+          "reset_id": "reset_2",
+          "frames": 12,
+          "provenance": "artificial_pipeline_only"
+        },
+        {
+          "episode_index": 3,
+          "session_id": "synthetic_validation",
+          "split": "validation",
+          "reset_id": "reset_3",
+          "frames": 12,
+          "provenance": "artificial_pipeline_only"
+        },
+        {
+          "episode_index": 4,
+          "session_id": "synthetic_test",
+          "split": "test",
+          "reset_id": "reset_4",
+          "frames": 12,
+          "provenance": "artificial_pipeline_only"
+        },
+        {
+          "episode_index": 5,
+          "session_id": "synthetic_test",
+          "split": "test",
+          "reset_id": "reset_5",
+          "frames": 12,
+          "provenance": "artificial_pipeline_only"
+        }
+      ],
+      "normalization_sessions": [
+        "synthetic_train"
+      ],
+      "heldout_test_used": false,
+      "profile_sha256": "74acca0a2b9f972a8a3dfe06aff118afc81492f57ca83c30142ffc6caf0327e4",
+      "physical_skill_trained": false
+    }
+  },
+  "dry_run_adapters": {
+    "pick": {
+      "result": "passed",
+      "profile_sha256": "ff15783725a2d49803edae0a3186e9fc07308c1d320c2297495ee23a35309e25",
+      "provenance": "artificial_pipeline_only",
+      "physical_actuators": false,
+      "commands_sent": 2,
+      "action_dimensions": 6,
+      "intervals_s": [
+        0.10039901733398438
+      ],
+      "inference_latency_s": [
+        0.0434915469995758
+      ],
+      "cancel_s": 9.642900113249198e-05,
+      "results": [
+        {
+          "executor_id": "act_pick_table",
+          "action_id": "f7_action",
+          "stage": "running",
+          "recorded_at": 1790114446.6258996,
+          "clock_id": "unix",
+          "detail": "dry_run_only_no_actuators"
+        },
+        {
+          "executor_id": "act_pick_table",
+          "action_id": "f7_action",
+          "stage": "stopped",
+          "recorded_at": 1790114446.8149917,
+          "clock_id": "unix",
+          "detail": "dry_run_receiver_stopped_queue_cleared"
+        }
+      ]
+    },
+    "place": {
+      "result": "passed",
+      "profile_sha256": "74acca0a2b9f972a8a3dfe06aff118afc81492f57ca83c30142ffc6caf0327e4",
+      "provenance": "artificial_pipeline_only",
+      "physical_actuators": false,
+      "commands_sent": 2,
+      "action_dimensions": 6,
+      "intervals_s": [
+        0.10897445678710938
+      ],
+      "inference_latency_s": [
+        0.04441888900055346
+      ],
+      "cancel_s": 5.874900034541497e-05,
+      "results": [
+        {
+          "executor_id": "act_place",
+          "action_id": "f7_action",
+          "stage": "running",
+          "recorded_at": 1790114009.0808375,
+          "clock_id": "unix",
+          "detail": "dry_run_only_no_actuators"
+        },
+        {
+          "executor_id": "act_place",
+          "action_id": "f7_action",
+          "stage": "stopped",
+          "recorded_at": 1790114009.2759802,
+          "clock_id": "unix",
+          "detail": "dry_run_receiver_stopped_queue_cleared"
+        }
+      ]
+    }
+  },
+  "resource_measurement": {
+    "physical_actuators": false,
+    "act_profile": "ff15783725a2d49803edae0a3186e9fc07308c1d320c2297495ee23a35309e25",
+    "act_architecture": "reduced_CPU_smoke_not_full_production_ACT",
+    "standalone_roundtrip_s": [
+      0.06971491500007687,
+      0.06061519899958512,
+      0.06079325899918331,
+      0.0597792920016218,
+      0.06384655799956818
+    ],
+    "models_resident_roundtrip_s": [
+      0.06559171600019909,
+      0.06072838799991587,
+      0.05930798000008508,
+      0.05740628099920286,
+      0.06093973899987759
+    ],
+    "concurrent_p95_s": 0.08936123140119889,
+    "concurrent_over_100ms": 4,
+    "peak_combined_rss_mib": 11645.00390625,
+    "rss_note": "sum of process RSS; shared pages may be counted more than once",
+    "elapsed_concurrent_s": 25.564396662000945,
+    "vlm_reply": {
+      "raw": "{\"kind\":\"action\",\"skill\":\"navigate_to\",\"destination\":\"mesa_sala\",\"plan\":[\"navigate_to\"],\"views\":[\"rgb_1\"]}",
+      "receipts": [
+        {
+          "view_id": "rgb_1",
+          "rgb_sha256": "f509b281d4b222652dede76f6151834044f1c09358926e1d0bff6ea2ab13b464",
+          "png_sha256": "7367426bbdd557d21f0a67fe187936baa2a3d3231aae6e0738395037c460c27f"
+        }
+      ],
+      "tensor_sha256": "6e634c044bc25c0ed9dd6a017c6736d7ff9215d7ae437a619a429ac5a92a9992",
+      "tensor_shape": [
+        936,
+        1176
+      ],
+      "elapsed_s": 25.523822784000004,
+      "peak_rss_mib": 9062.328125,
+      "generated_tokens": 31,
+      "visual_assessment": "1",
+      "visual_elapsed_s": 4.524342397999135,
+      "visual_clarification_required": false
+    },
+    "perception_memory": "CLIP/YOLO/Chroma loaded; one observation and remember before concurrent inference",
+    "interpretation": "Inference-only contention probe, not a mission or physical control frequency benchmark",
+    "concurrent_count": 133,
+    "concurrent_min_s": 0.061512243999459315,
+    "concurrent_max_s": 0.4489633640005195
+  },
+  "validation": {
+    "dimos_pytest": {
+      "passed": 154,
+      "skipped_optional_lerobot_module": 1,
+      "log": ".ignore.f7/pytest_final.log"
+    },
+    "lerobot_pytest": {
+      "passed": 6,
+      "log": ".ignore.f7/pytest_lerobot.log",
+      "command": "PYTHONPATH=<deps>:<lerobot-src>:<dimos-root> HF_HUB_OFFLINE=1 HF_DATASETS_OFFLINE=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 <lerobot-python> -m pytest --confcutdir=dimos/experimental/household_assistant -o addopts= dimos/experimental/household_assistant/test_act_lerobot.py -q"
+    },
+    "mypy_dimos": {
+      "passed": true,
+      "files": 5
+    },
+    "mypy_lerobot": {
+      "passed": true,
+      "files": 1,
+      "source_path_explicit": true,
+      "follow_imports": "silent"
+    },
+    "ruff": {
+      "passed": true
+    },
+    "pre_commit": {
+      "log": ".ignore.f7/hooks.log",
+      "all_applicable_passed_except": [
+        "largefiles-check"
+      ],
+      "pre_existing_large_files": [
+        "artifacts/cronograma_tesis/cronograma_actualizado.xlsx",
+        "artifacts/plan_tesis/propuesta_tesis_asistencia_domestica.pdf",
+        "artifacts/reporte_visual_vlm_skills.html"
+      ],
+      "limit_kib": 75,
+      "existing_artifacts_modified": false
+    },
+    "runtime_note": "Resource probe exits successfully; upstream multiprocessing warns about one semaphore cleaned up at exit. No ACT or VLM worker remains running.",
+    "adapter_after_atomic_close": {
+      "passed": 23,
+      "log": ".ignore.f7/pytest_adapter_final.log"
+    }
+  },
+  "closure": {
+    "capture_export_load": true,
+    "reduced_cpu_optimization_executed": true,
+    "checkpoints_reloaded_for_inference": true,
+    "three_cameras_required": true,
+    "invalid_dimension_camera_or_freshness_prevents_commands": true,
+    "cancellation_clears_queue_and_discards_late_result": true,
+    "first_physical_episode_procedure": "docs/development/asistencia_domestica_modular/fase_7_act.md",
+    "act_physical_skill_training_validated": false,
+    "lab_gpu_reservation_confirmed": false
+  },
+  "limitations": [
+    "Artificial RGB patterns and action signals; no simulated contact or learned bottle handling.",
+    "Initial pick and place smoke datasets have equivalent patterns and seed; checkpoints do not demonstrate two learned skills.",
+    "F4/F6 blueprint still uses its labelled artificial manipulation executor; ACT adapter tested separately with F4 command/result contracts.",
+    "Six synthetic action axes are not motor IDs, degrees or a calibrated SO101 mapping.",
+    "CPU resource probe uses reduced ACT; cannot establish performance of full ACT or physical control timing.",
+    "SO101 geometry integration and physical interfaces remain pending.",
+    "No GPU available; no full physical training or external compute reservation."
+  ],
+  "artifacts": [
+    {
+      "path": ".ignore.f7/pick_cpu_v2/checkpoint/config.json",
+      "bytes": 1863,
+      "sha256": "312a810913f5c5f0781d3ec1a64cfca330478718b84b429caaa6a8938a7d7393"
+    },
+    {
+      "path": ".ignore.f7/pick_cpu_v2/checkpoint/household_profile.json",
+      "bytes": 923,
+      "sha256": "16fb3ca19e53c4cbdce23bd99af6f0e6119cd503360bff040d63fca368a2bb3e"
+    },
+    {
+      "path": ".ignore.f7/pick_cpu_v2/checkpoint/model.safetensors",
+      "bytes": 45378832,
+      "sha256": "242bd2f4d550bbb48ba32733e318faedfcbe14dc7cdec40d3d395bb56ae204e2"
+    },
+    {
+      "path": ".ignore.f7/pick_cpu_v2/checkpoint/policy_postprocessor_step_0_unnormalizer_processor.safetensors",
+      "bytes": 1024,
+      "sha256": "f912ce13cd1c477815b1e9f284063c73e2e10daca5d723db06fea71c35c1152a"
+    },
+    {
+      "path": ".ignore.f7/pick_cpu_v2/checkpoint/policy_preprocessor_step_3_normalizer_processor.safetensors",
+      "bytes": 1024,
+      "sha256": "f912ce13cd1c477815b1e9f284063c73e2e10daca5d723db06fea71c35c1152a"
+    },
+    {
+      "path": ".ignore.f7/pick_cpu_v2/checkpoint/postprocessor.json",
+      "bytes": 660,
+      "sha256": "648b415125a183dfd6cbc47c1dc04ab3f2d912654ef22a12ca5e8b93d7d85cdd"
+    },
+    {
+      "path": ".ignore.f7/pick_cpu_v2/checkpoint/preprocessor.json",
+      "bytes": 1522,
+      "sha256": "83d25d3409f09b2be4f2295bdc23c8c7e0c5b1483ef15d751835947062bb4868"
+    },
+    {
+      "path": ".ignore.f7/pick_cpu_v2/checkpoint/smoke_report.json",
+      "bytes": 1873,
+      "sha256": "599124b826caefcebf10855d363fecbefce61d6b63ed33876eee090664804ff5"
+    },
+    {
+      "path": ".ignore.f7/pick_cpu_v2/checkpoint/training_stats.json",
+      "bytes": 2232,
+      "sha256": "1b453155d9172e743d0e85f35042e1f0be9e6d6d18764b1d1cd1b22c2fb9f320"
+    },
+    {
+      "path": ".ignore.f7/place_cpu/checkpoint/config.json",
+      "bytes": 1863,
+      "sha256": "312a810913f5c5f0781d3ec1a64cfca330478718b84b429caaa6a8938a7d7393"
+    },
+    {
+      "path": ".ignore.f7/place_cpu/checkpoint/household_profile.json",
+      "bytes": 910,
+      "sha256": "3640c3e0287b5e6136de17618f043a9c25836a955c0447141da7fd122e0b8c0a"
+    },
+    {
+      "path": ".ignore.f7/place_cpu/checkpoint/model.safetensors",
+      "bytes": 45378832,
+      "sha256": "242bd2f4d550bbb48ba32733e318faedfcbe14dc7cdec40d3d395bb56ae204e2"
+    },
+    {
+      "path": ".ignore.f7/place_cpu/checkpoint/policy_postprocessor_step_0_unnormalizer_processor.safetensors",
+      "bytes": 1024,
+      "sha256": "f912ce13cd1c477815b1e9f284063c73e2e10daca5d723db06fea71c35c1152a"
+    },
+    {
+      "path": ".ignore.f7/place_cpu/checkpoint/policy_preprocessor_step_3_normalizer_processor.safetensors",
+      "bytes": 1024,
+      "sha256": "f912ce13cd1c477815b1e9f284063c73e2e10daca5d723db06fea71c35c1152a"
+    },
+    {
+      "path": ".ignore.f7/place_cpu/checkpoint/postprocessor.json",
+      "bytes": 660,
+      "sha256": "648b415125a183dfd6cbc47c1dc04ab3f2d912654ef22a12ca5e8b93d7d85cdd"
+    },
+    {
+      "path": ".ignore.f7/place_cpu/checkpoint/preprocessor.json",
+      "bytes": 1522,
+      "sha256": "83d25d3409f09b2be4f2295bdc23c8c7e0c5b1483ef15d751835947062bb4868"
+    },
+    {
+      "path": ".ignore.f7/place_cpu/checkpoint/smoke_report.json",
+      "bytes": 1873,
+      "sha256": "4603ce1aabdbbb9c55c9234fcf694e29ae284e5691e130699d6a84bc03a9a6db"
+    },
+    {
+      "path": ".ignore.f7/place_cpu/checkpoint/training_stats.json",
+      "bytes": 2232,
+      "sha256": "1b453155d9172e743d0e85f35042e1f0be9e6d6d18764b1d1cd1b22c2fb9f320"
+    },
+    {
+      "path": ".ignore.f7/pick_cpu_v2/dataset/meta/household.json",
+      "bytes": 2366,
+      "sha256": "7b8ec3a8a656316d0349787d50373692074651ce77d8b96e20ac97feb30589bb"
+    },
+    {
+      "path": ".ignore.f7/place_cpu/dataset/meta/household.json",
+      "bytes": 2353,
+      "sha256": "c02f7558aa672d4bed27a306c971f751c8ce7d81e7cf31ad5658984deb3c0f60"
+    },
+    {
+      "path": ".ignore.f7/pick_adapter_final/report.json",
+      "bytes": 850,
+      "sha256": "a47c471b779073e78472818e7c6d7d1e265a02b39c4c3b5c6bafbf48da213ede"
+    },
+    {
+      "path": ".ignore.f7/place_adapter/report.json",
+      "bytes": 841,
+      "sha256": "b4af23f66a10f8747d75a3daf1cb55fc224d9dbf18ee34b993f921b879f3a2ad"
+    },
+    {
+      "path": ".ignore.f7/resources_final/report.json",
+      "bytes": 5071,
+      "sha256": "b020f65c9496450fad20be9f6df131ad219cc74a38c7f3025d3e7adb6a5b0834"
+    },
+    {
+      "path": ".ignore.f7/pytest_final.log",
+      "bytes": 490,
+      "sha256": "1e573635d6c437197950dc9f4dafc16690679e9570baf7fd6393dfce9769b188"
+    },
+    {
+      "path": ".ignore.f7/pytest_lerobot.log",
+      "bytes": 1233,
+      "sha256": "7c84135999813353db61b9302c86be77c322946f1d1f72a54990ba6e8d2d6595"
+    },
+    {
+      "path": ".ignore.f7/mypy_dimos.log",
+      "bytes": 43,
+      "sha256": "e317872697c2cbfdefa321527a6efe73290dff3a390b0fa8723b87092eccba6a"
+    },
+    {
+      "path": ".ignore.f7/mypy_lerobot.log",
+      "bytes": 42,
+      "sha256": "5d4b6d285b77932e3d08212c3b4974d0a803f98ec60408ac6ccf6a063fa6c19e"
+    },
+    {
+      "path": ".ignore.f7/pick_cpu_v2/dataset/data/chunk-000/file-000.parquet",
+      "bytes": 61145,
+      "sha256": "836d6cc4c799e835d9d2f9f16319308152744fbe484caf8a22fcc627263bbea9"
+    },
+    {
+      "path": ".ignore.f7/pick_cpu_v2/dataset/meta/info.json",
+      "bytes": 3143,
+      "sha256": "5ee8d99eaea480e41eefd08a06cac4433a2f1f259a7a6e8848cc6e00e51adf36"
+    },
+    {
+      "path": ".ignore.f7/pick_cpu_v2/dataset/meta/stats.json",
+      "bytes": 17945,
+      "sha256": "908831a619984eeab382e0552da8df3e2143f79ade3412993f5033ad849683b1"
+    },
+    {
+      "path": ".ignore.f7/place_cpu/dataset/data/chunk-000/file-000.parquet",
+      "bytes": 61145,
+      "sha256": "c4e7bd1fa6dbe2ca8de962b6c467de93a4256ecf42b7451d5d171ffdd9f86df0"
+    },
+    {
+      "path": ".ignore.f7/place_cpu/dataset/meta/info.json",
+      "bytes": 3143,
+      "sha256": "5ee8d99eaea480e41eefd08a06cac4433a2f1f259a7a6e8848cc6e00e51adf36"
+    },
+    {
+      "path": ".ignore.f7/place_cpu/dataset/meta/stats.json",
+      "bytes": 17945,
+      "sha256": "68da34ce58c7ebd24c0d66da96573f0e9c9e8499cca7fdbd5ef060f589ef2c52"
+    }
+  ],
+  "artifact_storage": "Local ignored .ignore.f7; copy explicitly to archive datasets/checkpoints/reports."
+}

@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "platform": "alohamini1",
+  "provenance": "artificial_pipeline_only",
+  "skill_id": "place_on_table",
+  "executor_id": "act_place",
+  "arm": "right",
+  "axes": [
+    "synthetic_axis_1",
+    "synthetic_axis_2",
+    "synthetic_axis_3",
+    "synthetic_axis_4",
+    "synthetic_axis_5",
+    "synthetic_axis_6"
+  ],
+  "units": "synthetic_normalized_not_motor_units",
+  "cameras": [
+    "top_rgb",
+    "right_wrist_rgb",
+    "left_wrist_rgb"
+  ],
+  "image_hw": [
+    128,
+    128
+  ],
+  "fps": 10,
+  "chunk_size": 4,
+  "execute_steps": 2,
+  "max_age_s": 0.2,
+  "max_skew_s": 0.05,
+  "prediction_ttl_s": 0.5,
+  "inference_timeout_s": 10.0,
+  "lower": [
+    -1.0,
+    -1.0,
+    -1.0,
+    -1.0,
+    -1.0,
+    -1.0
+  ],
+  "upper": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "max_step": [
+    0.25,
+    0.25,
+    0.25,
+    0.25,
+    0.25,
+    0.25
+  ],
+  "clock_id": "unix"
+}

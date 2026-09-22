@@ -4,7 +4,7 @@ title: "Plan de tesis: asistencia doméstica modular con DimOS, VLM y ACT"
 
 # Plan de trabajo por fases
 
-**Actualización:** 18 de septiembre de 2026. **Plataforma vigente:** AlohaMini1; véase la [migración y sus límites](/docs/development/asistencia_domestica_modular/migracion_alohamini1.md). **Estado:** F0–F5 completadas en su alcance de software/simulación; F6–F10 pendientes. El [registro F4](/docs/development/asistencia_domestica_modular/fase_4_gestor_misiones.md) distingue navegación simulada de manipulación y asociaciones visuales artificiales. El [registro F5](/docs/development/asistencia_domestica_modular/fase_5_vlm.md) documenta decisiones de un VLM local real y sus límites. Véanse el [registro de F0](/docs/development/asistencia_domestica_modular/fase_0_limpieza.md), los [contratos y decisiones de F1](/docs/development/asistencia_domestica_modular/fase_1_definicion.md) y la [simulación, resultados y reproducción de F2](/docs/development/asistencia_domestica_modular/fase_2_simulacion.md).
+**Actualización:** 22 de septiembre de 2026. **Plataforma vigente:** AlohaMini1; véase la [migración y sus límites](/docs/development/asistencia_domestica_modular/migracion_alohamini1.md). **Estado:** F0–F7 completadas en su alcance de preparación de software/simulación previo al robot; F8–F10 pendientes. F7 comprobó el pipeline ACT artificial en CPU; no entrenamiento ni ejecución física. La validación de voz de F6 continúa pendiente en F9. El [registro F4](/docs/development/asistencia_domestica_modular/fase_4_gestor_misiones.md) distingue navegación simulada de manipulación y asociaciones visuales artificiales. El [registro F5](/docs/development/asistencia_domestica_modular/fase_5_vlm.md) documenta decisiones de un VLM local real y sus límites. Véanse el [registro de F0](/docs/development/asistencia_domestica_modular/fase_0_limpieza.md), los [contratos y decisiones de F1](/docs/development/asistencia_domestica_modular/fase_1_definicion.md) y la [simulación, resultados y reproducción de F2](/docs/development/asistencia_domestica_modular/fase_2_simulacion.md).
 
 Este plan persigue la propuesta actual: un asistente robótico que permita a una persona con movilidad reducida solicitar, supervisar y completar tareas de acceso a objetos mediante lenguaje natural. Integra DimOS, memoria y navegación semántica, supervisión visual y habilidades de manipulación ACT. El éxito final requiere entregar el objeto correcto en una región accesible acordada.
 
@@ -227,6 +227,8 @@ Trabajo:
 
 ### F6. Habilitar solicitud y supervisión desde la interfaz
 
+**Estado:** hito previo al robot completado el 22/09/2026. Solicitud y consulta por texto desde Android real, cámara/mapa, cancelación con parada confirmada, cambio de destino y reconexión sin duplicados. Integración del VLM local comprobada con una decisión de navegación y cancelación durante planificación; la misión completa del navegador utiliza la secuencia artificial identificada. Pasaron 131 pruebas Python y 126 del cockpit. Dictado preparado, pero HTTPS/micrófono y voz real pendientes en F9 según el criterio de cierre. [Implementación y reproducción](/docs/development/asistencia_domestica_modular/fase_6_interfaz.md), [evidencia](/docs/development/asistencia_domestica_modular/fase_6_validacion.json).
+
 **Objetivo:** probar la asistencia desde el punto de vista del usuario. **Depende de:** F1 y eventos de F4; integra F5 cuando esté listo. **Aporta a:** O1, O5; C3.
 
 Trabajo:
@@ -244,7 +246,9 @@ Trabajo:
 
 ### F7. Preparar ACT, captura y adaptación física
 
-**Cambio de plataforma autorizado:** la [migración al AlohaMini1](/docs/development/asistencia_domestica_modular/migracion_alohamini1.md) sustituye el modelo anterior. Los límites cero impiden reutilizar el control articular previo; completar límites, pinzas y cámaras antes de preparar ACT. No se cierra la manipulación ni la validación física de F7/F8.
+**Estado:** preparación de software previa al robot completada el 22/09/2026. Dos perfiles ACT independientes, tres cámaras, captura LeRobot, partición por sesiones, optimización reducida en CPU, checkpoints y adaptador sin actuadores comprobados. Nueva decisión física: base/elevador AlohaMini1 con dos seguidores SO101 de 7,4 V y dos maestros SO101; brazo derecho por defecto. GPU no disponible. Geometría SO101, calibraciones, drivers y entrenamiento físico permanecen pendientes. [Implementación y protocolo de captura](/docs/development/asistencia_domestica_modular/fase_7_act.md), [validación](/docs/development/asistencia_domestica_modular/fase_7_validacion.json).
+
+**Cambio de plataforma autorizado:** la [migración al AlohaMini1](/docs/development/asistencia_domestica_modular/migracion_alohamini1.md) sustituye el modelo anterior. Los límites cero y el cambio a seguidores SO101 impiden reutilizar el control articular previo; completar geometría, límites, pinzas y cámaras antes de habilitar el perfil ACT físico. F7 ensaya únicamente un perfil artificial separado, sin actuadores. No se cierra la manipulación ni la validación física de F7/F8.
 
 
 **Objetivo:** llegar al robot con el flujo de datos y las interfaces preparados. **Depende de:** F1 y contrato de ejecutores F4. La ficha de hardware comienza en F1. **Aporta a:** O4, O6; C1 y C2.
@@ -273,9 +277,9 @@ ACT utiliza imágenes y estado articular para generar bloques de acciones; el si
 - [x] Navegación entre estaciones y observaciones accesibles en simulación, comprobadas en F2.
 - [x] Memoria que distingue información histórica de confirmación actual, comprobada en F3 con invalidación asistida y modelos locales.
 - [x] Gestor con éxito, fallo, incertidumbre, consulta y cancelación comprobados en F4 con evidencia artificial/simulada explícita.
-- [ ] VLM real recibe imágenes y propone acciones validadas.
-- [ ] Interfaz por texto completa un ciclo desde otro dispositivo.
-- [ ] Captura, representación de acciones y adaptador ACT preparados.
+- [x] VLM real recibe imágenes y propone acciones validadas ([F5](/docs/development/asistencia_domestica_modular/fase_5_vlm.md)); no equivale a autonomía física completa.
+- [x] Interfaz por texto completa un ciclo desde otro dispositivo: Android real, solicitud, elección y cancelación con parada confirmada ([F6](/docs/development/asistencia_domestica_modular/fase_6_interfaz.md)).
+- [x] Captura, representación de acciones y adaptador ACT preparados y ensayados sin actuadores ([F7](/docs/development/asistencia_domestica_modular/fase_7_act.md)); mapeo/calibración física pendientes.
 - [x] Registros de F1/F2 identifican evidencia artificial y simulada; las siguientes fases deben conservar esta distinción.
 - [ ] Protocolo experimental redactado antes de ajustar el sistema con hardware.
 
@@ -414,6 +418,8 @@ Las configuraciones, metadatos y scripts pertenecen al repositorio. Videos, data
 4. F3 completada: recuperación de observaciones con DimOS/CLIP, candidatos visuales con YOLO en CPU, búsqueda acotada y separación temporal de evidencia. El [registro de F3](/docs/development/asistencia_domestica_modular/fase_3_memoria_percepcion.md) precisa errores y el uso real de las cuatro áreas de DimOS.
 5. F4 completada: gestor, verificación posterior, cancelación y fallos con navegación MuJoCo y manipulación artificial. Las asociaciones visuales de la demostración son fixtures; no acreditan percepción autónoma ni agarre físico.
 6. F5 completada: supervisor VLM local con imágenes y memoria efectivas, validación de propuestas, consultas, timeout y cancelación. Se evaluaron decisiones aisladas y la conexión a cámara/gestor en vivo; la misión completa con percepción continua sigue por validar.
-7. Siguiente paso, F6: conectar solicitud, preguntas, selección de instancia y cancelación a la interfaz. F7 prepara el pipeline ACT y mide recursos conjuntos antes de la captura física.
+7. F6 completada en el hito de texto: solicitud, preguntas, selección de instancia, cambio de destino y cancelación desde la interfaz; prueba en Android y grabaciones registradas. Voz real pendiente en F9.
+8. F7 completada en preparación: pipeline ACT reducido en CPU, tres cámaras, captura, checkpoints, cancelación y medición conjunta con VLM. Sin GPU ni entrenamiento físico validado.
+9. Siguiente paso, F8: completar geometría y calibración del montaje AlohaMini1 + SO101, interfaces físicas y primer lote de demostraciones; conservar el protocolo de evaluación antes de ajustar con hardware.
 
 Este orden permite avanzar desde ahora hacia las contribuciones del PDF y deja identificada la evidencia que todavía dependerá del robot.

@@ -30,7 +30,11 @@ from dimos.experimental.household_assistant.contracts import (
 )
 from dimos.experimental.household_assistant.mission import MissionManager
 from dimos.experimental.household_assistant.mission_contracts import WorldFrame
-from dimos.experimental.household_assistant.mission_verification import fact, postconditions
+from dimos.experimental.household_assistant.mission_verification import (
+    carrying,
+    fact,
+    postconditions,
+)
 from dimos.experimental.household_assistant.semantic_memory import (
     BoundedSearch,
     HouseholdMemory,
@@ -74,7 +78,15 @@ class MissionSequence:
         )
         skill: str
         if snapshot.held_object_id:
-            if "prepare_transport" not in snapshot.completed_actions:
+            ready = assess_requirements(
+                carrying(snapshot.held_object_id, self.manager.arm),
+                frame.observations,
+                now=now,
+                clock_id=self.manager.clock_id,
+                max_age_s=self.manager.max_age_s,
+                allowed_origins=frozenset({Origin.TEST, Origin.SIMULATION}),
+            )
+            if ready.verdict != Verdict.SUCCESS:
                 skill = "prepare_transport"
                 # Stow where the robot is currently stopped, including pause recovery.
                 destination = (

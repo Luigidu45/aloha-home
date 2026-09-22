@@ -79,7 +79,11 @@ class PilotConfiguration(Contract):
         roles = {item.id: item.role for item in self.places}
         if roles.get(request.source_id) not in {"pickup", "floor_pickup"}:
             raise ValueError("unknown pickup location")
-        if roles.get(request.destination_id) != "delivery":
+        return_to_source = (
+            request.mission_id == self.mission.id
+            and request.destination_id == self.mission.source_id
+        )
+        if roles.get(request.destination_id) != "delivery" and not return_to_source:
             raise ValueError("unknown delivery region")
         candidates = [item for item in self.objects if item.category == request.object_category]
         if not candidates:
@@ -89,10 +93,13 @@ class PilotConfiguration(Contract):
         )
         if mission is None:
             raise ValueError("unknown mission")
-        if (request.source_id, request.destination_id, request.object_category) != (
+        if (request.source_id, request.object_category) != (
             mission.source_id,
-            mission.destination_id,
             mission.object_category,
+        ) or request.destination_id not in (
+            (mission.destination_id, mission.source_id)
+            if mission.id == self.mission.id
+            else (mission.destination_id,)
         ):
             raise ValueError("request is outside the configured mission")
         if request.selected_object_id is not None and request.selected_object_id not in {

@@ -577,6 +577,46 @@ class MissionManager:
             self._emit("intervention", "resume_reprepared_not_replayed", now)
             return self._snapshot
 
+    def clarify(self, answer: str, *, expected_revision: int, now: float) -> MissionSnapshot:
+        """Keep conversational context; a user's text never creates sensor evidence."""
+        with self._lock:
+            if self._request is None or self._snapshot.state != "asking":
+                raise RuntimeError("no clarification pending")
+            if expected_revision != self._snapshot.revision:
+                raise ValueError("scene changed before clarification")
+            if self._check(stopped(), now).verdict != Verdict.SUCCESS:
+                raise ValueError("clarification requires observed stop")
+            if not answer.strip() or len(answer) > 500:
+                raise ValueError("clarification must contain 1 to 500 characters")
+            instruction = self._request.instruction + "\nAclaración del usuario: " + answer.strip()
+            if len(instruction) > 1000:
+                raise ValueError("conversation limit reached; pause and review the task")
+            self._request = self._request.model_copy(update={"instruction": instruction})
+            self._requests[self._request.id] = self._request
+            self._snapshot = self._snapshot.model_copy(
+                update={"state": "preparing", "reason": "clarification_received"}
+            )
+            self._emit("clarification_text", answer, now)
+            return self._snapshot
+
+    def redirect(
+        self, destination_id: str, *, expected_revision: int, now: float
+    ) -> MissionSnapshot:
+        """Confirm a new destination only after observed pause; reconcile payload before moving."""
+        with self._lock:
+            if self._request is None or self._snapshot.state != "paused":
+                raise RuntimeError("destination change requires a confirmed pause")
+            if self._snapshot.revision != expected_revision:
+                raise ValueError("scene changed before destination confirmation")
+            revised = self._request.model_copy(update={"destination_id": destination_id})
+            self.pilot.validate_request(revised)
+            # Reconciliation must succeed before changing the accepted request.
+            self.resume(now=now)
+            self._request = revised
+            self._requests[revised.id] = revised
+            self._emit("destination_changed", destination_id, now)
+            return self._snapshot
+
     def tick(self, *, now: float) -> None:
         with self._lock:
             self._time(now)
