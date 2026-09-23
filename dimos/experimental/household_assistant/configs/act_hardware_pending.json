@@ -114,7 +114,7 @@
   "missing": [
     "serial ports and bus IDs verified",
     "individual leader/follower calibration files",
-    "mount transforms and SO101 geometry in simulator",
+    "verified correspondence of original URDF link meshes with local SO101 STL parts and measured mount transforms",
     "measured joint/step/speed limits",
     "gripper retention/stop behavior with bottle",
     "loaded_home and pickup/place trajectories",
@@ -126,7 +126,8 @@
     "/home/luigidu/AlohaMini/AlohaMini1/docs/BOM.md",
     "https://github.com/TheRobotStudio/SO-ARM100",
     "https://huggingface.co/docs/lerobot/so101",
-    "/home/luigidu/lerobot/src/lerobot/robots/so_follower/so_follower.py"
+    "/home/luigidu/lerobot/src/lerobot/robots/so_follower/so_follower.py",
+    "/home/luigidu/AlohaMini/AlohaMini1/hardware/arms/stl"
   ],
-  "warning": "Template only; no executable motor interface. Original AlohaMini1 12 V arm BOM superseded by user-confirmed SO101 7.4 V followers. Base/lift BOM remains separate."
+  "warning": "Template only; no executable motor interface. The local AlohaMini1 arm STL directory already contains SO101 parts. Verify their correspondence with original URDF meshes before changing geometry. The user confirmed 7.4 V followers; original BOM text describes 12 V followers. Base/lift BOM remains separate."
 }

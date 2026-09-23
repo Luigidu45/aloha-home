@@ -1,13 +1,13 @@
 # Migración de la tesis al AlohaMini1
 
-Cambio solicitado por el usuario el 15/09/2026. La plataforma activa de software es **AlohaMini1**. Se conserva el trabajo F1–F4 de contratos, percepción/memoria, navegación semántica y gestor, con nuevas comprobaciones de integración para esta geometría. Las misiones A (botella sala → dormitorio) y B (control caído, ampliación pendiente) y el brazo derecho de pruebas no cambian.
+Cambio solicitado por el usuario el 15/09/2026. **Aclaración posterior:** `AlohaMini1/hardware/arms/stl` ya incluye piezas SO101; los meshes compuestos del URDF aún no se han comparado con ellas. La retirada de prototipos de control SO101 previos no demuestra una diferencia geométrica entre los brazos físicos. La plataforma activa de software es **AlohaMini1**. Se conserva el trabajo F1–F4 de contratos, percepción/memoria, navegación semántica y gestor, con nuevas comprobaciones de integración para esta geometría. Las misiones A (botella sala → dormitorio) y B (control caído, ampliación pendiente) y el brazo derecho de pruebas no cambian.
 
 ## Cambios en el repositorio
 
 - Paquete activo: [dimos/robot/alohamini1](/dimos/robot/alohamini1). Modelos, imports, configuración, blueprints, demos y pruebas apuntan a este robot.
 - URDF aportado: `/home/luigidu/AlohaMini/AlohaMini1/simulation/src/Aloha/urdf/Aloha.urdf`; meshes del directorio hermano `meshes`. Conversión local reproducible, con licencia de origen, hashes y 19 meshes reducidos.
 - Blueprints públicos: `alohamini1-nav-sim`, `alohamini1-nav-sim-full`, `household-navigation-sim` y `household-mission-sim`. Registro regenerado mediante su prueba oficial.
-- Retirados los módulos, assets y comandos SO101/AM-ARM200 que no corresponden a la nueva mecánica. No se ofrecen aliases que carguen silenciosamente otro robot.
+- Retirados los módulos, assets y comandos de control de prototipos SO101/AM-ARM200 anteriores, no validados para este montaje. Esto no se refiere a los STL SO101 del repositorio AlohaMini1. No se ofrecen aliases que carguen silenciosamente otro robot.
 - Guía de uso, ficha de hardware y plan actualizados. Los documentos y resultados anteriores están en [el archivo histórico](/docs/development/asistencia_domestica_modular/historico_alohamini2). Sus hashes, métricas y nombres de robot no se reasignan al nuevo modelo. El Excel y las fuentes externas no se modifican.
 
 ## Qué permite el URDF y qué queda pendiente

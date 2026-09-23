@@ -15,7 +15,9 @@
       "left_wrist_rgb"
     ],
     "bimanual_execution_available": false,
-    "physical_geometry_calibration_drivers_validated": false
+    "physical_geometry_calibration_drivers_validated": false,
+    "local_so101_stl_parts_present": true,
+    "urdf_meshes_match_so101_stl_verified": false
   },
   "environment": {
     "python": "/home/luigidu/miniforge3/envs/lerobot/bin/python",
@@ -367,7 +369,7 @@
     "F4/F6 blueprint still uses its labelled artificial manipulation executor; ACT adapter tested separately with F4 command/result contracts.",
     "Six synthetic action axes are not motor IDs, degrees or a calibrated SO101 mapping.",
     "CPU resource probe uses reduced ACT; cannot establish performance of full ACT or physical control timing.",
-    "SO101 geometry integration and physical interfaces remain pending.",
+    "Correspondence of original URDF meshes to local SO101 STL parts, measured mount transforms and physical interfaces remain pending.",
     "No GPU available; no full physical training or external compute reservation."
   ],
   "artifacts": [
